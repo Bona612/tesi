@@ -1,0 +1,23 @@
+{
+  "name": "thegraph",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.73.0"
+  },
+  "dependencies": {
+    "@apollo/rover": "^0.23.0",
+    "@babel/preset-typescript": "^7.24.7",
+    "@graphprotocol/graph-ts": "^0.35.1",
+    "babel-plugin-relay": "^17.0.0",
+    "react-relay": "^17.0.0",
+    "relay-runtime": "^17.0.0"
+  }
+}

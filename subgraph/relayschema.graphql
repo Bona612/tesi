@@ -1,0 +1,66 @@
+# relayschema.graphql
+
+# Define the Node interface required by Relay
+interface Node {
+  id: ID!
+}
+
+# Define the Token entity with Relay's Node interface
+type Token implements Node {
+  id: ID!
+  tokenId: String!
+  anchor: String!
+  metadataURI: String!
+  tags: [String!]!
+  owner: Owner!
+}
+
+# Define the Owner entity with Relay's Node interface
+type Owner implements Node {
+  id: ID!
+  address: String!
+  # nfts: [Token!]! @derivedFrom(field: "owner") 
+  nfts(where: Where_filter, first: Int, skip: Int): [Token!]! @derivedFrom(field: "owner") 
+}
+
+# # Relay-specific connection types for pagination
+# type TokenConnection {
+#   id: ID!
+#   nodes: [Token!]!
+#   edges: [TokenEdge!]!
+#   pageInfo: PageInfo!
+# }
+
+# type TokenEdge {
+#   id: ID!
+#   node: Token!
+#   cursor: String!
+# }
+
+# type PageInfo {
+#   id: ID!
+#   hasNextPage: Boolean!
+#   hasPreviousPage: Boolean!
+#   startCursor: String
+#   endCursor: String
+# }
+
+input Where_filter {
+  anchor: String!
+}
+
+# Queries available in your GraphQL schema
+type Query {
+  node(id: ID!): Node
+  tokens(
+    where: Where_filter
+    first: Int,
+    skip: Int
+  ): [Token!]!
+  owner(
+    id: ID!
+  ): Owner!
+  token(
+    id: ID!
+  ): Token!
+}

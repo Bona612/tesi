@@ -1,0 +1,7 @@
+
+Build completed: QmeraJvLujaxm9xFxf8KtQ9E3V9L5wM7BXKQFn34RrCKkh
+
+Deployed to https://thegraph.com/studio/subgraph/erc6956full
+
+Subgraph endpoints:
+Queries (HTTP):     https://api.studio.thegraph.com/query/3138/erc6956full/v1.0.3

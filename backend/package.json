@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@chainlink/contracts": "^1.1.0",
+    "@pinata/sdk": "^2.1.0",
+    "base64-sol": "^1.1.0",
+    "commons": "^0.0.1-pre",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.4",
+    "merkletreejs": "^0.3.11"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.6",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.0.2",
+    "@openzeppelin/merkle-tree": "^1.0.6",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.12",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "ethers": "^6.12.1",
+    "ts-generator": "^0.1.1",
+    "typechain": "^8.3.2",
+    "typescript": "^5.4.5"
+  }
+}

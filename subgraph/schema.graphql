@@ -1,0 +1,77 @@
+# schema.graphql
+
+type _Schema_
+  @fulltext(
+    name: "tokenSearch"
+    language: en
+    algorithm: proximityRank
+    include: [{ entity: "Token", fields: [{ name: "anchor" }] }]
+  )
+
+  # @fulltext(
+  #   name: "ownerTokenSearch"
+  #   language: en
+  #   algorithm: proximityRank
+  #   include: [{ entity: "Token", fields: [{ name: "anchor" }] }]
+  # )
+
+
+# Define the Node interface required by Relay
+interface Node {
+  id: ID!
+}
+
+# Define the Token entity with Relay's Node interface
+type Token implements Node @entity {
+  id: ID!
+  # tokenId: String!  # UGUALE A id QUINDI POTREMMO ELIMINARLO
+  anchor: String!
+  metadata: TokenMetadata
+  # tags: [String!]!
+  owner: Owner!
+  # Field to indicate if the token is currently listed
+  isListed: Boolean! # True if the token is listed for sale
+  listingPrice: BigInt! # Optional: Listing price, if relevant
+  # listedAt: BigInt # Optional: Timestamp when the token was listed
+  # marketplace: String # Optional: Marketplace where it is listed
+  transactions: [Transaction!]! @derivedFrom(field: "token")
+}
+
+type TokenMetadata implements Node @entity {
+  id: ID!
+  title: String!
+  description: String!
+  tags: [String!]!
+  imageURI: String!
+}
+
+input Where_Tags {
+  tags: [String!]
+}
+input Where_Token_Metadata {
+  metadata_: Where_Tags
+}
+
+input Where_Token_Owner_Address {
+  address: String
+}
+input Where_Token_Owner {
+  owner_: Where_Token_Owner_Address
+}
+
+# Define the Owner entity with Relay's Node interface
+type Owner implements Node @entity {
+  id: ID!
+  # address: String!  # UGUALE A id QUINDI POTREMMO ELIMINARLO
+  nfts: [Token!]! @derivedFrom(field: "owner")
+  transactions: [Transaction!]! @derivedFrom(field: "from")
+  transactionsReceived: [Transaction!]! @derivedFrom(field: "to")
+}
+
+type Transaction implements Node @entity {
+  id: ID!
+  from: Owner!
+  to: Owner!
+  token: Token!
+  timestamp: BigInt!
+}

@@ -1,0 +1,38 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.6.3/schema.json",
+    "files": {
+      "ignore": ["**/node_modules/**", "**/__generated__/**", "**/*.module.css.d.ts", "**/*.module.css.d.ts.map", ".next"]
+    },
+    "organizeImports": {
+      "enabled": true
+    },
+    "linter": {
+      "enabled": true,
+      "rules": {
+        "recommended": true,
+        "nursery": {
+          "noRestrictedImports": {
+            "level": "error",
+            "options": {
+              "paths": {
+                "react-relay": "To fetch queries, you need to use `graphql` or `readInlineData`. They can be imported from relay-runtime or react-relay. However, react-relay uses APIs specific to the Client Component and will not work with the Server Component. If you are implementing the Server Component, import from relay-runtime. Otherwise, ignore this error."
+              }
+            }
+          }
+        },
+        "correctness": {
+          "noUnusedImports": "error"
+        }
+      }
+    },
+    "formatter": {
+      "indentStyle": "space",
+      "lineWidth": 120
+    },
+    "javascript": {
+      "formatter": {
+        "quoteStyle": "single",
+        "bracketSameLine": true
+      }
+    }
+  }

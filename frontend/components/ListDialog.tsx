@@ -56,7 +56,7 @@ export function DialogList({handleOnClick, disabled = false}: DialogBuyProps) {
     <Dialog>
       <DialogTrigger asChild>
         {/* <Button className="font-bold py-2 px-4 rounded mt-4" variant="outline" disabled={disabled}>List</Button> */}
-        <Button className="font-bold py-2 px-4 rounded mt-4" disabled={disabled}>List NFT</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4">List NFT</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -93,22 +93,15 @@ export function DialogList({handleOnClick, disabled = false}: DialogBuyProps) {
                         </form>
                     </Form>
                 </CardContent>
-                <CardFooter className="flex justify-between">
-                    {/* <Button type="button" onClick={handleReset} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mt-4">
-                        Reset
-                    </Button> */}
-                    <Button type="submit" form="nft-listing-form" className="font-bold py-2 px-4 rounded mt-4">List</Button>
-                    {/* <AlertDialogForm /> */}
-                </CardFooter>
             </Card>
           </div>
-        <DialogFooter>
+        <DialogFooter  className="flex justify-between">
             <DialogClose asChild>
                 <Button type="button" variant="secondary">
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="submit">List</Button>
+            <Button type="submit" form="nft-listing-form" className="font-bold py-2 px-4 rounded mt-4">List</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

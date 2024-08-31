@@ -55,6 +55,7 @@ import { unixfs } from "@helia/unixfs"
 import { BlackHoleBlockstore } from "blockstore-core/black-hole"
 import { fixedSize } from "ipfs-unixfs-importer/chunker"
 import { balanced } from "ipfs-unixfs-importer/layout"
+import { CreateDialog } from "./CreateDialog";
 
 
 
@@ -845,7 +846,8 @@ export default function NFTForm() {
                         Reset
                     </Button>
                     {/* <Button type="submit" form="nft-form" className="font-bold py-2 px-4 rounded mt-4">Submit</Button> */}
-                    <AlertDialogForm />
+                    {/* <AlertDialogForm /> */}
+                    <CreateDialog />
                 </CardFooter>
             </Card>
         </div>

@@ -24,7 +24,7 @@ export function DialogCancelList({handleOnClick, disabled = false}: DialogCancel
     <Dialog>
       <DialogTrigger asChild>
         {/* <Button onClick={handleOnClick} variant="outline" disabled={disabled}>Buy {price} ETH</Button> */}
-        <Button onClick={handleOnClick} disabled={disabled}>Cancel listing</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4">Cancel listing</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -51,7 +51,7 @@ export function DialogCancelList({handleOnClick, disabled = false}: DialogCancel
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="submit">Delist</Button>
+            <Button type="button" onClick={handleOnClick}>Buy</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

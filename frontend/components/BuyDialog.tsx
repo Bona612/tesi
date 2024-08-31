@@ -21,11 +21,12 @@ interface DialogBuyProps {
 
 
 export function DialogBuy({handleOnClick, disabled = false, price}: DialogBuyProps) {
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         {/* <Button onClick={handleOnClick} variant="outline" disabled={disabled}>Buy {price} ETH</Button> */}
-        <Button onClick={handleOnClick} disabled={disabled}>Buy {price} ETH</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4">Buy {price} ETH</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -52,7 +53,7 @@ export function DialogBuy({handleOnClick, disabled = false, price}: DialogBuyPro
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="submit">Buy</Button>
+            <Button type="button" onClick={handleOnClick}>Buy</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

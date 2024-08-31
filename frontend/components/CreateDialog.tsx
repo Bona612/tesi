@@ -12,19 +12,19 @@ import {
   
 
 type CreateDialogProps = {
-    text: string;
-    handleOnClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
-    disabled?: boolean,
+    // text: string;
+    // handleOnClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
+    // disabled?: boolean,
 }
 
   
-export function CreateDialog({ text, handleOnClick, disabled = false }: CreateDialogProps) {
+export function CreateDialog({}: CreateDialogProps) {
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         {/* <Button onClick={handleOnClick} variant="outline" disabled={disabled}>Buy {price} ETH</Button> */}
-        <Button onClick={handleOnClick} disabled={disabled}>Create NFT</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4">Create NFT</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -51,7 +51,7 @@ export function CreateDialog({ text, handleOnClick, disabled = false }: CreateDi
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="submit">Create</Button>
+            <Button type="submit" form="nft-form">Create</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

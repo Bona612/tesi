@@ -52,6 +52,8 @@ dataSources:
           handler: handleItemCancelled
         - event: ItemBought(indexed address,indexed uint256,indexed address,uint256)
           handler: handleItemBought
+        - event: ItemRedeemed(indexed address,indexed uint256,indexed address)
+          handler: handleItemRedeemed
 
 templates:
   - name: TokenMetadata

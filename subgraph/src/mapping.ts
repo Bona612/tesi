@@ -100,6 +100,7 @@ export function handleItemBought(event: ItemBoughtEvent): void {
   if (token) {
     token.isListed = false;
     token.listingPrice = BigInt.fromI32(0);
+    token.toRedeem = true;
     token.save()
   }
 }
@@ -113,41 +114,35 @@ export function handleItemCanceled(event: ItemCanceledEvent): void {
   }
 }
 
-// // PER ORA DA NON USARE, IN QUANTO IL REDEEM CHIAMRà ANCHE ANCHORTRANSFER
-// // event ItemRedeemed(
-// //   address indexed nftAddress,
-// //   uint256 indexed tokenId, 
-// //   address indexed buyer,
-// //   address indexed seller
-// // );
 
-// export function handleItemRedeemed(event: ItemRedeemed): void {
-//   let token = Token.load(event.params.tokenId.toString())
-//   if (token) {
-//     token.owner = event.params.buyer.toString();
-//     token.save();
+export function handleItemRedeemed(event: ItemRedeemedEvent): void {
+  let token = Token.load(event.params.tokenId.toString())
+  if (token) {
+    // token.owner = event.params.buyer.toString();
+    token.toRedeem = false;
+    token.save();
 
-//     let transaction = new Transaction(event.transaction.hash.toHex());
-//     if (transaction) {
-//       transaction.from = event.params.seller.toString();
-//       transaction.to = event.params.buyer.toString();
-//       transaction.token = event.params.tokenId.toString();
-//       transaction.timestamp = event.block.timestamp;
-//       transaction.save();
+    // let transaction = new Transaction(event.transaction.hash.toHex());
+    // if (transaction) {
+    //   transaction.from = event.params.seller.toString();
+    //   transaction.to = event.params.buyer.toString();
+    //   transaction.token = event.params.tokenId.toString();
+    //   transaction.timestamp = event.block.timestamp;
+    //   transaction.save();
 
-//       let newOwner = Owner.load(event.params.buyer.toHex());
-//       if (newOwner) {
-//         newOwner.nfts = newOwner.nfts + token
-//         newOwner.transactions = newOwner.transactions + transaction
-//         newOwner.save();
-//       }
+    //   let newOwner = Owner.load(event.params.buyer.toHex());
+    //   if (newOwner) {
+    //     newOwner.nfts = newOwner.nfts + token
+    //     newOwner.transactions = newOwner.transactions + transaction
+    //     newOwner.save();
+    //   }
       
-//       let prevOwner = Owner.load(event.params.from.toHex());
-//       if (prevOwner) {
-//         prevOwner.nfts = prevOwner.nfts - token
-//         prevOwner.transactionsReceived = prevOwner.transactionsReceived + transaction
-//         prevOwner.save();
-//       }
-//     }
-//   }
-// }
+    //   let prevOwner = Owner.load(event.params.from.toHex());
+    //   if (prevOwner) {
+    //     prevOwner.nfts = prevOwner.nfts - token
+    //     prevOwner.transactionsReceived = prevOwner.transactionsReceived + transaction
+    //     prevOwner.save();
+    //   }
+    // }
+  }
+}

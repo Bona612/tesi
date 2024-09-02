@@ -21,22 +21,24 @@ echo "Deployment Output:"
 echo "$DEPLOY_OUTPUT"
 
 # this does not work
-# SUBGRAPH_STUDIO_ENDPOINT=$(echo "$DEPLOY_OUTPUT" | grep -oP '(?<=Queries \(HTTP\):\s*)https://[^\s,]+')
-SUBGRAPH_STUDIO_ENDPOINT=$(echo "$DEPLOY_OUTPUT" | grep -oP '(?<=Subgraph endpoints: Queries \(HTTP\):\t)http://[^\s,]+')
-# SUBGRAPH_STUDIO_ENDPOINT=$(echo "$DEPLOY_OUTPUT" | grep -oP '(?<=Subgraph endpoints: Queries \(HTTP\): )https://[^\s,]+')
-# SUBGRAPH_STUDIO_ENDPOINT=$(echo "$DEPLOY_OUTPUT" | grep -o 'https://api\.studio\.thegraph\.com/query/[0-9]*/erc6956full/v[0-9]\+\.[0-9]\+.[0-9]\+')
+SUBGRAPH_STUDIO_ENDPOINT=$(echo "$DEPLOY_OUTPUT" | 
+ sed 's/\x1b\[0m//g' |
+sed -n -e '/Subgraph endpoints:/,/Queries (HTTP):/s/.*Queries (HTTP):[[:space:]]*//p' | sed 's/[[:space:]].*//')
 # Print SUBGRAPH_STUDIO_ENDPOINT to the terminal
 echo "Subgraph Studio Endpoint:"
 echo "$SUBGRAPH_STUDIO_ENDPOINT"
 
+# File path to the .env file
+ENV_FILE="../frontend/.env"
+
 # Append the endpoint URL to the .env file
-if grep -q '^SUBGRAPH_STUDIO_ENDPOINT=' ../frontend/.env; then
+if grep -q '^SUBGRAPH_STUDIO_ENDPOINT=' "$ENV_FILE"; then
   # Replace the existing SUBGRAPH_STUDIO_ENDPOINT
-  sed -i "s|^SUBGRAPH_STUDIO_ENDPOINT=.*|SUBGRAPH_STUDIO_ENDPOINT=$SUBGRAPH_STUDIO_ENDPOINT|" ../frontend/.env
+  sed -i "s|^SUBGRAPH_STUDIO_ENDPOINT=.*|SUBGRAPH_STUDIO_ENDPOINT=$SUBGRAPH_STUDIO_ENDPOINT|" "$ENV_FILE"
 else
   # Add a new SUBGRAPH_STUDIO_ENDPOINT entry
-  echo "SUBGRAPH_STUDIO_ENDPOINT=$SUBGRAPH_STUDIO_ENDPOINT" >> ../frontend/.env
+  echo "SUBGRAPH_STUDIO_ENDPOINT=$SUBGRAPH_STUDIO_ENDPOINT" >> "$ENV_FILE"
 fi
 
 # Print confirmation
-echo "Deployment endpoint URL saved to ../frontend/.env file: $SUBGRAPH_STUDIO_ENDPOINT"
+echo "Deployment endpoint URL saved to  "$ENV_FILE" file: $SUBGRAPH_STUDIO_ENDPOINT"

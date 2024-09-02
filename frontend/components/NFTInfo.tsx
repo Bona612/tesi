@@ -30,7 +30,7 @@ import NFTMarketplace from "../contractsData/NFTMarketplace.json";
 import { ERC6956Full__factory } from '@/typechain/factories/contracts/ERC6956Full__factory';
 import { ERC6956Full } from '@/typechain/contracts/ERC6956Full';
 import { NFTMarketplace as NFTM } from '@/typechain/contracts/NFTMarketplace';
-import { AlertDialogConfirmation } from './CreateDialog';
+import { CreateDialog } from './CreateDialog';
 import { bigint } from 'zod';
 import { ethToWei, weiToEth } from '@/utils/utils';
 import { DialogBuy } from './BuyDialog';
@@ -385,7 +385,7 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
             {data.isListed ? (
                 address && data.owner.id === address ? (
                     <CardFooter className="flex justify-between">
-                        <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} />
+                        {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
                         <DialogBuy handleOnClick={handleBuyNFT} disabled={data.owner.id === address} price={weiToEth(data.listingPrice)} />
                         <Button onClick={handleBuyNFT} variant="outline" disabled={data.owner.id === address}>Buy {weiToEth(data.listingPrice)} ETH</Button>
                         <Button onClick={handleBuyNFT} disabled={data.owner.id === address}>Buy {weiToEth(data.listingPrice)} ETH</Button>

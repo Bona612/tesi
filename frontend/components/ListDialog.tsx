@@ -29,10 +29,11 @@ interface DialogBuyProps {
 
 
 const formSchema = z.object({
-  listingPrice: z.number({
-    required_error: "Price is required",
-    invalid_type_error: "Price must be a number",
-  }).gt(0),
+  listingPrice: z.string().transform((val) => parseFloat(val)).refine((val) => {
+    return val > 0 && Number.isFinite(val) && val.toString().split('.')[1]?.length <= 8;
+  }, {
+    message: "The number must be a positive float greater than 0 with no more than 8 decimal places.",
+  }),
 })
 
 

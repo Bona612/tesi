@@ -53,7 +53,6 @@ export type Transaction = {
 
 export type NFT = {
   id: string,
-  tokenId: number,
   anchor: string,
   metadata: Metadata,
   // tags: Tag[],

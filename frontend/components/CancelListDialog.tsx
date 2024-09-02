@@ -51,7 +51,7 @@ export function DialogCancelList({handleOnClick, disabled = false}: DialogCancel
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="button" onClick={handleOnClick}>Buy</Button>
+            <Button type="button" onClick={handleOnClick}>Cancel listing</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

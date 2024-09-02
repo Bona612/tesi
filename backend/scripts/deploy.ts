@@ -131,7 +131,7 @@ async function saveFrontendFiles(contract: Contract, name: string) {
 
 async function saveTheGraphFiles(contract: Contract, name: string) {
   
-  const contractsDir = __dirname + "/../../thegraph/abis";
+  const contractsDir = __dirname + "/../../subgraph/abis";
 
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);

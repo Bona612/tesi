@@ -20,7 +20,7 @@ function Tag({tag, handleOnClick, readonly = false}: TagProps) {
       // className="border-orange-800 text-gray-900 text-lg mx-2 my-1 hover:cursor-pointer bg-orange-50 hover:scale-110 ease-in duration-200"
       // onClick={(e) => handleOnClick(tag)}
       className={cn(
-        "border-orange-800 text-gray-900 text-lg mx-2 my-1 bg-orange-50 ease-in duration-200",
+        "border-black-800 text-gray-900 text-lg mx-2 my-1 bg-white-50 ease-in duration-200",
         { "hover:cursor-pointer hover:scale-110": !readonly }
       )}
       onClick={readonly ? undefined : (e) => handleOnClick && handleOnClick(tag)}

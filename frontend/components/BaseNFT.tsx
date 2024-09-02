@@ -15,6 +15,7 @@ import { BrowserProvider, Contract, Eip1193Provider, ethers, formatUnits } from 
 
 // import ERC6956Full from "../contractsData/ERC6956Full.json";
 import NFTMarketplace_address from "../contractsData/NFTMarketplace_address.json";
+import ERC6956Full_address from "../contractsData/ERC6956Full_address.json";
 import NFTMarketplace from "../contractsData/NFTMarketplace.json";
 import { ERC6956Full__factory } from '@/typechain/factories/contracts/ERC6956Full__factory';
 import { ERC6956Full } from '@/typechain/contracts/ERC6956Full';
@@ -47,7 +48,7 @@ import TagList from "./TagList";
 import { NFT, Tag } from "@/types";
 import TokenHistory from "./NFTHistory";
 import { buildQueryFromSelectionSet } from "@apollo/client/utilities";
-import { AlertDialogConfirmation } from "./CreateDialog";
+import { CreateDialog } from "./CreateDialog";
 import { DialogBuy } from "./BuyDialog";
 import { ethToWei, weiToEth } from "@/utils/utils";
 import { DialogList } from "./ListDialog";
@@ -120,7 +121,7 @@ async function buyNFT(nft: NFT, isConnected: boolean, address: string | undefine
         
         console.log("senza data")
         // QUI da cambiare in .address
-        const tx_mint = await nftmcecontractWithSigner.buyItem(nft.id, nft.tokenId, txParams);
+        const tx_mint = await nftmcecontractWithSigner.buyItem(ERC6956Full_address.address, nft.id, txParams);
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
@@ -192,7 +193,7 @@ async function listNFT(nft: NFT, listingPrice: number, isConnected: boolean, add
         // const NULLADDR = ethers.ZeroAddress;
         
         // QUI da cambiare in .address
-        const tx_mint = await nftmcecontractWithSigner.listItem(nft.id, nft.tokenId, ethToWei(listingPrice), txParams);
+        const tx_mint = await nftmcecontractWithSigner.listItem(ERC6956Full_address.address, nft.id, ethToWei(listingPrice), txParams);
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
@@ -264,8 +265,9 @@ async function cancelListNFT(nft: NFT, isConnected: boolean, address: string | u
         let receipt_mint: ethers.ContractTransactionReceipt | null = null;
         // const NULLADDR = ethers.ZeroAddress;
         
+        console.log(ERC6956Full_address.address, nft.id);
         // QUI da cambiare in .address
-        const tx_mint = await nftmcecontractWithSigner.cancelListing(nft.id, nft.tokenId, txParams);
+        const tx_mint = await nftmcecontractWithSigner.cancelListing(ERC6956Full_address.address, nft.id, txParams);
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
@@ -315,7 +317,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
     return (
         <div className="w-full p-4">
             <Card className="w-full">
-                <Link href={`/nfts/${nft.tokenId}`} key={`${nft.tokenId}`} >
+                <Link href={`/nfts/${nft.id}`} key={`${nft.id}`} >
                 <CardHeader>
                     <CardTitle>{nft.metadata.title}</CardTitle>
                     <CardDescription>{nft.metadata.description}</CardDescription>
@@ -341,7 +343,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                 {nft.isListed ? (
                     address && nft.owner.id !== address ? (
                         <CardFooter className="flex justify-between">
-                            <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} />
+                            {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
                             <DialogBuy handleOnClick={handleBuyNFT} disabled={nft.owner.id === address} price={weiToEth(nft.listingPrice)} />
                             <Button onClick={handleBuyNFT} variant="outline" disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button>
                             <Button onClick={handleBuyNFT} disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button>

@@ -16,13 +16,13 @@ import { BrowserProvider, Contract, Eip1193Provider, ethers, formatUnits } from 
 
 import Link from 'next/link';
 import { graphql, useFragment, usePaginationFragment } from 'react-relay';
-import type { NFTList_query$data, NFTList_query$key } from '@/components/__generated__/NFTList_query.graphql';
+// import type { NFTList_query$data, NFTList_query$key } from '@/components/__generated__/NFTList_query.graphql';
 import styles from './index.module.css';
 import Grid from './Grid';
 import { NFTtokens, NFTtokensVariables } from "@/types/index";
 
 import { Stringifier } from 'postcss';
-import type { NFTListWithAddress_query$data, NFTListWithAddress_query$key } from '@/components/__generated__/NFTListWithAddress_query.graphql';
+// import type { NFTListWithAddress_query$data, NFTListWithAddress_query$key } from '@/components/__generated__/NFTListWithAddress_query.graphql';
 
 import {
   gql,
@@ -55,7 +55,7 @@ const NFTList = React.memo(({ data, ownerAddress }: NFTListProps) => {
     <div>
         <Grid>
             {data?.tokens.map((nft, idx) => (
-                <BaseNFTBox nft={nft} key={`${nft.tokenId}-${idx}`} />
+                <BaseNFTBox nft={nft} key={`${nft.id}-${idx}`} />
             ))}
         </Grid>
     </div>

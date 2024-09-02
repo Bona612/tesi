@@ -17,7 +17,7 @@ import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider'
 import { fetchGraphQLQuery } from '@/relay/fetchGraphQLQuery';
 import { graphql } from 'relay-runtime';
 import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
-import type { page_RootLayoutQuery, page_RootLayoutQuery$variables } from '@/app/marketplace/__generated__/page_RootLayoutQuery.graphql';
+// import type { page_RootLayoutQuery, page_RootLayoutQuery$variables } from '@/app/marketplace/__generated__/page_RootLayoutQuery.graphql';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NFTsHeader from '@/components/NFTsHeader';
 import { SkeletonCard } from '@/components/SkeletonCard';
@@ -42,6 +42,7 @@ import client from "@/lib/apollo-client";
 import NFTsPagination from './NFTsPagination';
 import { NFT_Owner, NFTtokens, NFTtokensVariables, Transaction } from "@/types/index";
 import { bigint } from 'zod';
+import { ethToWei } from '@/utils/utils';
 // import { RefetchFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
 
 
@@ -80,17 +81,15 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
   const data: NFTtokens = {tokens: 
     [{
       id: "1",
-      tokenId: 1,
       anchor: "1",
       metadata: {title: "titolo", description: "descrizione", tags: ["Tag 1"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C7"} as NFT_Owner,
+      owner: {id: "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199"} as NFT_Owner,
       isListed: true,
-      listingPrice: BigInt(0),
+      listingPrice: ethToWei(0.01),
       transactions: [] as Transaction[],
     },
     {
       id: "2",
-      tokenId: 2,
       anchor: "2",
       metadata: {title: "titolo", description: "descrizione", tags: ["Tag 2"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
       owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
@@ -100,7 +99,6 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
     },
     {
       id: "3",
-      tokenId: 3,
       anchor: "3",
       metadata: {title: "titolo", description: "descrizione", tags: ["Tag 3"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
       owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
@@ -110,7 +108,6 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
     },
     {
       id: "4",
-      tokenId: 4,
       anchor: "4",
       metadata: {title: "titolo", description: "descrizione", tags: ["Tag 4"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
       owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
@@ -120,7 +117,6 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
     },
     {
       id: "5",
-      tokenId: 5,
       anchor: "5",
       metadata: {title: "titolo", description: "descrizione", tags: ["Tag 4"],imageURI: "https://dummyimage.com/300.png/09f/fff"},
       owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
@@ -130,7 +126,6 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
     },
     {
       id: "2",
-      tokenId: 2,
       anchor: "2",
       metadata: {title: "titolo", description: "descrizione", tags: ["Tag 2"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
       owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
@@ -140,7 +135,6 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
     },
     {
       id: "3",
-      tokenId: 3,
       anchor: "3",
       metadata: {title: "titolo", description: "descrizione", tags: ["Tag 3"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
       owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
@@ -150,7 +144,6 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
     },
     {
       id: "4",
-      tokenId: 4,
       anchor: "4",
       metadata: {title: "titolo", description: "descrizione", tags: ["Tag 4"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
       owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,

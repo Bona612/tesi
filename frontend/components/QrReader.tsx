@@ -7,27 +7,20 @@ import "./QrReader.css";
 import QrScanner from "qr-scanner";
 import QrFrame from "../assets/qr-frame.svg";
 import { AttestationShower } from "@/components/AttestationShower";
+import { Attestation } from "@/types";
+import { jsonToAttestation } from "@/utils/utils";
+import { UseFormReturn } from "react-hook-form";
 
 
 interface QrReaderProps {
     onClose: () => void;
     onScannedAttestation: () => void;
+    handleOnScanSuccess: (attestation: Attestation) => void,
 }
 
-interface Attestation {
-    to: string;
-    anchor: string;
-    attestationTime: number;
-    validStartTime: number;
-    validEndTime: number;
-}
 
-function jsonToAttestation(attestationJSON: string): Attestation {
-    const attestation: Attestation = JSON.parse(attestationJSON) as Attestation;
-    return attestation;
-}
 
-const QrReader = ({ onClose, onScannedAttestation }: QrReaderProps) => {
+const QrReader = ({ onClose, onScannedAttestation, handleOnScanSuccess }: QrReaderProps) => {
     // QR States
     const scanner = useRef<QrScanner>();
     const videoEl = useRef<HTMLVideoElement>(null);
@@ -65,10 +58,15 @@ const QrReader = ({ onClose, onScannedAttestation }: QrReaderProps) => {
     // Success
     const onScanSuccess = (result: QrScanner.ScanResult) => {
         // 🖨 Print the "result" to browser console.
+        console.log("success");
         console.log(result);
         // ✅ Handle success.
         // 😎 You can do whatever you want with the scanned result.
         const attestation: Attestation = jsonToAttestation(result?.data)
+        // DA VERIFICARE
+        handleOnScanSuccess(attestation);
+        console.log(attestation)
+
         setScannedAttestation(attestation);
         if (attestation !== undefined) {
             onScannedAttestation();
@@ -78,6 +76,7 @@ const QrReader = ({ onClose, onScannedAttestation }: QrReaderProps) => {
     // Fail
     const onScanFail = (err: string | Error) => {
         // 🖨 Print the "err" to browser console.
+        console.log("fail");
         console.log(err);
     };
 
@@ -86,6 +85,11 @@ const QrReader = ({ onClose, onScannedAttestation }: QrReaderProps) => {
         requestCameraPermission();
         console.log("end permission")
     }, []);
+
+    useEffect(() => {
+        console.log("setQrOn");
+        console.log(qrOn);
+    }, [qrOn]);
 
     useEffect(() => {
         console.log("start create qr")
@@ -127,7 +131,10 @@ const QrReader = ({ onClose, onScannedAttestation }: QrReaderProps) => {
         // if (!permissions) {
         //     alert("Camera access is required to scan QR codes. Please enable camera access in your browser settings and reload the page.");
         // }
-        console.log("Camera access is required to scan QR codes. Please enable camera access in your browser settings and reload the page.")
+        if (!permissions) {
+            console.log("Camera access is required to scan QR codes. Please enable camera access in your browser settings and reload the page.")
+        }
+        console.log(permissions);
     }, [permissions]);    
 
 
@@ -139,14 +146,13 @@ const QrReader = ({ onClose, onScannedAttestation }: QrReaderProps) => {
                     <video ref={videoEl}></video>
                     <div ref={qrBoxEl} className="qr-box">
                         <img
-                        src={QrFrame}
+                        src="qr-frame.svg"
                         alt="Qr Frame"
                         width={256}
                         height={256}
                         className="qr-frame"
                         />
                     </div>
-                    <AttestationShower attestation={scannedAttestation as Attestation}></AttestationShower>
                 </>
             }
             {!permissions && <button onClick={onRequestCameraPermission}>Close</button>}

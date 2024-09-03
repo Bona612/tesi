@@ -28,7 +28,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import Redeem from "./Redeem";
+import Redeem from "./RedeemOption";
 
 import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
 import { BrowserProvider, Contract, Eip1193Provider, ethers, formatUnits } from 'ethers'
@@ -40,7 +40,7 @@ import { ERC6956Full__factory } from '@/typechain/factories/contracts/ERC6956Ful
 import { ecsign, toRpcSig, fromRpcSig } from 'ethereumjs-util';
 import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot } from "../../backend/utils/merkleTreeUtilities";
 import { Tag, Attestation, Metadata, TAGS, zod_TAGS } from "@/types/index";
-import { AlertDialogForm } from "./AlertDialogForm";
+import { AlertDialogRedeem } from "./AlertDialogRedeem";
 
 import { useToast } from "@/components/ui/use-toast"
 import TagListWithContext from "@/components/TagListWithContext";
@@ -56,6 +56,8 @@ import { BlackHoleBlockstore } from "blockstore-core/black-hole"
 import { fixedSize } from "ipfs-unixfs-importer/chunker"
 import { balanced } from "ipfs-unixfs-importer/layout"
 import { CreateDialog } from "./CreateDialog";
+import RedeemOption from "./RedeemOption";
+import { AttestationShower } from "./AttestationShower";
 
 
 
@@ -67,16 +69,19 @@ const fileValidation = (file: File | null) => {
 type FileOrUndefined = File | undefined;
 
 const TagSchema = z.enum(zod_TAGS);
+
+const AttestationSchema = z.object({
+    to: z.string().min(1, "receiver address cannot be empty"),
+    anchor: z.string().min(1, "anchor cannot be empty"),
+    // attestationTime: ,
+    // validStartTime: ,
+    // validEndTime: ,
+});
+
 const formSchema = z.object({
     title: z.string().min(2, {
         message: "Username must be at least 2 characters.",
     }),
-    // imageURL: z.string().min(1, {
-    //     message: "Please select an image file.",
-    // }),
-    // image: z.instanceof(File).optional().refine(fileValidation, {
-    //     message: "Please upload a valid image file.",
-    // }),
     image: z.instanceof(File)
         .refine(fileValidation, {
         message: "Image is required.",
@@ -87,12 +92,9 @@ const formSchema = z.object({
     description: z.string().min(10, {
         message: "Description must be at least 10 characters.",
     }),
-    
-    // attestation: AttestationSchema.required(),
+    attestation: AttestationSchema.required(),
 })
 
-// // extract the inferred type like this
-// type Dog = z.infer<typeof Dog>;
 
 // FUNZIONE DA CHIAMARE APPENA LA TRANSAZIONE è COMPLETATA POSITIVAMENTE
 const uploadImageToIPFS = async (image: File) => {    
@@ -244,107 +246,99 @@ const merkleTreeAPI = async (data: {anchor: string}) => {
         console.error('Error sending data:', error);
         return error;
     }
-
-// fetch(apiUrl)
-//   .then(response => response.json())
-//   .then(data => {
-//     console.log('Merkle Tree:', data);
-//   })
-//   .catch(error => {
-//     console.error('Error fetching Merkle Tree:', error);
-//   });
 };
 
-async function pre(metadata2, formValues){
-    try {
-        // const text = JSON.stringify(metadata2);
-        // const blob = new Blob([text], { type: "text/plain" });
-        // const unit8array = new Uint8Array(await blob.arrayBuffer());
-        // console.log(unit8array)
+// // DA SCOMMENTARE PER FARE LA PROVA
+// async function pre(metadata2, formValues){
+//     try {
+//         // const text = JSON.stringify(metadata2);
+//         // const blob = new Blob([text], { type: "text/plain" });
+//         // const unit8array = new Uint8Array(await blob.arrayBuffer());
+//         // console.log(unit8array)
 
-        // const bytes = raw.encode(unit8array)
-        // console.log(bytes)
+//         // const bytes = raw.encode(unit8array)
+//         // console.log(bytes)
 
-        // const hash = await sha256.digest(bytes)
-        // console.log(hash)
+//         // const hash = await sha256.digest(bytes)
+//         // console.log(hash)
 
-        // const cid = CID.create(1, raw.code, hash)
-        // console.log(cid.toString())
-        const file = formValues.image as File;
+//         // const cid = CID.create(1, raw.code, hash)
+//         // console.log(cid.toString())
+//         const file = formValues.image as File;
 
-        const form = new FormData();
-        form.append('file', file);
-        const pinataOptions = JSON.stringify({
-            cidVersion: 1,
-        });
-        form.append("pinataOptions", pinataOptions);
-        const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
-            method: "POST",
-            headers: {
-              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI0ZmZkYTliYy01MzEyLTQxZDktOTQ3ZC00NDA0NmJhMTYyMzgiLCJlbWFpbCI6Im1hdHRlby5ib2NjYWxpLjA2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfSx7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIwODY3ODJhZDgzNGY5ZjM5YjZiMCIsInNjb3BlZEtleVNlY3JldCI6IjNkNjE3ZDFmZDFhZGY1MWQzOGQ3YmExODUwYmRmMTdmM2RkNTFlY2NlZTVmNDJkNGVlOTNlMmEyNWRiYTAwZDkiLCJpYXQiOjE3MTcyNTE0OTh9.Dg4e6Dgd64H9lqg3jcmbflZhm_BuLdkGSswmJd5pjf8"
-            },
-            body: form,
-        });
+//         const form = new FormData();
+//         form.append('file', file);
+//         const pinataOptions = JSON.stringify({
+//             cidVersion: 1,
+//         });
+//         form.append("pinataOptions", pinataOptions);
+//         const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+//             method: "POST",
+//             headers: {
+//               Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI0ZmZkYTliYy01MzEyLTQxZDktOTQ3ZC00NDA0NmJhMTYyMzgiLCJlbWFpbCI6Im1hdHRlby5ib2NjYWxpLjA2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfSx7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIwODY3ODJhZDgzNGY5ZjM5YjZiMCIsInNjb3BlZEtleVNlY3JldCI6IjNkNjE3ZDFmZDFhZGY1MWQzOGQ3YmExODUwYmRmMTdmM2RkNTFlY2NlZTVmNDJkNGVlOTNlMmEyNWRiYTAwZDkiLCJpYXQiOjE3MTcyNTE0OTh9.Dg4e6Dgd64H9lqg3jcmbflZhm_BuLdkGSswmJd5pjf8"
+//             },
+//             body: form,
+//         });
     
-        const resData = await res.json();
-        console.log(resData);
+//         const resData = await res.json();
+//         console.log(resData);
 
-        const fileBlob = new Blob([file], { type: file.type });
-        const unit8array2 = new Uint8Array(await fileBlob.arrayBuffer());
-        console.log(unit8array2)
+//         const fileBlob = new Blob([file], { type: file.type });
+//         const unit8array2 = new Uint8Array(await fileBlob.arrayBuffer());
+//         console.log(unit8array2)
 
-        const bytes2 = raw.encode(unit8array2)
-        console.log(bytes2)
+//         const bytes2 = raw.encode(unit8array2)
+//         console.log(bytes2)
 
-        const hash2 = await sha256.digest(bytes2)
-        console.log(hash2)
+//         const hash2 = await sha256.digest(bytes2)
+//         console.log(hash2)
 
-        const cid2 = CID.create(1, raw.code, hash2)
-        console.log(cid2.toString())
-    } 
-    catch(error) {
-        console.log(error)
-    }
-}
+//         const cid2 = CID.create(1, raw.code, hash2)
+//         console.log(cid2.toString())
+//     } 
+//     catch(error) {
+//         console.log(error)
+//     }
+// }
 
-async function pre2(bytes: Uint8Array) {
-    const metadata: Metadata = {
-        title: "titolo",
-        description: "descrizione",
-        imageURI: "https://gold-magnificent-stork-310.mypinata.cloud/ipfs/bafybeidh6bhadr4csigx4tbafgslniuarvxas734oqsefaywdwn32vffp4",
-        tags: ["Tag 1"],
-    };
-    const textEncoder = new TextEncoder()
-    const jsonString = JSON.stringify(metadata)
-    const blob = new Blob([jsonString], { type: "text/plain" });
-    const uint8Array = textEncoder.encode(jsonString)
-    // const uint8Array = new Uint8Array(await blob.arrayBuffer());
+// async function pre2(bytes: Uint8Array) {
+//     const metadata: Metadata = {
+//         title: "titolo",
+//         description: "descrizione",
+//         imageURI: "https://gold-magnificent-stork-310.mypinata.cloud/ipfs/bafybeidh6bhadr4csigx4tbafgslniuarvxas734oqsefaywdwn32vffp4",
+//         tags: ["Tag 1"],
+//     };
+//     const textEncoder = new TextEncoder()
+//     const jsonString = JSON.stringify(metadata)
+//     const blob = new Blob([jsonString], { type: "text/plain" });
+//     const uint8Array = textEncoder.encode(jsonString)
+//     // const uint8Array = new Uint8Array(await blob.arrayBuffer());
 
-    const unixFs = unixfs({
-        blockstore: new BlackHoleBlockstore(),
-    })
+//     const unixFs = unixfs({
+//         blockstore: new BlackHoleBlockstore(),
+//     })
     
-    const cid = await unixFs.addBytes(bytes, {
-        cidVersion: 1,
-        rawLeaves: false,
-        leafType: "raw",
-        layout: balanced({
-            maxChildrenPerNode: 174,
-        }),
-        chunker: fixedSize({
-            chunkSize: 262144,
-        }),
-    })
+//     const cid = await unixFs.addBytes(bytes, {
+//         cidVersion: 1,
+//         rawLeaves: false,
+//         leafType: "raw",
+//         layout: balanced({
+//             maxChildrenPerNode: 174,
+//         }),
+//         chunker: fixedSize({
+//             chunkSize: 262144,
+//         }),
+//     })
     
-    console.log(cid.toString());
-    // const cidv0 = cid.toV0().toString()
-    const cidv1 = cid.toV1();
-    console.log(cidv1);
-    console.log(cidv1.toString());
-}
+//     console.log(cid.toString());
+//     // const cidv0 = cid.toV0().toString()
+//     const cidv1 = cid.toV1();
+//     console.log(cidv1);
+//     console.log(cidv1.toString());
+// }
 
 /// DA RIVEDERE E MIGLIORARE
-async function createToken(toast, formValues: { title: string; image: File; tags: Tag[]; description: string; }, attestation: Attestation, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
+async function createToken(toast: (arg0: { title: string; description: string; }) => void, formValues: { title: string; image: File; tags: Tag[]; description: string; }, attestation: Attestation, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
     console.log("isConnected: ", isConnected)
     console.log("address: ", address)
 
@@ -411,13 +405,12 @@ async function createToken(toast, formValues: { title: string; image: File; tags
         
         const to = await signer.getAddress()
         attestation.to = to
-        // '0x' + createHash('sha256').update('TestAnchor123').digest('hex')
-        const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
-        attestation.attestationTime = attestationTime
-        const validStartTime = 0;
-        attestation.validStartTime = validStartTime
-        const validEndTime = attestationTime + validStartTime + 15 * 60; // 15 minutes valid from attestation
-        attestation.validEndTime = validEndTime
+        // const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
+        // attestation.attestationTime = attestationTime
+        // const validStartTime = 0;
+        // attestation.validStartTime = validStartTime
+        // const validEndTime = attestationTime + validStartTime + 15 * 60; // 15 minutes valid from attestation
+        // attestation.validEndTime = validEndTime
 
 
         console.log("pre signing")
@@ -588,7 +581,7 @@ export default function NFTForm() {
             image: undefined,
             tags: [],
             description: "",
-            // attestation: undefined,
+            attestation: undefined,
         },
     })
     
@@ -640,21 +633,21 @@ export default function NFTForm() {
         const att: Attestation = {
             to: "",
             anchor: "0x3ab9a2c6e6a7a11cbf3ec33b9a44926f7b85b6f93a599be75dcb2a1b7a9f9f31",
-            attestationTime: 0,
-            validStartTime: 0,
-            validEndTime: 0
+            // attestationTime: 0,
+            // validStartTime: 0,
+            // validEndTime: 0
         }
 
-        // // DA SISTEMARE QUI, andrà aggiunta probabilmente parte async/await
-        // // E DA CAPIRE SE DOVRà ESSERE MESSA LATO SERVER
-        // const result = await createToken(toast, values, att, isConnected, address, walletProvider);
-        // console.log("result: ", result);
+        // DA SISTEMARE QUI, andrà aggiunta probabilmente parte async/await
+        // E DA CAPIRE SE DOVRà ESSERE MESSA LATO SERVER
+        const result = await createToken(toast, values, att, isConnected, address, walletProvider);
+        console.log("result: ", result);
 
-        // setTransactionResult(result)
-        // setTransactionCompleted(true)
+        setTransactionResult(result)
+        setTransactionCompleted(true)
 
-        uploadImageToIPFS(values.image);
-        pre2(new Uint8Array(await values.image.arrayBuffer()));
+        // uploadImageToIPFS(values.image);
+        // pre2(new Uint8Array(await values.image.arrayBuffer()));
     }
 
     // const onError = (errors) => {
@@ -721,6 +714,10 @@ export default function NFTForm() {
         }
     };
 
+    const handleOnScanSuccess = (attestation: Attestation) => {
+        form.setValue("attestation", attestation);
+    }
+
     const handleReset = () => {
         setTags([]);
         form.reset(); // This will reset all fields managed by react-hook-form
@@ -785,12 +782,6 @@ export default function NFTForm() {
                                         <FormLabel>Tags</FormLabel>
                                         <FormControl>
                                             <div>
-                                                {/* <div className="flex m-4">
-                                                    <TagFilter tagList={field.value as Tag[]} handleOnClick={handleOnClick}/>
-                                                </div>
-                                                <div>
-                                                    {field.value && <TagList tagList={field.value as Tag[]} handleOnClick={handleOnClick}></TagList>}
-                                                </div> */}
                                                 <div className="flex m-4">
                                                     <TagFilter />
                                                 </div>
@@ -822,14 +813,20 @@ export default function NFTForm() {
                                     </FormItem>
                                 )}
                             />
-                            {/* <FormField
+                            <FormField
                                 control={form.control}
                                 name="attestation"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Attestation</FormLabel>
                                         <FormControl>
-                                            <Redeem />
+                                            <div>
+                                                {field.value &&
+                                                    <AttestationShower attestation={field.value} />
+                                                }
+                                                <AlertDialogRedeem attestation={field.value} handleOnScanSuccess={handleOnScanSuccess} /> 
+                                                {/* <RedeemOption handleScanSuccess={handleScanSuccess} /> */}
+                                            </div>
                                         </FormControl>
                                         <FormDescription>
                                             Attestation for the creation of the NFT.
@@ -837,7 +834,7 @@ export default function NFTForm() {
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            /> */}
+                            />
                         </form>
                     </Form>
                 </CardContent>
@@ -853,3 +850,5 @@ export default function NFTForm() {
         </div>
     )
 }
+
+/// QUI MANCA IL TESTING DEL QR E DEL REDEEM, CONSIDERANDO CHE ANDRà FATTO IL QR ANCHE PER L'ANCORA (O FORSE SOLO QUELLO)

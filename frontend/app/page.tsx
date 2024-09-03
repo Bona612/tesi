@@ -12,13 +12,6 @@ export default function HomePage() {
     return (
       <div className="xl:px-24 px-10">
         <div className="my-12">
-            {/* <BaseNFTBox nft={{
-              id: "1",
-              tokenId: 1,
-              anchor: "1",
-              metadataURI: {title: "titolo", description: "descrizione", imageURI: "https://dummyimage.com/300.png/09f/fff"},
-              tags: ["Tag 1"]
-            }} /> */}
         </div>
       </div>
     );

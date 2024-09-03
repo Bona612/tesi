@@ -13,10 +13,10 @@ import ListedNFTBox from '@/components/ListedNFT';
 import ConnectButton from '@/components/ConnectButton';
 // import NFTsHeader from '@/components/NFTsHeader';
 
-import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider';
+// import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider';
 import { fetchGraphQLQuery } from '@/relay/fetchGraphQLQuery';
 import { graphql } from 'relay-runtime';
-import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
+// import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
 // import type { page_RootLayoutQuery, page_RootLayoutQuery$variables } from '@/app/marketplace/__generated__/page_RootLayoutQuery.graphql';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NFTsHeader from '@/components/NFTsHeader';

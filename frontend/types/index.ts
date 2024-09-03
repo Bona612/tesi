@@ -59,6 +59,7 @@ export type NFT = {
   owner: NFT_Owner,
   isListed: boolean,
   listingPrice: bigint,
+  toRedeem: boolean,
   transactions: Transaction[],
 }
 
@@ -129,19 +130,17 @@ export interface tokenOwnerVariables {
 export type Attestation = {
   to: string;
   anchor: string;
-  attestationTime: number;
-  validStartTime: number;
-  validEndTime: number;
+  // attestationTime: number;
+  // validStartTime: number;
+  // validEndTime: number;
 }
 
 export enum Token_orderBy {
   id,
-  tokenId,
   anchor,
   metadataURI,
   tags,
   owner,
   owner__id,
-  owner__address,
   transactions,
 }

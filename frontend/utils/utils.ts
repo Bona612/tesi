@@ -1,4 +1,4 @@
-import { OrderBy, orderByOptions, OrderDirectionEnum } from '@/types';
+import { Attestation, OrderBy, orderByOptions, OrderDirectionEnum } from '@/types';
 import { ethers } from 'ethers';
 
 
@@ -30,3 +30,8 @@ export const orderDirectionMap: { [key: string]: OrderDirectionEnum } = {
 export const findOrderBy = (name: string): OrderBy => {
     return orderByOptions.find(option => option.name === name) || orderByOptions[0];
 };
+
+export function jsonToAttestation(attestationJSON: string): Attestation {
+    const attestation: Attestation = JSON.parse(attestationJSON) as Attestation;
+    return attestation;
+}

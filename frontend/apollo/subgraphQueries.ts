@@ -1,6 +1,7 @@
 import { gql, TypedDocumentNode } from "@apollo/client"
 import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT} from "@/types";
 
+// DA RIVEDERE TUTTE LE QUERY, CON I DATI AGGIORNATI E CON I CONTROLLI SU isListed E toRedeem
 
 export const GET_NFT: TypedDocumentNode<NFT, NFTtokensVariables> = gql`
   query GetNFT($id: string) {

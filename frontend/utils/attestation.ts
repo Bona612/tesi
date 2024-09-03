@@ -1,31 +1,43 @@
+import { Attestation } from "@/types";
+import { ethers } from "ethers";
 
-// PROBABILMENTE DA LEVARE
+export const signAttestationAPI = async (data: {attestation: Attestation, signer: ethers.JsonRpcSigner}) => { 
+    console.log(data);
+    try {
+        const response = await fetch('/api/signAttestation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+    
+        const result = await response.json();
+        console.log('Response from API:', result);
 
-// import { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-// import ethers from 'ethers';
+        return result;
+    }
+    catch (error) {
+        console.error('Error sending data:', error);
+        return error;
+    }
+};
 
-// export async function createAttestation(to: string, anchor: string, oracle: HardhatEthersSigner, validStartTime: number = 0) {
-//     // #################################### ACCOUNTS
-//   // Alice shall get the NFT, oracle signs the attestation off-chain 
-//   // Oracle needs to be a trusted Oracle of the smart-contract that shall accept the generated attestation
-// //   const [alice, oracle] = await hre.ethers.getSigners();
+export const merkleTreeAPI = async (data: {anchor: string}) => { 
+    console.log(data);
+    try {
+        const apiUrl = '/api/merkleTree?anchor=' + data.anchor;
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+        });
+    
+        const result = await response.json();
+        console.log('Response from API:', result);
 
-// //   // #################################### CREATE AN ATTESTATION
-// //   const to = alice.address;
-// //   const anchor = '0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536'
-
-//   const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
-// //   const validStartTime = 0;
-//   const validEndTime = attestationTime + validStartTime + 15 * 60; // 15 minutes valid from attestation
-
-//   const messageHash = ethers.solidityPackedKeccak256(
-//     ["address", "bytes32", "uint256", 'uint256', "uint256"], 
-//     [to, anchor, attestationTime, validStartTime, validEndTime]
-//   );
-//   const sig = await oracle.signMessage(ethers.getBytes(messageHash));
-
-//   return ethers.AbiCoder.defaultAbiCoder().encode(
-//     ['address', 'bytes32', 'uint256', 'uint256', 'uint256', 'bytes'], 
-//     [to, anchor, attestationTime, validStartTime, validEndTime, sig]
-//   );
-// }
+        return result;
+    }
+    catch (error) {
+        console.error('Error sending data:', error);
+        return error;
+    }
+};

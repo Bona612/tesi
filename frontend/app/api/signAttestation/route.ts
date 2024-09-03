@@ -29,10 +29,16 @@ async function signAttestation(attestation: Attestation, signer: ethers.JsonRpcS
   // Create a wallet instance from the private key
   const wallet = new ethers.Wallet(oraclePrivateKey);
 
+  const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
+  // DA CAPIRE CON PRECISIONE QUESTO, SECONDO ME ININFLUENTE COSì CMO'è
+  const validStartTime = 0;
+  const validEndTime = attestationTime + 15 * 60; // 15 minutes valid from attestation
+
+
   // Compute the message hash (in the Ethereum signed message format)
   const messageHash = ethers.solidityPackedKeccak256(
       ["address", "bytes32", "uint256", 'uint256', "uint256"],
-      [attestation.to, attestation.anchor, attestation.attestationTime, attestation.validStartTime, attestation.validEndTime]
+      [attestation.to, attestation.anchor, attestationTime, validStartTime, validEndTime]
   );
 
   // Sign the message hash with the wallet's private key
@@ -44,7 +50,7 @@ async function signAttestation(attestation: Attestation, signer: ethers.JsonRpcS
 
   const prova = ethers.AbiCoder.defaultAbiCoder().encode(
     ['address', 'bytes32', 'uint256', 'uint256', 'uint256', 'bytes'], 
-    [attestation.to, attestation.anchor, attestation.attestationTime, attestation.validStartTime, attestation.validEndTime, signature]
+    [attestation.to, attestation.anchor, attestationTime, validStartTime, validEndTime, signature]
   );
   console.log("prova ", prova);
 

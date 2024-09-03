@@ -30,9 +30,10 @@ import { number } from 'zod';
 import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables } from "@/types";
 import MyNFT from './MyNFT';
 import { useFilters } from '@/context/FilterContext';
+import Redeem from './RedeemOption';
 
 
-export default function ResponsiveGrid() {
+export default function RedeemStructure() {
   const { address, chainId, isConnected } = useWeb3ModalAccount()
   const { walletProvider } = useWeb3ModalProvider()
   // console.log(isConnected)
@@ -263,7 +264,7 @@ export default function ResponsiveGrid() {
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SkeletonCard></SkeletonCard>}>
-            <MyNFT first={first} skip={skip} setSkip={setSkip} queryRef={queryRef} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
+            {/* <Redeem first={first} skip={skip} setSkip={setSkip} queryRef={queryRef} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} /> */}
           </Suspense>
         </ErrorBoundary>
     </div>

@@ -1,14 +1,7 @@
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Attestation } from "@/types";
 
-
-interface Attestation {
-    to: string;
-    anchor: string;
-    attestationTime: number;
-    validStartTime: number;
-    validEndTime: number;
-}
 
 interface AttestationProps {
     attestation: Attestation;
@@ -23,9 +16,13 @@ export function AttestationShower({attestation}: AttestationProps) {
     const attestationJSON = attestationToJSON(attestation);
     
     return (
-        <div>
-            <Label htmlFor="message">Attestation</Label>
-            <Textarea value={attestationJSON} className="resize-none" readOnly />
-        </div>
+        <>
+            {attestation &&
+                <div>
+                    <Label htmlFor="message">Attestation:</Label>
+                    <Textarea value={attestationJSON} className="resize-none" readOnly />
+                </div>
+            }
+        </>
     )
 }

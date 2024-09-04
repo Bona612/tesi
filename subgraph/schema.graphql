@@ -46,6 +46,9 @@ type TokenMetadata implements Node @entity {
   imageURI: String!
 }
 
+input Where_Token {
+  id: String,
+}
 input Where_Token_Metadata {
   tags: [String!]
 }

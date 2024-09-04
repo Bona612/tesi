@@ -96,7 +96,6 @@ function getStartData(tokenId: string) {
   }
   const t: NFT = {
     id: tokenId,
-    tokenId: n,
     anchor: tokenId,
     metadataURI: {title: "titolo", description: "descrizione", imageURI: "https://dummyimage.com/300.png/09f/fff"} as Metadata,
     tags: [tag],

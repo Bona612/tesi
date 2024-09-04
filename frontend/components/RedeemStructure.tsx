@@ -23,7 +23,7 @@ import NFTList from '@/components/NFTList';
 
 // Import everything needed to use the `useQuery` hook
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, useBackgroundQuery, useLoadableQuery, LoadQueryFunction, OperationVariables, QueryRef } from '@apollo/client';
-import { SEARCH_OWNER_NFTS, GET_OWNER_NFTS } from "@/apollo/subgraphQueries"
+import { SEARCH_OWNER_REDEEM_NFTS, GET_OWNER_REDEEM_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import { number } from 'zod';
@@ -162,7 +162,7 @@ export default function RedeemStructure() {
   // }
 
   
-  let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_OWNER_NFTS, {
+  let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_OWNER_REDEEM_NFTS, {
     variables: variables,
     notifyOnNetworkStatusChange: true,
     pollInterval: pollInterval_ms,
@@ -203,7 +203,7 @@ export default function RedeemStructure() {
   };
 
   
-  const [loadNfts, searchQueryRef] = useLoadableQuery(SEARCH_OWNER_NFTS);
+  const [loadNfts, searchQueryRef] = useLoadableQuery(SEARCH_OWNER_REDEEM_NFTS);
 
   // const handleSearchBarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   // console.log(event)

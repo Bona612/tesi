@@ -46,18 +46,34 @@ type TokenMetadata implements Node @entity {
   imageURI: String!
 }
 
-input Where_Tags {
+input Where_Token_Metadata {
   tags: [String!]
 }
-input Where_Token_Metadata {
-  metadata_: Where_Tags
+input Where_Metadata {
+  metadata_: Where_Token_Metadata
+}
+input Where_Owner {
+  id: String,
 }
 
-input Where_Token_Owner_Address {
-  address: String
+input Where_Marketplace {
+  isListed: Boolean,
+  metadata_: Where_Token_Metadata
 }
+
 input Where_Token_Owner {
-  owner_: Where_Token_Owner_Address
+  owner_: Where_Owner,
+  metadata_: Where_Token_Metadata
+}
+
+input Where_Token_Owner_Redeem {
+  toRedeem: Boolean,
+  owner_: Where_Owner,
+  metadata_: Where_Token_Metadata
+}
+input Where_Token_Redeem {
+  toRedeem: Boolean,
+  metadata_: Where_Token_Metadata
 }
 
 # Define the Owner entity with Relay's Node interface

@@ -85,10 +85,17 @@ export interface NFTtokenVariables {
   id: string,
 }
 
+
+export interface Where_Marketplace {
+  isListed: Boolean,
+  metadata_: Where_Token_Metadata
+}
 export interface NFTtokensVariables {
   skip: number,
   first: number,
-  tags: Tag[] | null,
+  where_marketplace: Where_Marketplace,
+  orderBy: string,
+  orderDirection: string,
 }
 
 // PROBABILMENTE QUI tags  DOVRà CAMBIARE IN where_tags
@@ -96,27 +103,53 @@ export interface tokenSearchVariables {
   text: string,
   skip: number,
   first: number,
-  tags: Tag[] | null,
+  where_marketplace: Where_Marketplace,
+  orderBy: string,
+  orderDirection: string,
 }
 
+export type Where_Token_Metadata = {
+  metadata_: Where_Tags
+}
+export type Where_Owner_Id = {
+  id: string
+}
+export type Where_Owner = {
+  owner_: Where_Owner_Id
+}
 export type Where_Tags = {
   tags: Tag[]
 }
+
+export type Where_Token_Owner = {
+  owner_: Where_Owner,
+  metadata_: Where_Token_Metadata
+}
+export type Where_Token_Owner_Redeem = {
+  toRedeem: boolean,
+  owner_: Where_Owner,
+  metadata_: Where_Token_Metadata
+}
+export type Where_Token_Redeem = {
+  toRedeem: boolean,
+  metadata_: Where_Token_Metadata
+}
+
 
 export interface ownerVariables {
   id: string,
   skip: number,
   first: number,
-  where_tags: Where_Tags,
+  where_token_owner: Where_Token_Owner,
+  orderBy: string,
+  orderDirection: string,
 }
 
 // QUI HO CONTROLLATO, BASTA USARE owner: address VISTO CHE ID == ADDRESS
-export type Where_Token_Owner_Address = {
-  address: String
+export type Where_Owner_Address = {
+  id: string
 }
-export type Where_Token_Owner = {
-  owner_: Where_Token_Owner_Address
-}
+
 
 // PROBABILMENTE QUI, NON SERVIRà SOLO owner_, MA ANCHE tags IN QUALCHE MODO
 // PROBABILMENTE SERVIRà FARE SI CHE tags SIA OPZIONALE
@@ -125,6 +158,8 @@ export interface tokenOwnerVariables {
   skip: number,
   first: number,
   where_token_owner: Where_Token_Owner,
+  orderBy: string,
+  orderDirection: string,
 }
 
 export type Attestation = {

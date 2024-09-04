@@ -84,6 +84,13 @@ export type Data_Owner = {
 export interface NFTtokenVariables {
   id: string,
 }
+export type Where_Token = {
+  id: string
+}
+export interface NFTtokenFromOwnerVariables {
+  id: string,
+  where_token: Where_Token
+}
 
 
 export interface Where_Marketplace {

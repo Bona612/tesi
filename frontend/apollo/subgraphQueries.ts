@@ -1,9 +1,9 @@
 import { gql, TypedDocumentNode } from "@apollo/client"
-import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT} from "@/types";
+import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT, NFTtokenVariables, NFTtokenFromOwnerVariables} from "@/types";
 
-// DA RIVEDERE TUTTE LE QUERY, CON I DATI AGGIORNATI E CON I CONTROLLI SU isListed E toRedeem
 
-export const GET_NFT: TypedDocumentNode<NFT, NFTtokensVariables> = gql`
+// DA CAPIRE QUALE DELLE DUE SIA LA MIGLIORE, IN TERMINI DI PERFORMANCE E SICUREZZA
+export const GET_NFT: TypedDocumentNode<NFT, NFTtokenVariables> = gql`
   query GetNFT($id: string) {
     token(id: $id) {
       id
@@ -23,6 +23,33 @@ export const GET_NFT: TypedDocumentNode<NFT, NFTtokensVariables> = gql`
       toRedeem
       transactions {
         id
+      }
+    }
+  }
+`;
+export const GET_NFT_FROM_OWNER: TypedDocumentNode<Data_Owner, NFTtokenFromOwnerVariables> = gql`
+  query GetNFT($owner_id: string, $where_token: Where_Token) {
+    owner(id: $owner_id) {
+      id
+      nfts(where: $where_token) {
+        id
+        anchor
+        metadata {
+          id
+          title
+          description
+          tags
+          imageURI
+        }
+        owner {
+          id
+        }
+        isListed
+        listingPrice
+        toRedeem
+        transactions {
+          id
+        }
       }
     }
   }
@@ -51,8 +78,8 @@ export const GET_MARKETPLACE_NFTS: TypedDocumentNode<NFTtokens, NFTtokensVariabl
 `;
 
 export const SEARCH_MARKETPLACE_NFTS: TypedDocumentNode<NFTtokens, tokenSearchVariables> = gql`
-  query SearchNFTs($text: String, $skip: Int, $first: Int, $where_marketplace: Where_Marketplace, $orderBy: Token_orderBy, $orderDirection: OrderDirection) {
-    tokenSearch(text: $text, skip: $skip, first: $first, where: $where_marketplace, orderBy: $orderBy, orderDirection: $orderDirection) {
+  query SearchNFTs($text: String, $skip: Int, $first: Int, $where_marketplace: Where_Marketplace) {
+    tokenSearch(text: $text, skip: $skip, first: $first, where: $where_marketplace) {
       id
       anchor
       metadata {
@@ -98,8 +125,8 @@ export const GET_OWNER_NFTS: TypedDocumentNode<Data_Owner, ownerVariables> = gql
 `;
 
 export const SEARCH_OWNER_NFTS: TypedDocumentNode<NFTtokens, tokenOwnerVariables> = gql`
-  query SearchOwnerNFTs($text: String, $skip: Int, $first: Int, $where_token_owner: Where_Token_Owner, $orderBy: Token_orderBy, $orderDirection: OrderDirection) {
-    tokenSearch(text: $text, skip: $skip, first: $first, where: $where_token_owner, orderBy: $orderBy, orderDirection: $orderDirection) {
+  query SearchOwnerNFTs($text: String, $skip: Int, $first: Int, $where_token_owner: Where_Token_Owner) {
+    tokenSearch(text: $text, skip: $skip, first: $first, where: $where_token_owner) {
       id
       anchor
       metadata {
@@ -120,7 +147,7 @@ export const SEARCH_OWNER_NFTS: TypedDocumentNode<NFTtokens, tokenOwnerVariables
 `;
 
 export const GET_OWNER_REDEEM_NFTS: TypedDocumentNode<Data_Owner, ownerVariables> = gql`
-  query GetOwnerNFTs($id: String!, $skip: Int, $first: Int, $where_token_redeem: Where_Token_Redeem, $orderBy: Token_orderBy, $orderDirection: OrderDirection) {
+  query GetOwnerRedeemNFTs($id: String!, $skip: Int, $first: Int, $where_token_redeem: Where_Token_Redeem, $orderBy: Token_orderBy, $orderDirection: OrderDirection) {
     owner(id: $id) {
       id
       nfts(skip: $skip, first: $first, where: $where_token_redeem, orderBy: $orderBy, orderDirection: $orderDirection) {
@@ -145,8 +172,8 @@ export const GET_OWNER_REDEEM_NFTS: TypedDocumentNode<Data_Owner, ownerVariables
 `;
 
 export const SEARCH_OWNER_REDEEM_NFTS: TypedDocumentNode<NFTtokens, tokenOwnerVariables> = gql`
-  query SearchOwnerNFTs($text: String, $skip: Int, $first: Int, $where_token_owner_redeem: Where_Token_Owner_Redeem, $orderBy: Token_orderBy, $orderDirection: OrderDirection) {
-    tokenSearch(text: $text, skip: $skip, first: $first, where: $where_token_owner_redeem, orderBy: $orderBy, orderDirection: $orderDirection) {
+  query SearchOwnerRedeemNFTs($text: String, $skip: Int, $first: Int, $where_token_owner_redeem: Where_Token_Owner_Redeem) {
+    tokenSearch(text: $text, skip: $skip, first: $first, where: $where_token_owner_redeem) {
       id
       anchor
       metadata {

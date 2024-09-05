@@ -21,7 +21,7 @@ const FloatingButton = React.forwardRef<HTMLButtonElement, FloatingButtonProps>(
         size={size}
         className={cn(
             buttonVariants({ variant, size, className }),
-            'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white rounded-full shadow-lg transition-colors duration-300 z-50',
+            'fixed bottom-32 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white rounded-full shadow-lg transition-colors duration-300 z-50',
         )}
       />
     );

@@ -182,7 +182,7 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
             <div>
                 <NFTList data={data} />
             </div>
-            <div>
+            <div className="pb-4">
                 <NFTsPagination n_pages={n_pages} first={first} onChange={onChange} setSkip={setSkip} onFetchMore={onFetchMore} />
             </div>
         </div>

@@ -83,6 +83,7 @@ export default function MarketplaceStructure() {
       setTags(updateTags(tag));
   };
 
+  // VARAIBLES TO CHANGE
     const variables = {skip: skip, first: first, tags: tags} as NFTtokensVariables
     const pollInterval_ms = 5000
 

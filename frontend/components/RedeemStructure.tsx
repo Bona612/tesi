@@ -50,7 +50,8 @@ export default function RedeemStructure() {
 
   const id: string = address?.toString() || "";
   const where_tags: Where_Tags = {tags: tags};
-  // orderDirection: OrderDirection.
+  
+// VARAIBLES TO CHANGE
   const variables = {id: id, skip: skip, first: first, where_tags: where_tags, orderBy: Token_orderBy.id} as ownerVariables
   const pollInterval_ms = 5000
 
@@ -173,6 +174,7 @@ export default function RedeemStructure() {
     console.log("REFETCH")
     startTransition(() => {
       refetch({
+        // VARAIBLES TO CHANGE
         where_tags: {tags: tags}
       });
     });
@@ -182,6 +184,7 @@ export default function RedeemStructure() {
     console.log("REFETCH")
     startTransition(() => {
       refetch({
+        // VARAIBLES TO CHANGE
         where_tags: {tags: tags},
         // orderBy: ,
         // orderDirection: ,

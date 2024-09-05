@@ -158,7 +158,7 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
 
     // 
     return (
-        <div className="flex items-center justify-center pt-4 pb-2 pl-2 pr-2">
+        <div className="flex items-center justify-center pt-2 pb-2">
             <Card className="w-full sm:w-1/2">
                 <CardHeader>
                     <CardTitle>{data.metadata.title}</CardTitle>

@@ -131,7 +131,7 @@ export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
   console.log(tokenId)
 
   return (
-    <div>
+    <div className="pt-2 pl-2 pr-2">
         <BackButton />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
             <Suspense fallback={<div>Suspense</div>}>

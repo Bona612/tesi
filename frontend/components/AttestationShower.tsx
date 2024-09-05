@@ -45,9 +45,8 @@ export function AttestationShower({attestation}: AttestationProps) {
         <>
             {attestation &&
                 <div className="grid w-full gap-1.5">
-                    <Label htmlFor="message">Attestation</Label>
+                    {/* <Label htmlFor="message">Attestation</Label> */}
                     <Textarea id="message" ref={textareaRef} value={attestationJSON} className="resize-none h-auto" readOnly />
-                    {/* <Button>Send message</Button> */}
                 </div>
             }
         </>

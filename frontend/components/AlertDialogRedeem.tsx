@@ -10,10 +10,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import RedeemOption from "./RedeemOption"
 import { Attestation } from "@/types"
 import { useState } from "react"
 import { AttestationShower } from "./AttestationShower"
+import QrReader from "./QrReader"
 
 
 interface AlertDialogRedeemProps {
@@ -25,14 +25,20 @@ interface AlertDialogRedeemProps {
 
 export function AlertDialogRedeem({attestation, handleOnScanSuccess, handleRedeemNFT}: AlertDialogRedeemProps) {
 
-  // const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
+  const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
 
-
+  
+  const handleConfirmAttestation = () => {
+    handleOnScanSuccess(scannedAttestation as Attestation)
+  }
   const handleOnClick = () => {
     if (handleRedeemNFT) {
       handleRedeemNFT(attestation as Attestation);
     }
   };
+  const handleNewAttestation = () => {
+    setScannedAttestation(scannedAttestation as Attestation)
+  }
 
   return (
     <AlertDialog>
@@ -49,21 +55,21 @@ export function AlertDialogRedeem({attestation, handleOnScanSuccess, handleRedee
         </AlertDialogHeader>
         <div className="grid gap-4 py-4">
           {attestation &&
-            <AttestationShower attestation={attestation as Attestation} />
+            <AttestationShower attestation={scannedAttestation as Attestation} />
           }
-          <RedeemOption handleOnScanSuccess={handleOnScanSuccess} />
+          <QrReader handleOnScanSuccess={handleNewAttestation} />
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel >Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button type="submit" form="nft-form">Redeem</Button>
+            {handleRedeemNFT ? (
+              <Button type="button" onClick={handleOnClick}>Redeem</Button>
+            ) : (
+              <Button type="button" onClick={handleConfirmAttestation}>Confirm attestation</Button>
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
-        {/* {handleRedeemNFT ? (
-          <Button type="button" onClick={handleOnClick}>Redeem</Button>
-        ) : (
-          <Button type="submit" form="nft-form">Redeem</Button>
-        )} */}
+        
       </AlertDialogContent>
     </AlertDialog>
     

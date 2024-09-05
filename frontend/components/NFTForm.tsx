@@ -28,7 +28,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import Redeem from "./RedeemOption";
 
 import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
 import { BrowserProvider, Contract, Eip1193Provider, ethers, formatUnits } from 'ethers'
@@ -56,7 +55,6 @@ import { BlackHoleBlockstore } from "blockstore-core/black-hole"
 import { fixedSize } from "ipfs-unixfs-importer/chunker"
 import { balanced } from "ipfs-unixfs-importer/layout"
 import { CreateDialog } from "./CreateDialog";
-import RedeemOption from "./RedeemOption";
 import { AttestationShower } from "./AttestationShower";
 
 
@@ -561,8 +559,6 @@ export default function NFTForm() {
     const { tags, setTags } = useFilters();
 
 
-    // const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
-
     // const { register, handleSubmit, watch, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
     //     resolver: zodResolver(formSchema),
     //     defaultValues: {
@@ -714,9 +710,16 @@ export default function NFTForm() {
         }
     };
 
+    // const [prevAttestation, setPrevAttestation] = useState<Attestation | undefined>(undefined);
     const handleOnScanSuccess = (attestation: Attestation) => {
+        // if (more) {
+        //     setPrevAttestation(form.getValues("attestation") as Attestation);
+        // }
         form.setValue("attestation", attestation);
     }
+    // const handleCancel = (attestation: Attestation) => {
+    //     form.setValue("attestation", prevAttestation);
+    // }
 
     const handleReset = () => {
         setTags([]);
@@ -850,5 +853,3 @@ export default function NFTForm() {
         </div>
     )
 }
-
-/// QUI MANCA IL TESTING DEL QR E DEL REDEEM, CONSIDERANDO CHE ANDRà FATTO IL QR ANCHE PER L'ANCORA (O FORSE SOLO QUELLO)

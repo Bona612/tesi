@@ -825,7 +825,7 @@ export default function NFTForm() {
                                                     <AttestationShower attestation={field.value} />
                                                 }
                                                 <AlertDialogRedeem attestation={field.value} handleOnScanSuccess={handleOnScanSuccess} /> 
-                                                {/* <RedeemOption handleScanSuccess={handleScanSuccess} /> */}
+                                                {/* <RedeemOption handleOnScanSuccess={handleOnScanSuccess} /> */}
                                             </div>
                                         </FormControl>
                                         <FormDescription>

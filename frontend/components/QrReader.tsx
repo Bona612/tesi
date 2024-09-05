@@ -139,22 +139,36 @@ const QrReader = ({ onClose, onScannedAttestation, handleOnScanSuccess }: QrRead
 
 
     return (
-        <div className="qr-reader">
+        <div>
             {permissions && 
-                <>
-                    <button onClick={onClose}>Close</button>
+                <div className="qr-reader">
+                    {/* <button onClick={onClose}>Close</button> */}
                     <video ref={videoEl}></video>
                     <div ref={qrBoxEl} className="qr-box">
                         <img
-                        src="qr-frame.svg"
+                        src={"qr-frame.svg"}
                         alt="Qr Frame"
                         width={256}
                         height={256}
                         className="qr-frame"
                         />
                     </div>
-                </>
+                </div>
             }
+            {/* Show Data Result if scan is success */}
+            {scannedAttestation && (
+                <p
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 99999,
+                    color: "white",
+                }}
+                >
+                Scanned Result: {scannedAttestation.anchor}
+                </p>
+            )}
             {!permissions && <button onClick={onRequestCameraPermission}>Close</button>}
         </div>
     );

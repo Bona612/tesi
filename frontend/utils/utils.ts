@@ -32,6 +32,8 @@ export const findOrderBy = (name: string): OrderBy => {
 };
 
 export function jsonToAttestation(attestationJSON: string): Attestation {
+    console.log(attestationJSON);
+    console.log(JSON.parse(attestationJSON));
     const attestation: Attestation = JSON.parse(attestationJSON) as Attestation;
     return attestation;
 }

@@ -51,11 +51,10 @@ export function AlertDialogRedeem({attestation, handleOnScanSuccess, handleRedee
           {attestation &&
             <AttestationShower attestation={attestation as Attestation} />
           }
-          <AttestationShower attestation={attestation as Attestation} />
           <RedeemOption handleOnScanSuccess={handleOnScanSuccess} />
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel >Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
             <Button type="submit" form="nft-form">Redeem</Button>
           </AlertDialogAction>

@@ -13,10 +13,10 @@ import ListedNFTBox from '@/components/ListedNFT';
 import ConnectButton from '@/components/ConnectButton';
 // import NFTsHeader from '@/components/NFTsHeader';
 
-import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider';
+// import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider';
 import { fetchGraphQLQuery } from '@/relay/fetchGraphQLQuery';
 import { graphql } from 'relay-runtime';
-import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
+// import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
 // import type { page_RootLayoutQuery, page_RootLayoutQuery$variables } from '@/app/marketplace/__generated__/page_RootLayoutQuery.graphql';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NFTsHeader from '@/components/NFTsHeader';
@@ -37,7 +37,7 @@ import NFTList from '@/components/NFTList';
 
 // Import everything needed to use the `useQuery` hook
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, useBackgroundQuery, useReadQuery, QueryRef, OperationVariables } from '@apollo/client';
-import { GET_NFTS } from "@/apollo/subgraphQueries"
+import { GET_MARKETPLACE_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import NFTsPagination from './NFTsPagination';
 import { NFT_Owner, NFTtokens, NFTtokensVariables, Transaction } from "@/types/index";

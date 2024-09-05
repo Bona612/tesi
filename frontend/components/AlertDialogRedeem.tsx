@@ -32,14 +32,19 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
     if (handleOnScanSuccess) {
       handleOnScanSuccess(scannedAttestation as Attestation)
     }
+    resetScannedAttestation()
   }
   const handleOnClick = () => {
     if (handleRedeemNFT) {
       handleRedeemNFT(scannedAttestation as Attestation);
     }
+    resetScannedAttestation()
   };
-  const handleNewAttestation = () => {
-    setScannedAttestation(scannedAttestation as Attestation)
+  const handleNewAttestation = (attestation: Attestation) => {
+    setScannedAttestation(attestation)
+  }
+  const resetScannedAttestation = () => {
+    setScannedAttestation(undefined)
   }
 
   return (
@@ -62,7 +67,7 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
           <QrReader handleOnScanSuccess={handleNewAttestation} />
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={resetScannedAttestation}>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
             {handleRedeemNFT ? (
               <Button type="button" onClick={handleOnClick}>Redeem</Button>

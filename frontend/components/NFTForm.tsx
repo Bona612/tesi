@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import { TagFilter } from "@/components/TagFilter";
@@ -721,14 +721,21 @@ export default function NFTForm() {
     //     form.setValue("attestation", prevAttestation);
     // }
 
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const handleFormReset = () => {
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''; // Clear the file input
+        }
+    };
     const handleReset = () => {
         setTags([]);
         form.reset(); // This will reset all fields managed by react-hook-form
+        handleFormReset();
     };
 
     return (
-        <div className="flex items-center justify-center">
-            <Card className="w-[350px]">
+        <div className="flex items-center justify-center pt-4 pb-4 pl-2 pr-2">
+            <Card className="w-full sm:w-1/2">
                 <CardHeader>
                     <CardTitle>NFT creation</CardTitle>
                     <CardDescription>Mint your new NFT.</CardDescription>
@@ -759,18 +766,17 @@ export default function NFTForm() {
                                     <FormItem>
                                         <FormLabel>Upload Image</FormLabel>
                                         <FormControl>
-                                            <Input type="file" accept="image/*" onChange={handleFileChange} className="cursor-pointer" />
+                                            <Input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="cursor-pointer" />
                                         </FormControl>
                                         <FormDescription>
                                             Select an image for your NFT.
                                         </FormDescription>
                                         <FormMessage />
                                         {field.value && (
-                                            <div className="w-[450px] mt-2">
+                                            <div className="w-full mt-2">
                                                 <p>Selected Image Preview:</p>
                                                 <AspectRatio ratio={1 / 1}>
-                                                    <Image src={URL.createObjectURL(field.value)} alt="Selected preview" className="rounded-md object-cover" width={300} height={300} /> 
-                                                    {/* <Image src={field.value} alt="Selected preview" className="rounded-md" width={300} height={300} />  */}
+                                                    <Image src={URL.createObjectURL(field.value)} alt="Selected preview" fill className="rounded-md object-cover w-full h-full" /> 
                                                 </AspectRatio>
                                             </div>
                                         )}

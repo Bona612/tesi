@@ -65,5 +65,3 @@ const NFTList = React.memo(({ data, ownerAddress }: NFTListProps) => {
 NFTList.displayName = 'NFTList';
 
 export default NFTList;
-
-// let ethAmount = ethers.utils.parseEther('1.0');

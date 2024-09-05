@@ -10,6 +10,10 @@ import QrScanner from "qr-scanner";
 import QrFrame from "../assets/qr-frame.svg";
 import { Attestation } from "@/types";
 import { jsonToAttestation } from "@/utils/utils";
+import { Button } from "./ui/button";
+import { AspectRatio } from "./ui/aspect-ratio";
+import Image from "next/image";
+
 
 
 interface QRReaderProps {
@@ -231,45 +235,37 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
             <div>
                 {isQrReaderVisible ? (
                     <div>
-                        {/* <Button type="button" onClick={handleCloseQrReader}>Close QR Reader</Button> */}
-                        {/* <Button type="button" onClick={handleOpenQrReader}>Open QR Reader</Button> */}
-                        {/* <Button type="button" onClick={onRequestCameraPermission}>Concede permissions</Button> */}
-                        <button onClick={handleCloseQrReader}>Close QR Reader</button>
+                        <Button type="button" onClick={handleCloseQrReader}>Close QR Reader</Button>
                         <div className="qr-reader">
                             {/* <button onClick={onClose}>Close</button> */}
                             <video ref={videoEl}></video>
                             <div ref={qrBoxEl} className="qr-box">
-                                <img
+                                {/* <AspectRatio ratio={1 / 1}> */}
+                                <Image
                                 src={"qr-frame.svg"}
                                 alt="Qr Frame"
                                 width={256}
                                 height={256}
                                 className="qr-frame"
                                 />
+                                {/* </AspectRatio> */}
+                                {/* <img
+                                src={"qr-frame.svg"}
+                                alt="Qr Frame"
+                                width={256}
+                                height={256}
+                                className="qr-frame"
+                                /> */}
                             </div>
                         </div>
                     </div>
                 ) : (
-                    <button onClick={handleOpenQrReader}>Open QR Reader</button>
+                    <Button type="button" onClick={handleOpenQrReader}>Open QR Reader</Button>
                 )}
             </div>
         ) : (
-            <button onClick={onRequestCameraPermission}>Concede permissions for camera</button>
+            <Button type="button" onClick={onRequestCameraPermission}>Concede permissions for camera</Button>
         )}
-        {/* Show Data Result if scan is success */}
-        {/* {scannedAttestation && (
-            <p
-            style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 99999,
-                color: "white",
-            }}
-            >
-            Scanned Result: {scannedAttestation.anchor}
-            </p>
-        )} */}
     </div>
   );
 };

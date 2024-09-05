@@ -63,7 +63,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* Other <head> tags like title, favicon, etc., can be added here */}
       </Head>
-      <body className={inter.className}>
+      <body className={`${inter.className} flex-grow overflow-y-auto pb-16 md:pb-0`}>
         <div>
           {/* <StyledEngineProvider injectFirst>
             <NavBar />

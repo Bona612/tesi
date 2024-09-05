@@ -167,8 +167,7 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                     <div className="w-full mt-2">
                         {/* <p>Selected Image Preview:</p> */}
                         <AspectRatio ratio={1 / 1}>
-                            <Image src={data.metadata.imageURI} alt="Selected preview" className="w-full h-full rounded-md object-cover" layout="fill" />
-                            {/* <Image src={field.value} alt="Selected preview" className="rounded-md" width={300} height={300} />  */}
+                            <Image src={data.metadata.imageURI} alt="Selected preview" fill className="rounded-md object-cover w-full h-full" />
                         </AspectRatio>
                     </div>
                     <div>

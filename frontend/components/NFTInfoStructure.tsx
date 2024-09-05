@@ -135,7 +135,7 @@ export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
         <BackButton />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
             <Suspense fallback={<div>Suspense</div>}>
-                <NFTInfo queryRef={queryRef} tokenId={tokenId} />;
+                <NFTInfo queryRef={queryRef} tokenId={tokenId} />
             </Suspense>
         </ErrorBoundary>
     </div>

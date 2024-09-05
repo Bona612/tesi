@@ -61,7 +61,7 @@ function getStartData(tokenId: string) {
     // va fatto il get del token da pinata IPFS
     // const tokenURI: string = await getTokenURI(tokenId);
     // const token: NFT = await getTokenMetadata(tokenURI);
-  
+
     // // const nftMetadata: Metadata = await getNFTMetadata(token.metadataURI);
     // const nftMetadata: Metadata = token.metadataURI;
     console.log("token id: ", tokenId)
@@ -86,7 +86,7 @@ function getStartData(tokenId: string) {
       toRedeem: false,
       transactions: [] as Transaction[],
     }
-  
+
     return t;
 }
 
@@ -98,24 +98,24 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
 
     const { address, chainId, isConnected } = useWeb3ModalAccount()
     const { walletProvider } = useWeb3ModalProvider()
-    
+
     // const [attestation, setAttestation] = useState<Attestation | undefined>(undefined);
 
-    
+
     //     async function getAll() {
     //         // va fatto il get del token da pinata IPFS
     //         const tokenURI: string = await getTokenURI(tokenId, isConnected, address, walletProvider);
     //         const token: NFT = await getTokenMetadata(tokenURI);
-        
+
     //         // const nftMetadata: Metadata = await getNFTMetadata(token.metadataURI);
     //         const nftMetadata: Metadata = token.metadataURI;
-        
+
     //         setNft(token);
     //         setNftMetadata(nftMetadata);
 
     //         return nftMetadata;
     //     }
-    
+
     //     if (isConnected) {
     //         getAll();
     //     }
@@ -127,14 +127,14 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     //             metadataURI: {title: "titolo", description: "descrizione", imageURI: "https://dummyimage.com/300.png/09f/fff"} as Metadata,
     //             tags: ["Tag 2"]
     //         });
-            
+
     //     }
     // }, []);
 
     // const { data } = useReadQuery(queryRef);
     const data = getStartData(tokenId as string);
     console.log(data.metadata.tags);
-      
+
     const handleBuyNFT = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         buyNFT(data, isConnected, address, walletProvider);
     };
@@ -156,62 +156,59 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     //     setAttestation(attestation);
     // }
 
+    // 
     return (
-        <Card className="w-full">
-            <CardHeader>
-                <CardTitle>{data.metadata.title}</CardTitle>
-                <CardDescription>{data.metadata.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div>
-                    <div className="w-full mt-2">
-                        {/* <p>Selected Image Preview:</p> */}
-                        <AspectRatio ratio={1 / 1}>
-                            <Image src={data.metadata.imageURI} alt="Selected preview" fill className="rounded-md object-cover w-full h-full" />
-                        </AspectRatio>
-                    </div>
+        <div className="flex items-center justify-center pt-4 pb-2 pl-2 pr-2">
+            <Card className="w-full sm:w-1/2">
+                <CardHeader>
+                    <CardTitle>{data.metadata.title}</CardTitle>
+                    <CardDescription>{data.metadata.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
                     <div>
-                        <TagList tags={data.metadata.tags} readonly={true}></TagList>
+                        <div className="w-full mt-2">
+                            {/* <p>Selected Image Preview:</p> */}
+                            <AspectRatio ratio={1 / 1}>
+                                <Image src={data.metadata.imageURI} alt="Selected preview" fill className="rounded-md object-cover w-full h-full" />
+                            </AspectRatio>
+                        </div>
+                        <div>
+                            <TagList tags={data.metadata.tags} readonly={true}></TagList>
+                        </div>
+                        <div>
+                            <NFTHistory transactions={data.transactions} />
+                        </div>
                     </div>
-                    <div>
-                        <NFTHistory transactions={data.transactions} />
-                    </div>
-                </div>
-            </CardContent>
-            {data.isListed ? (
-                address && data.owner.id === address ? (
-                    <CardFooter className="flex justify-between">
-                        {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
-                        <DialogBuy handleOnClick={handleBuyNFT} disabled={data.owner.id === address} price={weiToEth(data.listingPrice)} />
-                        {/* <Button onClick={handleBuyNFT} variant="outline" disabled={data.owner.id === address}>Buy {weiToEth(data.listingPrice)} ETH</Button>
-                        <Button onClick={handleBuyNFT} disabled={data.owner.id === address}>Buy {weiToEth(data.listingPrice)} ETH</Button> */}
-                    </CardFooter>
-                ) : (
-                    <CardFooter className="flex justify-between">
-                        <DialogCancelList handleOnClick={handleCancelListNFT} />
-                    </CardFooter>
-                )
-            ) : (
-                data.owner.id === address ? (
-                    data.toRedeem ? (
+                </CardContent>
+                {data.isListed ? (
+                    address && data.owner.id === address ? (
                         <CardFooter className="flex justify-between">
-                            <AlertDialogRedeem handleRedeemNFT={handleRedeemNFT} />
+                            {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
+                            <DialogBuy handleOnClick={handleBuyNFT} disabled={data.owner.id === address} price={weiToEth(data.listingPrice)} />
+                            {/* <Button onClick={handleBuyNFT} variant="outline" disabled={data.owner.id === address}>Buy {weiToEth(data.listingPrice)} ETH</Button>
+                            <Button onClick={handleBuyNFT} disabled={data.owner.id === address}>Buy {weiToEth(data.listingPrice)} ETH</Button> */}
                         </CardFooter>
                     ) : (
                         <CardFooter className="flex justify-between">
-                            <DialogList handleOnClick={handleListNFT} />
+                            <DialogCancelList handleOnClick={handleCancelListNFT} />
                         </CardFooter>
                     )
-                ) : <></>
-            )}
-        </Card>
+                ) : (
+                    data.owner.id === address ? (
+                        data.toRedeem ? (
+                            <CardFooter className="flex justify-between">
+                                <AlertDialogRedeem handleRedeemNFT={handleRedeemNFT} />
+                            </CardFooter>
+                        ) : (
+                            <CardFooter className="flex justify-between">
+                                <DialogList handleOnClick={handleListNFT} />
+                            </CardFooter>
+                        )
+                    ) : <></>
+                )}
+            </Card>
+        </div>
     );
 }
-
-// : (
-//     <CardFooter className="flex justify-between">
-//         <DialogList handleOnClick={handleListNFT} />
-//     </CardFooter>
-// )
 
 export default NFTInfo;

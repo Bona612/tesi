@@ -41,11 +41,11 @@ export function AlertDialogRedeem({attestation, handleOnScanSuccess, handleRedee
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogTitle>Scan the QRcode as attestation</AlertDialogTitle>
+          {/* <AlertDialogDescription>
             This action cannot be undone. This will permanently delete your
             account and remove your data from our servers.
-          </AlertDialogDescription>
+          </AlertDialogDescription> */}
         </AlertDialogHeader>
         <div className="grid gap-4 py-4">
           {attestation &&

@@ -19,7 +19,7 @@ function attestationToJSON(attestation: Attestation): string {
     // const attestationJSON = JSON.stringify(attestation, null, "\t");
     const attestationJSON = JSON.stringify(attestation);
     const attestationJSON_woutQuote = attestationJSON.replace(/\"/g, '');
-    const attestationValues = attestationJSON_woutQuote.replace(/[\{\}]/g, '').replace(/,/g, '\n');
+    const attestationValues = attestationJSON_woutQuote.replace(/[\{\}]/g, '').replace(/,/g, '\n').replace(/:/g, ': ');
 
     console.log(attestationValues);
     return attestationValues;
@@ -35,7 +35,7 @@ export function AttestationShower({attestation}: AttestationProps) {
         if (textarea) {
             textarea.style.height = 'auto'; // Reset height to auto
             // con 10 funziona
-            const height = textarea.scrollHeight + 1
+            const height = textarea.scrollHeight;
             textarea.style.height = `${height}px`; // Set height to scrollHeight
         }
     }, [attestationJSON]); // Depend on attestationJSON to update height on content change
@@ -45,7 +45,7 @@ export function AttestationShower({attestation}: AttestationProps) {
         <>
             {attestation &&
                 <div className="grid w-full gap-1.5">
-                    <Label htmlFor="message">Attestation:</Label>
+                    <Label htmlFor="message">Attestation</Label>
                     <Textarea id="message" ref={textareaRef} value={attestationJSON} className="resize-none h-auto" readOnly />
                     {/* <Button>Send message</Button> */}
                 </div>

@@ -99,7 +99,7 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     const { address, chainId, isConnected } = useWeb3ModalAccount()
     const { walletProvider } = useWeb3ModalProvider()
     
-    const [attestation, setAttestation] = useState<Attestation | undefined>(undefined);
+    // const [attestation, setAttestation] = useState<Attestation | undefined>(undefined);
 
     
     //     async function getAll() {
@@ -152,9 +152,9 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
         redeemNFT(data, attestation, isConnected, address, walletProvider);
     };
 
-    const handleOnScanSuccess = (attestation: Attestation) => {
-        setAttestation(attestation);
-    }
+    // const handleOnScanSuccess = (attestation: Attestation) => {
+    //     setAttestation(attestation);
+    // }
 
     return (
         <Card className="w-full">
@@ -196,7 +196,7 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                 data.owner.id === address ? (
                     data.toRedeem ? (
                         <CardFooter className="flex justify-between">
-                            <AlertDialogRedeem attestation={attestation} handleOnScanSuccess={handleOnScanSuccess} handleRedeemNFT={handleRedeemNFT} />
+                            <AlertDialogRedeem handleRedeemNFT={handleRedeemNFT} />
                         </CardFooter>
                     ) : (
                         <CardFooter className="flex justify-between">

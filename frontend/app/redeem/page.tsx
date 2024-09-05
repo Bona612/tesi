@@ -21,7 +21,7 @@ import NFTList from '@/components/NFTList';
 
 // Import everything needed to use the `useQuery` hook
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, useBackgroundQuery } from '@apollo/client';
-import { GET_NFTS } from "@/apollo/subgraphQueries"
+import { GET_OWNER_REDEEM_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import MarketplaceStructure from '@/components/MarketplaceStructure';

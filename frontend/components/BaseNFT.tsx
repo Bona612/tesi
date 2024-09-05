@@ -78,7 +78,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
     const { address, chainId, isConnected } = useWeb3ModalAccount()
     const { walletProvider } = useWeb3ModalProvider()
 
-    const [attestation, setAttestation] = useState<Attestation | undefined>(undefined);
+    // const [attestation, setAttestation] = useState<Attestation | undefined>(undefined);
 
     console.log(address);
 
@@ -104,9 +104,9 @@ export default function BaseNFTBox({ nft }: NFTProps) {
         redeemNFT(nft, attestation, isConnected, address, walletProvider);
     };
 
-    const handleOnScanSuccess = (attestation: Attestation) => {
-        setAttestation(attestation);
-    }
+    // const handleOnScanSuccess = (attestation: Attestation) => {
+    //     setAttestation(attestation);
+    // }
     
 
     return (
@@ -152,7 +152,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                     nft.owner.id === address ? (
                         nft.toRedeem ? (
                             <CardFooter className="flex justify-between">
-                                <AlertDialogRedeem attestation={attestation} handleOnScanSuccess={handleOnScanSuccess} handleRedeemNFT={handleRedeemNFT} />
+                                <AlertDialogRedeem handleRedeemNFT={handleRedeemNFT} />
                             </CardFooter>
                         ) : (
                             <CardFooter className="flex justify-between">

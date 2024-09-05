@@ -30,7 +30,6 @@ import { number } from 'zod';
 import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables } from "@/types";
 import MyNFT from './MyNFT';
 import { useFilters } from '@/context/FilterContext';
-import Redeem from './RedeemOption';
 
 
 export default function RedeemStructure() {

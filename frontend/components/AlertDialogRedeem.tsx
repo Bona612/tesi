@@ -17,23 +17,25 @@ import QrReader from "./QrReader"
 
 
 interface AlertDialogRedeemProps {
-  attestation: Attestation | undefined,
-  handleOnScanSuccess: (attestation: Attestation) => void,
+  // attestation?: Attestation | undefined,
+  handleOnScanSuccess?: (attestation: Attestation) => void,
   handleRedeemNFT?: (attestation: Attestation) => void,
 }
 
 
-export function AlertDialogRedeem({attestation, handleOnScanSuccess, handleRedeemNFT}: AlertDialogRedeemProps) {
+export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertDialogRedeemProps) {
 
   const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
 
   
   const handleConfirmAttestation = () => {
-    handleOnScanSuccess(scannedAttestation as Attestation)
+    if (handleOnScanSuccess) {
+      handleOnScanSuccess(scannedAttestation as Attestation)
+    }
   }
   const handleOnClick = () => {
     if (handleRedeemNFT) {
-      handleRedeemNFT(attestation as Attestation);
+      handleRedeemNFT(scannedAttestation as Attestation);
     }
   };
   const handleNewAttestation = () => {
@@ -54,7 +56,7 @@ export function AlertDialogRedeem({attestation, handleOnScanSuccess, handleRedee
           </AlertDialogDescription> */}
         </AlertDialogHeader>
         <div className="grid gap-4 py-4">
-          {attestation &&
+          {scannedAttestation &&
             <AttestationShower attestation={scannedAttestation as Attestation} />
           }
           <QrReader handleOnScanSuccess={handleNewAttestation} />

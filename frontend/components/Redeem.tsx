@@ -37,7 +37,7 @@ import NFTList from '@/components/NFTList';
 
 // Import everything needed to use the `useQuery` hook
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, useBackgroundQuery, useReadQuery, QueryRef, OperationVariables } from '@apollo/client';
-import { GET_NFTS } from "@/apollo/subgraphQueries"
+import { GET_OWNER_REDEEM_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import NFTsPagination from './NFTsPagination';
 import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables } from "@/types/index";

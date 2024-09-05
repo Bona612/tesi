@@ -34,6 +34,11 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
   const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
 
 
+  useEffect(() => {
+    const permissionGranted = sessionStorage.getItem('cameraPermissionGranted') === 'true';
+    setPermissions(permissionGranted);
+  }, []);
+
   const requestCameraPermission = async () => {
       try {
         //   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -43,6 +48,7 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
         //       videoEl.current.play();
         //   }
           // setQrOn(true);
+          sessionStorage.setItem('cameraPermissionGranted', 'true');
           setPermissions(true);
       } 
       catch (err) {

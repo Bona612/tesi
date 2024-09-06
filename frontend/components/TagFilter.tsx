@@ -60,39 +60,53 @@ export function TagFilter({}: TagFilterProps) {
     };
 
 
-    if (isDesktop) {
-        return (
-            <div className="px-2 shrink">
-                <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                        <Button variant="outline" className="w-full md:w-auto md:min-w-[150px] justify-start">
-                            Tag
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full md:w-auto md:min-w-[200px] p-0" align="start">
-                        <StatusList tags={tags} handleOnClick={handleOnClick} />
-                    </PopoverContent>
-                </Popover>
-            </div>
-        )
-    }
-
     return (
         <div className="px-2 shrink">
-            <Drawer open={open} onOpenChange={setOpen}>
-                <DrawerTrigger asChild>
-                    <Button variant="outline" className="w-[150px] justify-start">
+            <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                    <Button variant="outline" className="w-full md:w-auto md:min-w-[150px] justify-start">
                         Tag
                     </Button>
-                </DrawerTrigger>
-                <DrawerContent>
-                    <div className="mt-4 border-t">
-                        <StatusList tags={tags} handleOnClick={handleOnClick} />
-                    </div>
-                </DrawerContent>
-            </Drawer>
+                </PopoverTrigger>
+                <PopoverContent className="w-full md:w-auto md:min-w-[200px] p-0" align="start">
+                    <StatusList tags={tags} handleOnClick={handleOnClick} />
+                </PopoverContent>
+            </Popover>
         </div>
     )
+    // if (isDesktop) {
+    //     return (
+    //         <div className="px-2 shrink">
+    //             <Popover open={open} onOpenChange={setOpen}>
+    //                 <PopoverTrigger asChild>
+    //                     <Button variant="outline" className="w-full md:w-auto md:min-w-[150px] justify-start">
+    //                         Tag
+    //                     </Button>
+    //                 </PopoverTrigger>
+    //                 <PopoverContent className="w-full md:w-auto md:min-w-[200px] p-0" align="start">
+    //                     <StatusList tags={tags} handleOnClick={handleOnClick} />
+    //                 </PopoverContent>
+    //             </Popover>
+    //         </div>
+    //     )
+    // }
+
+    // return (
+    //     <div className="px-2 shrink">
+    //         <Drawer open={open} onOpenChange={setOpen}>
+    //             <DrawerTrigger asChild>
+    //                 <Button variant="outline" className="w-[150px] justify-start">
+    //                     Tag
+    //                 </Button>
+    //             </DrawerTrigger>
+    //             <DrawerContent>
+    //                 <div className="mt-4 border-t">
+    //                     <StatusList tags={tags} handleOnClick={handleOnClick} />
+    //                 </div>
+    //             </DrawerContent>
+    //         </Drawer>
+    //     </div>
+    // )
 }
 
 function StatusList({

@@ -64,9 +64,9 @@ export default function NavMenu() {
                         <NavigationMenu enableFlex={false}>
                             <NavigationMenuList className="w-full flex justify-between flex-nowrap space-x-1 sm:space-x-2 md:space-x-4 lg:space-x-8">
                                 {PAGES.map((page) => (
-                                    <NavigationMenuItem key={page.smallTitle} className="w-full flex-1 my-1 sm:my-2 md:my-3 lg:my-4">
+                                    <NavigationMenuItem key={page.smallTitle} className="w-full flex flex-nowrap flex-1 p-0 sm:my-2 md:my-3 lg:my-4">
                                         <Link href={page.href} legacyBehavior passHref>
-                                            <NavigationMenuLink className={`${navigationMenuTriggerStyle()} w-full`}>
+                                            <NavigationMenuLink className={`${navigationMenuTriggerStyle()} w-full p-0`} style={{ padding: '0' }}>
                                                 {page.smallTitle}
                                             </NavigationMenuLink>
                                         </Link>

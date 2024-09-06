@@ -54,7 +54,7 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Scan the QRcode as attestation</AlertDialogTitle>
+          <AlertDialogTitle>Scan QRcode</AlertDialogTitle>
           {/* <AlertDialogDescription>
             This action cannot be undone. This will permanently delete your
             account and remove your data from our servers.

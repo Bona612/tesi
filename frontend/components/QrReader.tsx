@@ -244,7 +244,7 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
                         <Button type="button" onClick={handleCloseQrReader}>Close QR Reader</Button>
                         <div className="qr-reader">
                             {/* <button onClick={onClose}>Close</button> */}
-                            <video ref={videoEl}></video>
+                            <video ref={videoEl} className="rounded-lg"></video>
                             <div ref={qrBoxEl} className="qr-box">
                                 {/* <AspectRatio ratio={1 / 1}> */}
                                 <Image
@@ -255,13 +255,6 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
                                 className="qr-frame"
                                 />
                                 {/* </AspectRatio> */}
-                                {/* <img
-                                src={"qr-frame.svg"}
-                                alt="Qr Frame"
-                                width={256}
-                                height={256}
-                                className="qr-frame"
-                                /> */}
                             </div>
                         </div>
                     </div>

@@ -776,7 +776,7 @@ export default function NFTForm() {
                                             <div className="w-full mt-2">
                                                 <p>Selected Image Preview:</p>
                                                 <AspectRatio ratio={1 / 1}>
-                                                    <Image src={URL.createObjectURL(field.value)} alt="Selected preview" fill className="rounded-md object-cover w-full h-full" /> 
+                                                    <Image src={URL.createObjectURL(field.value)} alt="Selected preview" fill className="rounded-md object-contain w-full h-full" /> 
                                                 </AspectRatio>
                                             </div>
                                         )}

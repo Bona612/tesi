@@ -121,7 +121,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                     <div className="w-full">
                         <div className="w-full">
                             <AspectRatio ratio={1 / 1}>
-                                <Image src={nft.metadata.imageURI} alt="Selected preview" fill className="rounded-md object-cover w-full h-full" /> 
+                                <Image src={nft.metadata.imageURI} alt="Selected preview" fill className="rounded-md object-contain w-full h-full" /> 
                             </AspectRatio>
                         </div>
                         <div className="w-full pt-2">

@@ -167,15 +167,14 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                 <CardContent>
                     <div>
                         <div className="w-full mt-2">
-                            {/* <p>Selected Image Preview:</p> */}
                             <AspectRatio ratio={1 / 1}>
                                 <Image src={data.metadata.imageURI} alt="Selected preview" fill className="rounded-md object-cover w-full h-full" />
                             </AspectRatio>
                         </div>
-                        <div>
+                        <div className="w-full p-2">
                             <TagList tags={data.metadata.tags} readonly={true}></TagList>
                         </div>
-                        <div>
+                        <div className="w-full p-2">
                             <NFTHistory transactions={data.transactions} />
                         </div>
                     </div>

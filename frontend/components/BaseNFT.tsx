@@ -120,17 +120,13 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                 <CardContent>
                     <div className="w-full">
                         <div className="w-full">
-                            {/* <p>Selected Image Preview:</p> */}
                             <AspectRatio ratio={1 / 1}>
                                 <Image src={nft.metadata.imageURI} alt="Selected preview" fill className="rounded-md object-cover w-full h-full" /> 
                             </AspectRatio>
                         </div>
-                        <div>
+                        <div className="w-full pt-2">
                             <TagList tags={nft.metadata.tags} readonly={true}></TagList>
                         </div>
-                        {/* <div>
-                            <TokenHistory transactions={transactions} />
-                        </div> */}
                     </div>
                 </CardContent>
                 </Link>

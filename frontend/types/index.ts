@@ -1,3 +1,32 @@
+// WHY NOT, MAYBE ALSO ICON
+export type Page = {
+  title: string;
+  smallTitle: string,
+  href: string;
+};
+export const PAGES: Page[] = [
+  {
+      title: "Marketplace",
+      smallTitle: "Market",
+      href: "/marketplace"
+  },
+  {
+      title: "My NFTs",
+      smallTitle: "My NFTs",
+      href: "/my-nft"
+  },
+  {
+      title: "Create NFT",
+      smallTitle: "Create",
+      href: "/nft-creation"
+  },
+  {
+      title: "Redeem NFT",
+      smallTitle: "Redeem",
+      href: "/redeem"
+  },
+]
+
 // Define the Tag type as a union of string literals
 export type Tag = 'Tag 1' | 'Tag 2' | 'Tag 3' | 'Tag 4';
 

@@ -1,7 +1,7 @@
-// 'use client';
+'use client';
 
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -12,11 +12,11 @@ import ListedNFTBox from '@/components/ListedNFT';
 import ConnectButton from '@/components/ConnectButton';
 // import NFTsHeader from '@/components/NFTsHeader';
 
-import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider';
+// import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider';
 import { fetchGraphQLQuery } from '@/relay/fetchGraphQLQuery';
 import { graphql } from 'relay-runtime';
-import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
-import type { page_RootLayoutQuery, page_RootLayoutQuery$variables } from '@/app/marketplace/__generated__/page_RootLayoutQuery.graphql';
+// import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
+// import type { page_RootLayoutQuery, page_RootLayoutQuery$variables } from '@/app/marketplace/__generated__/page_RootLayoutQuery.graphql';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NFTsHeader from '@/components/NFTsHeader';
 import { SkeletonCard } from '@/components/SkeletonCard';
@@ -36,10 +36,10 @@ import NFTList from '@/components/NFTList';
 
 // Import everything needed to use the `useQuery` hook
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery } from '@apollo/client';
-import { GET_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useFilters } from '@/context/FilterContext';
+import { useMediaQueries } from '@/hooks/useMediaQuery';
 
 
 
@@ -56,12 +56,27 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
     // const { address, chainId, isConnected } = useWeb3ModalAccount()
     // const { walletProvider } = useWeb3ModalProvider()
 
-    // const [page, setCurrentPage] = useState(1);
+    const [pagesToShow, setPagesToShow] = useState<number>(0);
     const {page, setPage} = useFilters();
 
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
+
+
+    const screenSize = useMediaQueries()
+    console.log("screen ", screenSize)
+
+    useEffect(() => {
+        console.log("Screen size changed to:", screenSize);
+        // Update the state variable based on screen size
+        if (screenSize === 'small') {
+            setPagesToShow(2);
+        }
+        else {
+            setPagesToShow(5);
+        }
+    }, [screenSize]);
 
 
     const handlePrevious = () => {
@@ -91,6 +106,8 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
         params.set(key, value);
         return params.toString();
     };
+
+    
     
     // Generate pagination items
     const renderPaginationItems = () => {
@@ -117,6 +134,14 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
             } else {
                 startPage = page - 2;
                 endPage = page + 2;
+            }
+            if (page <= Math.ceil(pagesToShow / 2)) {
+                endPage = pagesToShow;
+            } else if (page + Math.floor(pagesToShow / 2) >= n_pages) {
+                startPage = n_pages - pagesToShow + 1;
+            } else {
+                startPage = page - Math.floor(pagesToShow / 2);
+                endPage = page + Math.floor(pagesToShow / 2);
             }
 
             if (startPage > 1) {

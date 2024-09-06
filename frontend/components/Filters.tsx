@@ -44,9 +44,6 @@ import { useFilters } from "@/context/FilterContext";
 
 type TagFilterProps = {
     isDesktop: boolean,
-    // handleOnClick: (tag: Tag) => void,
-    // handleOrderByChange: () => void,
-    // handleOrderDirectionChange: () => void, 
 };
 
 
@@ -107,7 +104,8 @@ export function Filters({isDesktop}: TagFilterProps) {
                             {/* <DrawerDescription>Set your daily activity goal.</DrawerDescription> */}
                         </DrawerHeader>
                         <div className="mt-4 border-t">
-                            <StatusList tags={tags} handleOnClick={handleOnClick} />
+                            <TagFilter />
+                            {/* <StatusList tags={tags} handleOnClick={handleOnClick} /> */}
                             <OrderByFilter />
                             <OrderDirectionFilter />
                         </div>

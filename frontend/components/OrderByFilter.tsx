@@ -20,13 +20,11 @@ import { OrderBy } from "@/types"
 
 
 type OrderByFilterProps = {
-    // orders: OrderBy[],
-    // handleOrderByChange: () => void,
 };
 
 const orders: OrderBy[] = [
     {
-        by: "name",
+        name: "name",
         label: "Name"
     }
 ];
@@ -35,18 +33,18 @@ export function OrderByFilter({}: OrderByFilterProps) {
   const [open, setOpen] = React.useState(false)
   const { orderBy, setOrderBy } = useFilters();
 
-
+  
   return (
     <div className="px-2 flex-shrink">
-      <Select>
-          <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Order by" />
+      <Select open={open} onOpenChange={setOpen}>
+          <SelectTrigger open={open} className="w-[180px]">
+              <SelectValue placeholder={orderBy.label} />
           </SelectTrigger>
           <SelectContent>
               <SelectGroup>
                   <SelectLabel>Order by</SelectLabel>
                   {orders.map((order) => (
-                    <SelectItem key={order.by} value={order.by} onSelect={(value) => {
+                    <SelectItem key={order.name} value={order.label} onSelect={(value) => {
                       setOrderBy(order)
                       setOpen(false)}}
                     >

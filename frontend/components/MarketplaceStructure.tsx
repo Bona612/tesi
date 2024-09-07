@@ -176,6 +176,7 @@ export default function MarketplaceStructure() {
   //   // handleRefetch();
   // };
 
+  // DA CAPIRE IN UN SECONDO MOMENTO, QUI SUCCEDE CHE ALCUNE COSE SONO UNDEFINED
   // Initialize state based on URL parameters
   useEffect(() => {
     console.log("fine")
@@ -188,6 +189,8 @@ export default function MarketplaceStructure() {
     setOrderBy(findOrderBy(orderByParam));
     setOrderDirection(orderDirectionMap[orderDirectionParam]);
     setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
+    console.log("fem sta prova2: ", orderDirectionParam);
   }, [searchParams]);
     
 

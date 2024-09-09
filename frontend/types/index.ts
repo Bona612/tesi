@@ -95,6 +95,10 @@ export type NFT = {
 export type NFTtokens = {
   tokens: NFT[]
 }
+export type OwnerNFTtokens = {
+  id: string,
+  tokens: NFT[]
+}
 
 export type NFT_Owner = {
   id: string,
@@ -139,9 +143,7 @@ export interface tokenSearchVariables {
   text: string,
   skip: number,
   first: number,
-  where_marketplace: Where_Marketplace,
-  orderBy: string,
-  orderDirection: string,
+  where_marketplace: Where_Marketplace
 }
 
 
@@ -162,7 +164,7 @@ export type Where_Tags = {
 
 export type Where_Token_Owner = {
   owner_: Where_Owner_Id,
-  metadata_: Where_Metadata
+  metadata_: Where_Token_Metadata
 }
 export type Where_Token_Owner_Redeem = {
   toRedeem: boolean,
@@ -199,6 +201,12 @@ export interface tokenOwnerVariables {
   where_metadata: Where_Token_Metadata,
   orderBy: string,
   orderDirection: string,
+}
+export interface tokenOwnerSearchVariables {
+  text: string,
+  skip: number,
+  first: number,
+  where_token_owner: Where_Token_Owner
 }
 
 export type Attestation = {

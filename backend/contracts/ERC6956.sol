@@ -408,7 +408,7 @@ contract ERC6956 is
         _commitAttestation(to, anchor, attestationHash); // commit already here, will be reverted in error case anyway
 
         uint256 fromToken = tokenByAnchor[anchor]; // tokenID, null if not exists
-        address from = address(0); // owneraddress or 0x00, if not exists
+        // address from = address(0); // owneraddress or 0x00, if not exists
         
         _anchorIsReleased[anchor] = true; // Attestation always temporarily releases the anchor       
         console.log("tokenID ");
@@ -421,13 +421,15 @@ contract ERC6956 is
         // ALTRIMENTI VA BENE !!!
         // QUINDI CAPIRE COME SISTEMARE
 
-        console.log("uri token inside createAnchor: ");
-        console.log(fromToken);
-        string memory uri = tokenURI(fromToken);
-        console.log("uri ");
-        console.log(uri);
-        emit AnchorTransfer(from, to, anchor, fromToken, uri);
-        // emit AnchorTransfer(from, to, anchor, fromToken);
+        // PROBABILMENT LA SOLUZIONE è ELIMINARE, NELL'ORIGINALE NON è PRESENTE QUESTA PARTE
+
+        // console.log("uri token inside createAnchor: ");
+        // console.log(fromToken);
+        // string memory uri = tokenURI(fromToken);
+        // console.log("uri ");
+        // console.log(uri);
+        // emit AnchorTransfer(from, to, anchor, fromToken, uri);
+        // // emit AnchorTransfer(from, to, anchor, fromToken);
     }
 
     function createAnchor(bytes memory attestation, string memory cid) public virtual {
@@ -459,11 +461,11 @@ contract ERC6956 is
             // _safeMint(to, anchor);
         }
 
-        string memory uri = tokenURI(fromToken);
-        console.log("uri ");
-        console.log(uri);
-        emit AnchorTransfer(from, to, anchor, fromToken, uri);
-        // emit AnchorTransfer(from, to, anchor, fromToken);
+        // string memory uri = tokenURI(fromToken);
+        // console.log("uri ");
+        // console.log(uri);
+        // emit AnchorTransfer(from, to, anchor, fromToken, uri);
+        // // emit AnchorTransfer(from, to, anchor, fromToken);
     }
 
     function transferAnchor(bytes memory attestation) public virtual {

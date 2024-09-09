@@ -218,7 +218,7 @@ describe("Authorization Map tests", function () {
         .to.emit(abnftContract, "Transfer") // Standard ERC721 event
         .withArgs(alice.address, bob.address, 1)
         .to.emit(abnftContract, "AnchorTransfer")
-        .withArgs(alice.address, bob.address, anchor, 1);
+        .withArgs(alice.address, bob.address, anchor, 1, "https://gold-magnificent-stork-310.mypinata.cloud/ipfs/dummyCID");
 
         // Token is now at bob... so alice may hire a hacker quickly and reuse her attestation to get 
         // the token back from Bob ... which shall of course not work
@@ -315,7 +315,7 @@ describe("Authorization Map tests", function () {
       .to.emit(abnftContract, "Transfer")
       .withArgs(alice.address,NULLADDR, tokenId)
       .to.emit(abnftContract, "AnchorTransfer")
-      .withArgs(alice.address,NULLADDR, anchor, tokenId);  
+      .withArgs(alice.address,NULLADDR, anchor, tokenId, "https://gold-magnificent-stork-310.mypinata.cloud/ipfs/dummyCID");  
     })
 
     it("SHOULD allow issuer to burn", async function() {

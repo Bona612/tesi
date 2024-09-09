@@ -220,7 +220,7 @@ describe("Nft Marketplace Tests", function () {
         .to.emit(abnftContract, "Transfer") // Standard ERC721 event
         .withArgs(alice.address, bob.address, 1)
         .to.emit(abnftContract, "AnchorTransfer")
-        .withArgs(alice.address, bob.address, anchor, 1);
+        .withArgs(alice.address, bob.address, anchor, 1, "https://gold-magnificent-stork-310.mypinata.cloud/ipfs/");
 
         // Il proprietario dell'NFT deve approvare il marketplace a trasferire l'NFT per suo conto in caso di vendita
         await abnftContract_bob.approve(marketContract.getAddress(), TOKEN_ID);
@@ -297,7 +297,7 @@ describe("Nft Marketplace Tests", function () {
         )).to.emit(abnftContract, "Transfer") // Standard ERC721 event
         .withArgs(bob.address, alice.address, 1)
         .and.to.emit(abnftContract, "AnchorTransfer")
-        .withArgs(bob.address, alice.address, anchor, 1)
+        .withArgs(bob.address, alice.address, anchor, 1, "https://gold-magnificent-stork-310.mypinata.cloud/ipfs/")
         .and.to.emit(marketContract, "ItemRedeemed")
         .withArgs(abnftContract.getAddress(), TOKEN_ID, alice.address);
 
@@ -356,7 +356,7 @@ describe("Nft Marketplace Tests", function () {
         .to.emit(abnftContract, "Transfer") // Standard ERC721 event
         .withArgs(alice.address, bob.address, 1)
         .to.emit(abnftContract, "AnchorTransfer")
-        .withArgs(alice.address, bob.address, anchor, 1);
+        .withArgs(alice.address, bob.address, anchor, 1, "https://gold-magnificent-stork-310.mypinata.cloud/ipfs/");
 
         // Il proprietario dell'NFT deve approvare il marketplace a trasferire l'NFT per suo conto in caso di vendita
         await abnftContract_bob.approve(marketContract.getAddress(), TOKEN_ID);

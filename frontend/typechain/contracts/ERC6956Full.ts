@@ -39,7 +39,7 @@ export interface ERC6956FullInterface extends Interface {
       | "burnAnchor(bytes)"
       | "burnAnchor(bytes,bytes)"
       | "burnAuthorization"
-      | "cidByToken"
+      | "cidByAnchor"
       | "createAnchor(bytes,string,bytes)"
       | "createAnchor(bytes,string)"
       | "createAuthorizationMap"
@@ -149,8 +149,8 @@ export interface ERC6956FullInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "cidByToken",
-    values: [BigNumberish]
+    functionFragment: "cidByAnchor",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "createAnchor(bytes,string,bytes)",
@@ -344,7 +344,10 @@ export interface ERC6956FullInterface extends Interface {
     functionFragment: "burnAuthorization",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "cidByToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "cidByAnchor",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "createAnchor(bytes,string,bytes)",
     data: BytesLike
@@ -834,7 +837,7 @@ export interface ERC6956Full extends BaseContract {
 
   burnAuthorization: TypedContractMethod<[], [bigint], "view">;
 
-  cidByToken: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  cidByAnchor: TypedContractMethod<[arg0: BytesLike], [string], "view">;
 
   "createAnchor(bytes,string,bytes)": TypedContractMethod<
     [attestation: BytesLike, cid: string, data: BytesLike],
@@ -1083,8 +1086,8 @@ export interface ERC6956Full extends BaseContract {
     nameOrSignature: "burnAuthorization"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "cidByToken"
-  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+    nameOrSignature: "cidByAnchor"
+  ): TypedContractMethod<[arg0: BytesLike], [string], "view">;
   getFunction(
     nameOrSignature: "createAnchor(bytes,string,bytes)"
   ): TypedContractMethod<

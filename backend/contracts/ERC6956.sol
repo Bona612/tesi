@@ -255,7 +255,11 @@ contract ERC6956 is
         // require(batchSize == 1, "ERC6956-E4");
         // address from = _ownerOf(tokenId);
         bytes32 anchor = anchorByToken[tokenId];
+        console.log("uri token inside update: ");
+        console.log(tokenId);
         string memory uri = tokenURI(tokenId);
+        console.log(uri);
+        
         emit AnchorTransfer(from, to, anchor, tokenId, uri);
         // emit AnchorTransfer(from, to, anchor, tokenId);
 
@@ -407,12 +411,21 @@ contract ERC6956 is
         address from = address(0); // owneraddress or 0x00, if not exists
         
         _anchorIsReleased[anchor] = true; // Attestation always temporarily releases the anchor       
-
+        console.log("tokenID ");
+        console.log(fromToken);
         require(fromToken == 0, "Anchor already exists");
         console.log("giusto _safeMint()");
         _safeMint(to, anchor, cid);
 
+        // QUI IL PROBLEMA è CHE fromToken non è aggiornato !!!
+        // ALTRIMENTI VA BENE !!!
+        // QUINDI CAPIRE COME SISTEMARE
+
+        console.log("uri token inside createAnchor: ");
+        console.log(fromToken);
         string memory uri = tokenURI(fromToken);
+        console.log("uri ");
+        console.log(uri);
         emit AnchorTransfer(from, to, anchor, fromToken, uri);
         // emit AnchorTransfer(from, to, anchor, fromToken);
     }
@@ -447,6 +460,8 @@ contract ERC6956 is
         }
 
         string memory uri = tokenURI(fromToken);
+        console.log("uri ");
+        console.log(uri);
         emit AnchorTransfer(from, to, anchor, fromToken, uri);
         // emit AnchorTransfer(from, to, anchor, fromToken);
     }
@@ -547,8 +562,10 @@ contract ERC6956 is
     /// @param tokenId TokenID
     /// @return tokenURI Returns the Uniform Resource Identifier (URI) for `tokenId` token.
     function tokenURI(uint256 tokenId) public view override returns (string memory) {        // (ERC721) e non URIStorage
-        // bytes32 anchor = anchorByToken[tokenId];
-        string memory cid = cidByToken[tokenId];
+        bytes32 anchor = anchorByToken[tokenId];
+        string memory cid = cidByAnchor[anchor];
+        console.log("cid");
+        console.log(cid);
         // string memory anchorString = Strings.toHexString(uint256(anchor));
         // string memory cidString = Strings.toHexString(cid);
         return bytes(_baseURI()).length > 0 ? string(abi.encodePacked(_baseURI(), cid)) : "";
@@ -564,12 +581,13 @@ contract ERC6956 is
     string internal _baseUri = ""; // needs to end with '/'
 
     /// @notice Resolves tokenID to CID.
-    mapping(uint256 => string) public cidByToken;
+    mapping(bytes32 => string) public cidByAnchor;
 
     // DA VEDERE QUANDO CHIAMARLA
     function setCIDbyToken(uint256 tokenId, string memory cid) private {
         // require(msg.sender == _ownerOf(tokenId));
-        cidByToken[tokenId] = cid;
+        bytes32 anchor = anchorByToken[tokenId];
+        cidByAnchor[anchor] = cid;
     }
 
     /// @notice Set a new BaseURI. Can be used with dynamic NFTs that have server APIs, IPFS-buckets

@@ -124,7 +124,7 @@ export interface NFTtokenFromOwnerVariables {
 
 export interface Where_Marketplace {
   isListed: Boolean,
-  metadata_: Where_Token_Metadata
+  metadata_: Where_Tags
 }
 export interface NFTtokensVariables {
   skip: number,
@@ -144,31 +144,34 @@ export interface tokenSearchVariables {
   orderDirection: string,
 }
 
+
+
 export type Where_Token_Metadata = {
-  metadata_: Where_Tags
+  tags: Tag[]
 }
+export type Where_Metadata = {
+  metadata_: Where_Token_Metadata
+}
+
 export type Where_Owner_Id = {
   id: string
-}
-export type Where_Owner = {
-  owner_: Where_Owner_Id
 }
 export type Where_Tags = {
   tags: Tag[]
 }
 
 export type Where_Token_Owner = {
-  owner_: Where_Owner,
-  metadata_: Where_Token_Metadata
+  owner_: Where_Owner_Id,
+  metadata_: Where_Metadata
 }
 export type Where_Token_Owner_Redeem = {
   toRedeem: boolean,
-  owner_: Where_Owner,
-  metadata_: Where_Token_Metadata
+  owner_: Where_Owner_Id,
+  metadata_: Where_Tags
 }
 export type Where_Token_Redeem = {
   toRedeem: boolean,
-  metadata_: Where_Token_Metadata
+  metadata_: Where_Tags
 }
 
 
@@ -176,7 +179,7 @@ export interface ownerVariables {
   id: string,
   skip: number,
   first: number,
-  where_token_owner: Where_Token_Owner,
+  where_metadata: Where_Metadata,
   orderBy: string,
   orderDirection: string,
 }
@@ -193,7 +196,7 @@ export interface tokenOwnerVariables {
   id: string,
   skip: number,
   first: number,
-  where_token_owner: Where_Token_Owner,
+  where_metadata: Where_Token_Metadata,
   orderBy: string,
   orderDirection: string,
 }
@@ -213,5 +216,5 @@ export enum Token_orderBy {
   tags,
   owner,
   owner__id,
-  transactions,
+  transactions
 }

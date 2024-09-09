@@ -467,7 +467,7 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         };
         const responseMetadataCID = await predeterminingMetadataCID(metadata);
         console.log("metadata CID: ", responseMetadataCID)
-        const metadataCID: string = responseImageCID.cid;
+        const metadataCID: string = responseMetadataCID.cid;
         // const metadataUploaded3 = await uploadMetadataToIPFS(metadata);
         // console.log("metadataUploaded3 " + metadataUploaded3);
         
@@ -491,27 +491,13 @@ async function createToken(toast: (arg0: { title: string; description: string; }
 
         const result = receipt_mint as ethers.ContractTransactionReceipt;
 
-        
-        // DA CAPIRE LA GUARDIA DELL'if
-        if (result.status) {
-            /// QUESTA PARTE ANDRà CHIAMATA SOLO QUANDO LA createAnchor SARà ANDATA A BUON FINE
-            const imageUploaded = await uploadImageToIPFS(formValues.image);
-            console.log("imageUploaded " + imageUploaded);
-            const metadataUploaded = await uploadMetadataToIPFS(metadata);
-            console.log("metadataUploaded " + metadataUploaded);
-        }
-        else {
-            const imageDeleted = await deleteImageAPI({cid: imageUploaded2.response.IpfsHash});
-            console.log("imageDeleted " + imageDeleted);
-        }
-
 
         // setTransactionResult(result);
         // setTransactionCompleted(result.status);
 
         if (result.status) {
-            const imageUploaded = await uploadImageToIPFS(formValues.image);
-            console.log("imageUploaded " + imageUploaded);
+            // const imageUploaded = await uploadImageToIPFS(formValues.image);
+            // console.log("imageUploaded " + imageUploaded);
             const metadataUploaded = await uploadMetadataToIPFS(metadata);
             console.log("metadataUploaded " + metadataUploaded);
 

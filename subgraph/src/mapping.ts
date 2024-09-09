@@ -29,8 +29,8 @@ export function handleMetadata(content: Bytes): void {
     if (title && imageURI && description && tags) {
       tokenMetadata.title = title.toString()
       tokenMetadata.imageURI = imageURI.toString()
-      tokenMetadata.tags = tags.toArray().map<string>((tag, index) => tag.toString());
       tokenMetadata.description = description.toString()
+      tokenMetadata.tags = tags.toArray().map<string>((tag, index) => tag.toString());
     }
 
     tokenMetadata.save()
@@ -52,12 +52,13 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
     TokenMetadataTemplate.create(event.params.cid)
 
     token.isListed = false;
+    token.toRedeem = false;
     token.listingPrice = BigInt.fromI32(0);
 
     
-    transaction.from = event.params.from.toString();
-    transaction.to = event.params.to.toString();
-    transaction.token = event.params.tokenId.toString();
+    transaction.from = event.params.from.toHexString();
+    transaction.to = event.params.to.toHexString();
+    transaction.token = event.params.tokenId.toHexString();
 
     transaction.timestamp = event.block.timestamp;
     transaction.save();
@@ -118,31 +119,7 @@ export function handleItemCanceled(event: ItemCanceledEvent): void {
 export function handleItemRedeemed(event: ItemRedeemedEvent): void {
   let token = Token.load(event.params.tokenId.toString())
   if (token) {
-    // token.owner = event.params.buyer.toString();
     token.toRedeem = false;
     token.save();
-
-    // let transaction = new Transaction(event.transaction.hash.toHex());
-    // if (transaction) {
-    //   transaction.from = event.params.seller.toString();
-    //   transaction.to = event.params.buyer.toString();
-    //   transaction.token = event.params.tokenId.toString();
-    //   transaction.timestamp = event.block.timestamp;
-    //   transaction.save();
-
-    //   let newOwner = Owner.load(event.params.buyer.toHex());
-    //   if (newOwner) {
-    //     newOwner.nfts = newOwner.nfts + token
-    //     newOwner.transactions = newOwner.transactions + transaction
-    //     newOwner.save();
-    //   }
-      
-    //   let prevOwner = Owner.load(event.params.from.toHex());
-    //   if (prevOwner) {
-    //     prevOwner.nfts = prevOwner.nfts - token
-    //     prevOwner.transactionsReceived = prevOwner.transactionsReceived + transaction
-    //     prevOwner.save();
-    //   }
-    // }
   }
 }

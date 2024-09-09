@@ -115,26 +115,6 @@ export default function MarketplaceStructure() {
     (tags: Tag[], orderBy: OrderBy, orderDirection: OrderDirection, page: number) => {
       const params = new URLSearchParams(searchParams.toString());
 
-      // if (tags.length > 0) {
-      //   // Set the 'tags' query parameter
-      //   params.set('tags', tags.join(','));
-      //   // Replace the current entry in the history stack
-      //   // router.replace(`?${params.toString()}`);
-      //   router.push(`?${params.toString()}`);
-      // } else {
-      //   // If no tags, remove the 'tags' parameter
-      //   params.delete('tags');
-        
-      //   // Check if there are any other query parameters
-      //   const hasOtherParams = Array.from(params.keys()).length > 0;
-  
-      //   // Replace the URL accordingly
-      //   if (hasOtherParams) {
-      //     router.replace(`?${params.toString()}`);
-      //   } else {
-      //     router.replace(pathname);
-      //   }
-      // }
       // Update the 'tags' parameter
       if (tags.length > 0) {
         params.set('tags', tags.join(','));

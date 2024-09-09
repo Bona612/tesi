@@ -27,9 +27,10 @@ import { SEARCH_OWNER_NFTS, GET_OWNER_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import { number } from 'zod';
-import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables } from "@/types";
+import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, OrderBy, OrderDirection, tokenOwnerVariables, Where_Owner_Id, Where_Token_Owner, OrderDirectionEnum, Where_Token_Metadata, Where_Metadata } from "@/types";
 import MyNFT from './MyNFT';
 import { useFilters } from '@/context/FilterContext';
+import { findOrderBy, orderDirectionMap } from '@/utils/utils';
 
 
 export default function ResponsiveGrid() {
@@ -46,120 +47,71 @@ export default function ResponsiveGrid() {
   // const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [isPending, startTransition] = useTransition();
 
-  const { searchText, tags, setTags, orderBy, orderDirection } = useFilters();
+  const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
 
   const id: string = address?.toString() || "";
-  const where_tags: Where_Tags = {tags: tags};
-
-  // VARAIBLES TO CHANGE
-  const variables = {id: id, skip: skip, first: first, where_tags: where_tags, orderBy: Token_orderBy.id} as ownerVariables
+  
+  const wtags: Where_Token_Metadata = { tags: ["Tag 1"] };
+  const where_metadata: Where_Metadata = { metadata_: wtags };
+  
+  // const variables = {id: id, skip: skip, first: first, where_token_owner: where_token_owner, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables
+  const variables = {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8", skip: skip, first: first, where_metadata: where_metadata, orderBy: "id", orderDirection: OrderDirectionEnum[OrderDirectionEnum.asc]} as ownerVariables
   const pollInterval_ms = 5000
-
+  console.log("variables: ", variables);
 
 
   const router = useRouter();
   const pathname = usePathname()
   const searchParams = useSearchParams();
 
-  // // Function to update the URL with the selected tags
-  // const updateURL = useCallback(
-  //   (tags: Tag[]) => {
-  //     const params = new URLSearchParams(searchParams.toString());
-  //     console.log(tags.length)
-  //     console.log("params: ", params)
-  //     console.log(params.get('tags'))
-  //     if (tags.length > 0) {
-  //       params.set('tags', tags.join(','));
-  //       router.push(`?${params.toString()}`);
-  //     }
-  //     else {
-  //       console.log("vediamo se entra")
-  //       params.delete('tags')
-  //       router.replace(pathname);
-  //     }
-      
-  //   },
-  //   [searchParams, router]
-  // );
+  // Function to update the URL with the selected tags
   const updateURL = useCallback(
-    (tags: Tag[]) => {
+    (tags: Tag[], orderBy: OrderBy, orderDirection: OrderDirection, page: number) => {
       const params = new URLSearchParams(searchParams.toString());
-  
+
+      // Update the 'tags' parameter
       if (tags.length > 0) {
-        // Set the 'tags' query parameter
         params.set('tags', tags.join(','));
-        // Replace the current entry in the history stack
-        router.replace(`?${params.toString()}`);
       } else {
-        // If no tags, remove the 'tags' parameter
         params.delete('tags');
-        
-        // Check if there are any other query parameters
-        const hasOtherParams = Array.from(params.keys()).length > 0;
-  
-        // Replace the URL accordingly
-        if (hasOtherParams) {
-          router.replace(`?${params.toString()}`);
-        } else {
-          router.replace(pathname);
-        }
       }
+      // Update the 'orderBy' parameter
+      params.set('orderBy', orderBy.name);
+      // Update the 'orderDirection' parameter
+      params.set('orderDirection', OrderDirectionEnum[orderDirection]);
+      // Update the 'page' parameter
+      params.set('page', page.toString());
+
+      // Replace the URL with the updated search params
+      const newUrl = params.toString() ? `?${params.toString()}` : pathname;
+      router.push(newUrl);
+      // router.replace(newUrl);
     },
     [searchParams, router, pathname]
   );
 
-  // // Function to handle tag selection
-  // const handleTagChange = (tag: Tag) => {
-  //   setSelectedTags((prevTags) => {
-  //     const newTags = prevTags.includes(tag)
-  //       ? prevTags.filter((t) => t !== tag)
-  //       : [...prevTags, tag];
-  //     updateURL(newTags);
-  //     return newTags;
-  //   });
 
-  //   console.log(isConnected)
-  //   console.log(address)
-
-  //   handleRefetch();
-  // };
   useEffect(() => {
-    updateURL(tags);
-  }, [tags]);
+    updateURL(tags, orderBy, orderDirection, page);
+  }, [tags, orderBy, orderDirection, page]);
 
+  // DA CAPIRE IN UN SECONDO MOMENTO, QUI SUCCEDE CHE ALCUNE COSE SONO UNDEFINED
   // Initialize state based on URL parameters
   useEffect(() => {
     console.log("fine")
     const tagsParam = searchParams.get('tags') || '';
     const tagsArray = tagsParam.split(',').filter(Boolean);
+    const orderByParam = searchParams.get('orderBy') || '';
+    const orderDirectionParam = searchParams.get('orderDirection') || '';
+    const pageParam = searchParams.get('page') || '';
     setTags(tagsArray as Tag[]);
+    setOrderBy(findOrderBy(orderByParam));
+    setOrderDirection(orderDirectionMap[orderDirectionParam]);
+    setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
+    console.log("fem sta prova2: ", orderDirectionParam);
   }, [searchParams]);
 
-
-  // function updateTagList(tag: Tag) {
-  //   if (tagList === null) {
-  //       return setTagList([tag])
-  //   }
-
-  //   const currentTags = tagList as Tag[]
-  //   const tagIndex = currentTags.findIndex(t => t === tag);
-    
-  //   if (tagIndex > -1) {
-  //       console.log("TAG presente")
-  //       // Remove the tag if it exists
-  //       currentTags.splice(tagIndex, 1);
-  //   } else {
-  //       console.log("TAG non presente")
-  //       // Add the tag if it does not exist
-  //       currentTags.push(tag);
-  //   }
-
-  //   console.log(currentTags)
-  //   // Update the form's tags field
-  //   setTagList([...currentTags]);
-
-  //   handleRefetch();
-  // }
 
   
   let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_OWNER_NFTS, {
@@ -175,7 +127,7 @@ export default function ResponsiveGrid() {
     startTransition(() => {
       refetch({
         // VARAIBLES TO CHANGE
-        where_tags: {tags: tags}
+        where_metadata: where_metadata
       });
     });
   };
@@ -185,9 +137,11 @@ export default function ResponsiveGrid() {
     startTransition(() => {
       refetch({
         // VARAIBLES TO CHANGE
-        where_tags: {tags: tags},
-        // orderBy: ,
-        // orderDirection: ,
+        where_metadata: where_metadata,
+        // orderBy: orderBy.name, 
+        // orderDirection: OrderDirectionEnum[orderDirection]
+        orderBy: "id", 
+        orderDirection: OrderDirectionEnum[OrderDirectionEnum.asc]
       });
     });
   }, [orderBy, orderDirection]);
@@ -197,9 +151,7 @@ export default function ResponsiveGrid() {
     console.log("FETCH MORE")
     startTransition(() => {
       fetchMore({
-        variables: {
-          skip: skip
-        },
+        variables: variables,
       });
     });
   };

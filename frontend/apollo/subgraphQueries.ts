@@ -1,5 +1,5 @@
 import { gql, TypedDocumentNode } from "@apollo/client"
-import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT, NFTtokenVariables, NFTtokenFromOwnerVariables} from "@/types";
+import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT, NFTtokenVariables, NFTtokenFromOwnerVariables, Where_Metadata} from "@/types";
 
 
 // DA CAPIRE QUALE DELLE DUE SIA LA MIGLIORE, IN TERMINI DI PERFORMANCE E SICUREZZA
@@ -56,7 +56,7 @@ export const GET_NFT_FROM_OWNER: TypedDocumentNode<Data_Owner, NFTtokenFromOwner
 `;
 
 export const GET_MARKETPLACE_NFTS: TypedDocumentNode<NFTtokens, NFTtokensVariables> = gql`
-  query GetNFTs($skip: Int, $first: Int, $where_marketplace: Where_Marketplace, $orderBy: Token_orderBy, $orderDirection: OrderDirection) {
+  query GetNFTs($skip: Int, $first: Int, $where_marketplace: Where_Marketplace, $orderBy: string, $orderDirection: OrderDirection) {
     tokens(skip: $skip, first: $first, where: $where_marketplace, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       anchor
@@ -100,7 +100,7 @@ export const SEARCH_MARKETPLACE_NFTS: TypedDocumentNode<NFTtokens, tokenSearchVa
 `;
 
 export const GET_OWNER_NFTS: TypedDocumentNode<Data_Owner, ownerVariables> = gql`
-  query GetOwnerNFTs($id: String!, $skip: Int, $first: Int, $where_metadata: wWhere_Metadata, $orderBy: Token_orderBy, $orderDirection: OrderDirection) {
+  query GetOwnerNFTs($id: String!, $skip: Int, $first: Int, $where_metadata: Where_Metadata, $orderBy: String, $orderDirection: OrderDirection) {
     owner(id: $id) {
       id
       nfts(skip: $skip, first: $first, where: $where_metadata, orderBy: $orderBy, orderDirection: $orderDirection) {

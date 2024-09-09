@@ -57,6 +57,7 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
     // const { walletProvider } = useWeb3ModalProvider()
 
     const [pagesToShow, setPagesToShow] = useState<number>(0);
+    const [text, setText] = useState<boolean>(true);
     const {page, setPage} = useFilters();
 
     const router = useRouter()
@@ -71,10 +72,12 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
         console.log("Screen size changed to:", screenSize);
         // Update the state variable based on screen size
         if (screenSize === 'small') {
-            setPagesToShow(2);
+            setPagesToShow(1);
+            setText(false);
         }
         else {
             setPagesToShow(5);
+            setText(true);
         }
     }, [screenSize]);
 
@@ -117,7 +120,7 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
         if (page > 1) {
             items.push(
                 <PaginationItem key="prev">
-                    <PaginationPrevious href={`${pathname}?${createQueryString('page', (page - 1).toString())}`} onClick={handlePrevious} />
+                    <PaginationPrevious href={`${pathname}?${createQueryString('page', (page - 1).toString())}`} onClick={handlePrevious} text={text} />
                 </PaginationItem>
             );
         }
@@ -221,7 +224,7 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
         if (page < n_pages) {
           items.push(
             <PaginationItem key="next">
-              <PaginationNext href={`${pathname}?${createQueryString('page', (page + 1).toString())}`} onClick={handleNext} />
+              <PaginationNext href={`${pathname}?${createQueryString('page', (page + 1).toString())}`} onClick={handleNext} text={text} />
             </PaginationItem>
           );
         }

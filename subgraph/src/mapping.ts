@@ -17,6 +17,16 @@ import { TokenMetadata as TokenMetadataTemplate } from '../generated/templates'
 
 
 
+function extractCID(uri: string): string {
+  // Split the URI by '/' and get the last part
+  const parts = uri.split('/');
+  if (parts.length > 0) {
+    // The CID should be the last part of the URI
+    return parts[parts.length - 1];
+  }
+  return "";
+}
+
 export function handleMetadata(content: Bytes): void {
   let tokenMetadata = new TokenMetadata(dataSource.stringParam())
   const value = json.fromBytes(content).toObject()
@@ -48,8 +58,8 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
     token = new Token(tokenId);
     token.anchor = event.params.anchor.toHex();
     token.metadata =  event.params.cid;
-
-    TokenMetadataTemplate.create(event.params.cid)
+    
+    TokenMetadataTemplate.create(extractCID(event.params.cid))
 
     token.isListed = false;
     token.toRedeem = false;

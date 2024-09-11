@@ -1,5 +1,5 @@
 import { gql, TypedDocumentNode } from "@apollo/client"
-import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT, NFTtokenVariables, NFTtokenFromOwnerVariables, Where_Metadata, tokenOwnerSearchVariables, OwnerNFTtokens} from "@/types";
+import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT, NFTtokenVariables, NFTtokenFromOwnerVariables, Where_Metadata, tokenOwnerSearchVariables, OwnerNFTtokens, Metadatas, Metadata_e} from "@/types";
 
 
 // DA CAPIRE QUALE DELLE DUE SIA LA MIGLIORE, IN TERMINI DI PERFORMANCE E SICUREZZA
@@ -99,27 +99,26 @@ export const SEARCH_MARKETPLACE_NFTS: TypedDocumentNode<OwnerNFTtokens, tokenSea
   }
 `;
 
-export const GET_OWNER_NFTS: TypedDocumentNode<OwnerNFTtokens, ownerVariables> = gql`
-  query GetOwnerNFTs($id: String!, $skip: Int, $first: Int, $where_metadata: Where_Metadata, $orderBy: String, $orderDirection: OrderDirection) {
-    owner(id: $id) {
+// USATA PER TESTARE SUBGRAPH, TUTTO OKAY
+// MANCA DA TESTARE WHERE CLAUSOLA
+export const GET_OWNER_NFTS: TypedDocumentNode<NFTtokens, ownerVariables> = gql`
+  query GetOwnerNFTs($id: String, $skip: Int, $first: Int, $orderBy: String, $orderDirection: String) {
+    tokens(skip: $skip, first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
-      nfts(skip: $skip, first: $first, where: $where_metadata, orderBy: $orderBy, orderDirection: $orderDirection) {
+      anchor
+      metadata {
         id
-        anchor
-        metadata {
-          id
-          title
-          description
-          tags
-          imageURI
-        }
-        owner {
-          id
-        }
-        isListed
-        listingPrice
-        toRedeem
+        title
+        description
+        tags
+        imageURI
       }
+      owner {
+        id
+      }
+      isListed
+      listingPrice
+      toRedeem
     }
   }
 `;

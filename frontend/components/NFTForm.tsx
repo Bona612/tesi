@@ -453,11 +453,12 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         
 
         /// QUI TOCCHERà PASSARE L'IMMAGINE
-        const responseImageCID = await predeterminingImageCID(formValues.image);
-        console.log("image CID: ", responseImageCID.cid)
+        // const responseImageCID = await predeterminingImageCID(formValues.image);
+        // console.log("image CID: ", responseImageCID.cid)
         const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "https://";
-        // const imageURI = BASE_URI + responseImageCID.cid;
-        const imageURI = BASE_URI + imageUploaded2.response.IpfsHash;
+        const imageURI = BASE_URI + imageUploaded2.response.Hash;
+        // const imageURI = BASE_URI + imageUploaded2.response.IpfsHash;
+        
         /// QUI TOCCHERà PASSARE IL JSON DEL METADATA, QUINDI ANCHE CON L'URI DELL'IMMAGINE
         const metadata: Metadata = {
             title: formValues.title,
@@ -465,11 +466,12 @@ async function createToken(toast: (arg0: { title: string; description: string; }
             imageURI: imageURI,
             tags: formValues.tags,
         };
-        const responseMetadataCID = await predeterminingMetadataCID(metadata);
-        console.log("metadata CID: ", responseMetadataCID)
-        const metadataCID: string = responseMetadataCID.cid;
-        // const metadataUploaded3 = await uploadMetadataToIPFS(metadata);
-        // console.log("metadataUploaded3 " + metadataUploaded3);
+        const metadataUploaded = await uploadMetadataToIPFS(metadata);
+        console.log("metadataUploaded " + metadataUploaded);
+        const metadataCID: string = metadataUploaded.response.Hash;
+        // const responseMetadataCID = await predeterminingMetadataCID(metadata);
+        // console.log("metadata CID: ", responseMetadataCID)
+        // const metadataCID: string = responseMetadataCID.cid;
         
 
         // QUI DA CAMBIARE LA FUNZIONE DOPO AVERLA TESTATA, NON SARà PIù transferanchor MA createAnchor
@@ -498,8 +500,8 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         if (result.status) {
             // const imageUploaded = await uploadImageToIPFS(formValues.image);
             // console.log("imageUploaded " + imageUploaded);
-            const metadataUploaded = await uploadMetadataToIPFS(metadata);
-            console.log("metadataUploaded " + metadataUploaded);
+            // const metadataUploaded = await uploadMetadataToIPFS(metadata);
+            // console.log("metadataUploaded " + metadataUploaded);
 
             toast({
                 title: "Successfull!.",
@@ -509,8 +511,8 @@ async function createToken(toast: (arg0: { title: string; description: string; }
             console.log("mostrato");
         }
         else {
-            const imageDeleted = await deleteImageAPI({cid: imageUploaded2.response.IpfsHash});
-            console.log("imageDeleted " + imageDeleted);
+            // const imageDeleted = await deleteImageAPI({cid: imageUploaded2.response.IpfsHash});
+            // console.log("imageDeleted " + imageDeleted);
 
             toast({
                 title: "Uh oh! Something went wrong.",

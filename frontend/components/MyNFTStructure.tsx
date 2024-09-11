@@ -51,11 +51,11 @@ export default function ResponsiveGrid() {
 
   const id: string = address?.toString() || "";
   
-  const wtags: Where_Token_Metadata = { tags: ["Tag 1"] };
+  const wtags: Where_Token_Metadata = { tags_contains: ["Tag 1"] };
   const where_metadata: Where_Metadata = { metadata_: wtags };
   
   // const variables = {id: id, skip: skip, first: first, where_token_owner: where_token_owner, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables
-  const variables = {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8", skip: skip, first: first, where_metadata: where_metadata, orderBy: "id", orderDirection: OrderDirectionEnum[OrderDirectionEnum.asc]} as ownerVariables
+  const variables = {id: "QmT83suxMSkV3CqBkEK7nYbJw4MYfnSxxF8JjeqPC4XZqh", skip: skip, first: first, orderBy: "id", orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables
   const pollInterval_ms = 5000
   console.log("variables: ", variables);
 
@@ -127,7 +127,7 @@ export default function ResponsiveGrid() {
     startTransition(() => {
       refetch({
         // VARAIBLES TO CHANGE
-        where_metadata: where_metadata
+        // where_metadata: where_metadata
       });
     });
   };
@@ -137,11 +137,11 @@ export default function ResponsiveGrid() {
     startTransition(() => {
       refetch({
         // VARAIBLES TO CHANGE
-        where_metadata: where_metadata,
+        // where_metadata: where_metadata,
         // orderBy: orderBy.name, 
         // orderDirection: OrderDirectionEnum[orderDirection]
-        orderBy: "id", 
-        orderDirection: OrderDirectionEnum[OrderDirectionEnum.asc]
+        // orderBy: "id", 
+        // orderDirection: OrderDirectionEnum[OrderDirectionEnum.asc]
       });
     });
   }, [orderBy, orderDirection]);

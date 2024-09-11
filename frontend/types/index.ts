@@ -92,12 +92,24 @@ export type NFT = {
   transactions: Transaction[],
 }
 
+export type Metadata_e = {
+  id: string,
+  title: string,
+  description: string,
+  imageURI: string,
+  tags: Tag[],
+}
+export type Metadatas = {
+  tokenMetadata_collection: Metadata_e[]
+}
+
+
 export type NFTtokens = {
   tokens: NFT[]
 }
 export type OwnerNFTtokens = {
   id: string,
-  tokens: NFT[]
+  nfts: NFT[]
 }
 
 export type NFT_Owner = {
@@ -149,7 +161,7 @@ export interface tokenSearchVariables {
 
 
 export type Where_Token_Metadata = {
-  tags: Tag[]
+  tags_contains: Tag[]
 }
 export type Where_Metadata = {
   metadata_: Where_Token_Metadata
@@ -159,7 +171,7 @@ export type Where_Owner_Id = {
   id: string
 }
 export type Where_Tags = {
-  tags: Tag[]
+  tags_contains: Tag[]
 }
 
 export type Where_Token_Owner = {
@@ -181,7 +193,7 @@ export interface ownerVariables {
   id: string,
   skip: number,
   first: number,
-  where_metadata: Where_Metadata,
+  // where_metadata: Where_Metadata,
   orderBy: string,
   orderDirection: string,
 }

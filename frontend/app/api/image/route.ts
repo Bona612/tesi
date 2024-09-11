@@ -66,67 +66,27 @@ export async function POST(request: NextRequest) {
     const form = new FormData();
     form.append('file', file);
 
-    const pinataMetadata = JSON.stringify({
-      name: file.name,
-    });
-    form.append("pinataMetadata", pinataMetadata);
+    // const pinataMetadata = JSON.stringify({
+    //   name: file.name,
+    // });
+    // form.append("pinataMetadata", pinataMetadata);
 
-    const pinataOptions = JSON.stringify({
-      cidVersion: 1,
-    });
-    form.append("pinataOptions", pinataOptions);
-    // console.log(form);
+    // const pinataOptions = JSON.stringify({
+    //   cidVersion: 1,
+    // });
+    // form.append("pinataOptions", pinataOptions);
+    // // console.log(form);
 
-    const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+    const res = await fetch("http://localhost:5001/api/v0/add", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.PINATA_JWT}`
-      },
+      // headers: {
+      //   Authorization: `Bearer ${process.env.PINATA_JWT}`
+      // },
       body: form,
     });
 
     const resData = await res.json();
     console.log(resData);
-
-    const cid1 = CID.parse("bafybeidh6bhadr4csigx4tbafgslniuarvxas734oqsefaywdwn32vffp4");
-
-    // Get codec and hash function details
-    console.log('CID1 Details:', {
-      version: cid1.version,
-      codec: cid1.code,
-      hash: cid1.multihash
-    });
-
-    const fileBlob = new Blob([file], { type: file.type });
-    // console.log(await file.arrayBuffer());
-    // console.log(await new File([fileBlob], file.name).arrayBuffer());
-    // console.log(await file.arrayBuffer() === await new File([fileBlob], file.name).arrayBuffer());
-    // compareArrayBuffers(file);
-
-    const unit8array2 = new Uint8Array(await file.arrayBuffer());
-
-    // const bytes2 = raw.encode(unit8array2)
-    // const bytes2 = dagPB.encode(unit8array2);
-    const bytes2 = dagPB.encode({
-      Data: unit8array2,
-      Links: []
-    })
-
-    const hash2 = await sha256.digest(bytes2)
-
-    const cid2 = CID.create(1, dagPB.code, hash2)
-    console.log(cid2.toString())
-
-    console.log('predet CID2 Details:', {
-      version: cid2.version,
-      codec: cid2.code,
-      hash: {
-        code: hash2.code,
-        size: hash2.size,
-        digest: Array.from(hash2.digest),
-        bytes: Array.from(hash2.bytes)
-      }
-    });
 
     return NextResponse.json({ 'response': resData, 'status': 200 });
   } catch (error) {
@@ -137,6 +97,97 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+// export async function POST(request: NextRequest) {
+
+//   try {
+//     // const formData = new FormData();
+//     const formData = await request.formData();
+//     console.log("formData ", formData);
+//     // const src = "path/to/file.png";
+//     // const file = fs.createReadStream(src);
+//     // formData.append("file", file);
+
+//     const file: File = formData.get("image") as File;
+//     console.log("image ", file);
+
+//     if (!file) {
+//       return NextResponse.json({ error: 'Valid file image is required' }, { status: 400 });
+//     }
+
+//     const form = new FormData();
+//     form.append('file', file);
+
+//     const pinataMetadata = JSON.stringify({
+//       name: file.name,
+//     });
+//     form.append("pinataMetadata", pinataMetadata);
+
+//     const pinataOptions = JSON.stringify({
+//       cidVersion: 1,
+//     });
+//     form.append("pinataOptions", pinataOptions);
+//     // console.log(form);
+
+//     const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${process.env.PINATA_JWT}`
+//       },
+//       body: form,
+//     });
+
+//     const resData = await res.json();
+//     console.log(resData);
+
+//     const cid1 = CID.parse("bafybeidh6bhadr4csigx4tbafgslniuarvxas734oqsefaywdwn32vffp4");
+
+//     // Get codec and hash function details
+//     console.log('CID1 Details:', {
+//       version: cid1.version,
+//       codec: cid1.code,
+//       hash: cid1.multihash
+//     });
+
+//     const fileBlob = new Blob([file], { type: file.type });
+//     // console.log(await file.arrayBuffer());
+//     // console.log(await new File([fileBlob], file.name).arrayBuffer());
+//     // console.log(await file.arrayBuffer() === await new File([fileBlob], file.name).arrayBuffer());
+//     // compareArrayBuffers(file);
+
+//     const unit8array2 = new Uint8Array(await file.arrayBuffer());
+
+//     // const bytes2 = raw.encode(unit8array2)
+//     // const bytes2 = dagPB.encode(unit8array2);
+//     const bytes2 = dagPB.encode({
+//       Data: unit8array2,
+//       Links: []
+//     })
+
+//     const hash2 = await sha256.digest(bytes2)
+
+//     const cid2 = CID.create(1, dagPB.code, hash2)
+//     console.log(cid2.toString())
+
+//     console.log('predet CID2 Details:', {
+//       version: cid2.version,
+//       codec: cid2.code,
+//       hash: {
+//         code: hash2.code,
+//         size: hash2.size,
+//         digest: Array.from(hash2.digest),
+//         bytes: Array.from(hash2.bytes)
+//       }
+//     });
+
+//     return NextResponse.json({ 'response': resData, 'status': 200 });
+//   } catch (error) {
+//     console.log(error);
+//     return NextResponse.json(
+//         { 'error': "Internal Server Error" },
+//         { 'status': 500 }
+//     );
+//   }
+// }
 
 
 import { PinataSDK } from "pinata";

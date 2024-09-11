@@ -24,33 +24,27 @@ export async function POST(request: NextRequest) {
       console.log("JSON data: ", jsonData);
   
       const data = JSON.stringify({
-        pinataOptions: {cidVersion: 1},
-        pinataContent: jsonData,
-        pinataMetadata: {
-          name: jsonData.title ? `${jsonData.title}.json` : 'default.json'
-        }
+        // pinataOptions: {cidVersion: 1},
+        pinataContent: jsonData
+        // pinataMetadata: {
+        //   name: jsonData.title ? `${jsonData.title}.json` : 'default.json'
+        // }
       });
+      const form = new FormData();
+      form.append('file', JSON.stringify(jsonData));
 
-      const res = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+      const res = await fetch("http://localhost:5001/api/v0/add", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.PINATA_JWT}`,
-          'Content-Type': 'application/json'
-        },
-        body: data,
+        // headers: {
+        //   Authorization: `Bearer ${process.env.PINATA_JWT}`,
+        //   'Content-Type': 'application/json'
+        // },
+        body: form,
       });
 
       const resData = await res.json();
       console.log(resData);
 
-      const cid1 = CID.parse(resData.IpfsHash);
-
-      // Get codec and hash function details
-      console.log('CID1 Details:', {
-        version: cid1.version,
-        codec: cid1.code,
-        hash: cid1.multihash
-      });
 
       return NextResponse.json({ 'response': resData ,  'status': 200 });
     }
@@ -62,6 +56,50 @@ export async function POST(request: NextRequest) {
       );
     }
 };
+// export async function POST(request: NextRequest) {
+//     try {
+//       const jsonData = await request.json();
+//       console.log("JSON data: ", jsonData);
+  
+//       const data = JSON.stringify({
+//         pinataOptions: {cidVersion: 1},
+//         pinataContent: jsonData,
+//         pinataMetadata: {
+//           name: jsonData.title ? `${jsonData.title}.json` : 'default.json'
+//         }
+//       });
+
+//       const res = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
+//         method: "POST",
+//         headers: {
+//           Authorization: `Bearer ${process.env.PINATA_JWT}`,
+//           'Content-Type': 'application/json'
+//         },
+//         body: data,
+//       });
+
+//       const resData = await res.json();
+//       console.log(resData);
+
+//       const cid1 = CID.parse(resData.IpfsHash);
+
+//       // Get codec and hash function details
+//       console.log('CID1 Details:', {
+//         version: cid1.version,
+//         codec: cid1.code,
+//         hash: cid1.multihash
+//       });
+
+//       return NextResponse.json({ 'response': resData ,  'status': 200 });
+//     }
+//     catch (error) {
+//       console.log(error);
+//       return NextResponse.json(
+//         { 'error': "Internal Server Error" },
+//         { 'status': 500 }
+//       );
+//     }
+// };
 
 import { PinataSDK } from "pinata";
 

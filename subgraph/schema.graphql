@@ -50,7 +50,7 @@ input Where_Token {
   id: String,
 }
 input Where_Token_Metadata {
-  tags: [String!]
+  tags_contains: [String!]
 }
 input Where_Metadata {
   metadata_: Where_Token_Metadata

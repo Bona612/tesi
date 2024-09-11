@@ -40,7 +40,7 @@ import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, use
 import { GET_OWNER_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import NFTsPagination from './NFTsPagination';
-import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables } from "@/types/index";
+import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables, OwnerNFTtokens, Metadatas, Metadata_e } from "@/types/index";
 import { ownerDocument } from '@mui/material';
 // import { RefetchFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
 
@@ -50,7 +50,7 @@ interface MarketplaceProps {
     first: number;
     skip: number;
     setSkip: React.Dispatch<React.SetStateAction<number>>;
-    queryRef: QueryRef<Data_Owner, ownerVariables>;
+    queryRef: QueryRef<NFTtokens, ownerVariables>;
     isPending: boolean;
     onRefetch: () => void;
     onFetchMore: () => void;
@@ -78,7 +78,7 @@ export default function MyNFT({ first, skip, setSkip, queryRef, onFetchMore }: M
 ///  Query with Suspense and Background/Read
   const { data } = useReadQuery(queryRef);
   console.log(data)
-  const n_pages = data?.owner?.nfts || 0;
+  const n_pages = data?.tokens || 0;
   console.log("numero pagine calcolate: ", n_pages);
 //   console.log("data from read query: ", data)
 //   console.log(typeof data)

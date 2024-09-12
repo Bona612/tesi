@@ -1,12 +1,12 @@
 # schema.graphql
 
-type _Schema_
-  @fulltext(
-    name: "tokenSearch"
-    language: en
-    algorithm: proximityRank
-    include: [{ entity: "Token", fields: [{ name: "anchor" }] }]
-  )
+# type _Schema_
+#   @fulltext(
+#     name: "tokenSearch"
+#     language: en
+#     algorithm: proximityRank
+#     include: [{ entity: "Token", fields: [{ name: "anchor" }] }]
+#   )
 
   # @fulltext(
   #   name: "ownerTokenSearch"
@@ -38,7 +38,7 @@ type Token implements Node @entity {
   transactions: [Transaction!]! @derivedFrom(field: "token")
 }
 
-type TokenMetadata implements Node @entity {
+type TokenMetadata implements Node @entity(immutable: true) {
   id: ID!
   title: String!
   description: String!

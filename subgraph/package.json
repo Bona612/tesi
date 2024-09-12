@@ -1,9 +1,10 @@
 {
-  "name": "thegraph",
+  "name": "subgraph",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "graph test",
+    "coverage": "graph test -- -c"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "@babel/preset-typescript": "^7.24.7",
     "@graphprotocol/graph-ts": "^0.35.1",
     "babel-plugin-relay": "^17.0.0",
+    "matchstick-as": "^0.6.0",
     "react-relay": "^17.0.0",
     "relay-runtime": "^17.0.0"
   }

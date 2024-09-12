@@ -4,7 +4,6 @@ import { TokenMetadata } from '../generated/schema';
 
 export function handleIpfsData(content: Bytes): void {
   log.info('dentro handleTokenMetadata: {}', [dataSource.stringParam()]);
-  
 
   let tokenMetadata = new TokenMetadata(dataSource.stringParam())
   const value = json.fromBytes(content).toObject()

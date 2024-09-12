@@ -12,6 +12,7 @@ import {
 from "../generated/NFTMarketplace/NFTMarketplace"
 import { Token, Owner, Transaction } from '../generated/schema';
 import { IpfsData } from '../generated/templates';
+import { handleIpfsData } from './ipfs-data';
 
 
 
@@ -47,6 +48,8 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
     const context = new DataSourceContext();
     context.setString('tokenId', event.params.tokenId.toString());
     IpfsData.createWithContext(cid, context);
+    
+    
     token.metadata = cid;
 
     token.isListed = false;

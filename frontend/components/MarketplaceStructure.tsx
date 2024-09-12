@@ -156,22 +156,23 @@ export default function MarketplaceStructure() {
   //   // handleRefetch();
   // };
 
-  // DA CAPIRE IN UN SECONDO MOMENTO, QUI SUCCEDE CHE ALCUNE COSE SONO UNDEFINED
-  // Initialize state based on URL parameters
-  useEffect(() => {
-    console.log("fine")
-    const tagsParam = searchParams.get('tags') || '';
-    const tagsArray = tagsParam.split(',').filter(Boolean);
-    const orderByParam = searchParams.get('orderBy') || '';
-    const orderDirectionParam = searchParams.get('orderDirection') || '';
-    const pageParam = searchParams.get('page') || '';
-    setTags(tagsArray as Tag[]);
-    setOrderBy(findOrderBy(orderByParam));
-    setOrderDirection(orderDirectionMap[orderDirectionParam]);
-    setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
-    console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
-    console.log("fem sta prova2: ", orderDirectionParam);
-  }, [searchParams]);
+  // // DA CAPIRE IN UN SECONDO MOMENTO, QUI SUCCEDE CHE ALCUNE COSE SONO UNDEFINED
+  // // DA ELIMINARE PROBABILMENTE
+  // // Initialize state based on URL parameters
+  // useEffect(() => {
+  //   console.log("fine")
+  //   const tagsParam = searchParams.get('tags') || '';
+  //   const tagsArray = tagsParam.split(',').filter(Boolean);
+  //   const orderByParam = searchParams.get('orderBy') || '';
+  //   const orderDirectionParam = searchParams.get('orderDirection') || '';
+  //   const pageParam = searchParams.get('page') || '';
+  //   setTags(tagsArray as Tag[]);
+  //   setOrderBy(findOrderBy(orderByParam));
+  //   setOrderDirection(orderDirectionMap[orderDirectionParam]);
+  //   setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+  //   console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
+  //   console.log("fem sta prova2: ", orderDirectionParam);
+  // }, [searchParams]);
     
 
   /// DA SCOMMENTARE SOTTO

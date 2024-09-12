@@ -20,12 +20,14 @@ export function OrderDirectionFilter() {
     };
 
     return (
-        <Button variant="outline" size="icon" onClick={handleOnClick}>
-            {orderDirection ? (
-                <ChevronDown className="h-4 w-4" />
-            ) : (
-                <ChevronUp className="h-4 w-4" />
-            )}
-        </Button>
+        <div className="px-2 flex-shrink">
+            <Button variant="outline" size="icon" onClick={handleOnClick}>
+                {orderDirection ? (
+                    <ChevronDown className="h-4 w-4" />
+                ) : (
+                    <ChevronUp className="h-4 w-4" />
+                )}
+            </Button>
+        </div> 
     );
 }

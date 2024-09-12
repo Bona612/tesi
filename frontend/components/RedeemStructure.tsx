@@ -123,17 +123,17 @@ export default function RedeemStructure() {
 
   //   handleRefetch();
   // };
-  useEffect(() => {
-    updateURL(tags);
-  }, [tags]);
+  // useEffect(() => {
+  //   updateURL(tags);
+  // }, [tags]);
 
-  // Initialize state based on URL parameters
-  useEffect(() => {
-    console.log("fine")
-    const tagsParam = searchParams.get('tags') || '';
-    const tagsArray = tagsParam.split(',').filter(Boolean);
-    setTags(tagsArray as Tag[]);
-  }, [searchParams]);
+  // // Initialize state based on URL parameters
+  // useEffect(() => {
+  //   console.log("fine")
+  //   const tagsParam = searchParams.get('tags') || '';
+  //   const tagsArray = tagsParam.split(',').filter(Boolean);
+  //   setTags(tagsArray as Tag[]);
+  // }, [searchParams]);
 
 
   // function updateTagList(tag: Tag) {

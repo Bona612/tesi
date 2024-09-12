@@ -49,7 +49,7 @@ type TagFilterProps = {
 
 export function Filters({isDesktop}: TagFilterProps) {
     // const [open, setOpen] = React.useState(false)
-    const { tags, setTags } = useFilters();
+    const { tags, setTags, resetFilters } = useFilters();
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
 
@@ -76,6 +76,10 @@ export function Filters({isDesktop}: TagFilterProps) {
 
     function handleDrawerClose() {
         setIsDrawerOpen(false);
+    }
+    function handleResetFilters() {
+        resetFilters();
+        handleDrawerClose();
     }
     
 
@@ -104,17 +108,21 @@ export function Filters({isDesktop}: TagFilterProps) {
                             {/* <DrawerDescription>Set your daily activity goal.</DrawerDescription> */}
                         </DrawerHeader>
                         <div className="mt-4 border-t">
-                            <TagFilter />
+                            <div className="py-2">
+                                <TagFilter />
+                            </div>
                             {/* <StatusList tags={tags} handleOnClick={handleOnClick} /> */}
-                            <OrderByFilter />
-                            <OrderDirectionFilter />
+                            <div className="flex">
+                                <OrderByFilter />
+                                <OrderDirectionFilter />
+                            </div>
                         </div>
                         <DrawerFooter>
                             <DrawerClose asChild onClick={handleDrawerClose}>
-                                <Button>Save</Button>
+                                <Button>Show results</Button>
                             </DrawerClose>
-                            <DrawerClose asChild onClick={handleDrawerClose}>
-                                <Button variant="outline">Cancel</Button>
+                            <DrawerClose asChild onClick={handleResetFilters}>
+                                <Button variant="outline">Reset filters</Button>
                             </DrawerClose>
                         </DrawerFooter>
                     </div>

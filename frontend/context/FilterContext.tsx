@@ -16,6 +16,7 @@ interface FilterContextType extends FilterStateType {
   setOrderBy: (orderBy: OrderBy) => void;
   setOrderDirection: (orderDirection: OrderDirection) => void,
   setPage: (page: number) => void,
+  resetFilters: () => void
 }
 
 const defaultFilterState: FilterStateType = {

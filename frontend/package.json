@@ -4,18 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "run-p dev:*",
-    "dev:next": "next dev",
-    "dev:relay": "npm run gen:relay -- --watch",
-    "dev:graphql-codegen": "npm run gen:graphql-codegen -- --watch",
-    "dev:hcm": "npm run gen:hcm -- --watch",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "gen": "run-s -c gen:*",
-    "gen:relay": "./node_modules/relay-compiler/cli.js",
-    "gen:graphql-codegen": "graphql-codegen-esm",
-    "gen:hcm": "hcm '{app,components}/**/*.module.css'",
-    "lint": "biome check ."
+    "lint": "next lint",
+    "lint-biome": "biome check ."    
   },
   "dependencies": {
     "@apollo/client": "^3.10.8",

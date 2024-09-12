@@ -11,6 +11,10 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 
+const SEPOLIA_PRIVATE_KEY = process.env.SEPOLIA_PRIVATE_KEY || "";
+const INFURA_API_KEY = process.env.INFURA_API_KEY || "";
+
+
 const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.20",
@@ -50,15 +54,12 @@ const config: HardhatUserConfig = {
       from: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
       accounts: ["0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"]
     },
-    // // DA SCOMMENTARE PER IL DEPLOY VERO E PROPRIO
-    // sepolia: {
-    //   // da cambiare url
-    //   // url: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
-    //   url: process.env.SEPOLIA_RPC_URL || 'https://sepolia.drpc.org',
-    //   accounts: [`${process.env.SEPOLIA_PRIVATE_KEY}`],
-    //   chainId: 11155111, // Visto dal sito Chainlist.org
-    //   // blockConfirmations: 6, // Possiamo impostare direttamente da qui il numero di conferme da attendere per ogni rete con cui lavoriamo
-    // },
+    sepolia: {
+      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
+      accounts: [SEPOLIA_PRIVATE_KEY],
+      chainId: 11155111, // Visto dal sito Chainlist.org
+      // blockConfirmations: 6, // Possiamo impostare direttamente da qui il numero di conferme da attendere per ogni rete con cui lavoriamo
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

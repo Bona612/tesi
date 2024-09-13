@@ -24,7 +24,8 @@ interface RequestBody {
 
 /// THIS IS GOOD!!! IT WORKS
 async function signAttestation(attestation: Attestation, signer: ethers.JsonRpcSigner): Promise<string> {
-  const oraclePrivateKey: string = "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
+  const oraclePrivateKey: string = process.env.ORACLE_PRIVATE_KEY || "";
+  console.log(oraclePrivateKey);
 
   // Create a wallet instance from the private key
   const wallet = new ethers.Wallet(oraclePrivateKey);

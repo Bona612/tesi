@@ -2,18 +2,7 @@
 
 import * as React from 'react';
 import { useMemo, useState, useEffect, useCallback } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import BaseNFTBox from '@/components/BaseNFT';
-import ListedNFTBox from '@/components/ListedNFT';
-import ConnectButton from '@/components/ConnectButton';
-// import NFTsHeader from '@/components/NFTsHeader';
-
-// import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider';
-import { fetchGraphQLQuery } from '@/relay/fetchGraphQLQuery';
-import { graphql } from 'relay-runtime';
-// import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
-// import type { page_RootLayoutQuery, page_RootLayoutQuery$variables } from '@/app/marketplace/__generated__/page_RootLayoutQuery.graphql';
-import ErrorBoundary from '@/components/ErrorBoundary';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';import ErrorBoundary from '@/components/ErrorBoundary';
 import NFTsHeader from '@/components/NFTsHeader';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'

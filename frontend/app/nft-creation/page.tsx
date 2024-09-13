@@ -1,9 +1,6 @@
 "use client"
 
-// app/form/page.tsx
 import React from 'react';
-import { Container, Typography } from '@mui/material';
-import Home from "@/app/page";
 import NFTForm from "@/components/NFTForm";
 import { useWeb3ModalAccount, useWeb3ModalProvider } from '@web3modal/ethers/react';
 import { FilterProvider } from '@/context/FilterContext';

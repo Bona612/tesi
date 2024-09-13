@@ -15,11 +15,7 @@
   },
   "dependencies": {
     "@apollo/rover": "^0.23.0",
-    "@babel/preset-typescript": "^7.24.7",
     "@graphprotocol/graph-ts": "^0.35.1",
-    "babel-plugin-relay": "^17.0.0",
-    "matchstick-as": "^0.6.0",
-    "react-relay": "^17.0.0",
-    "relay-runtime": "^17.0.0"
+    "matchstick-as": "^0.6.0"
   }
 }

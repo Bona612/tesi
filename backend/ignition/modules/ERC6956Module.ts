@@ -1,6 +1,8 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 import { AttestedTransferLimitUpdatePolicy } from "../../test/commons"; // NULLADDR
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
+import { ethers, ignition } from "hardhat";
+
 import { createMerkleTree, getMerkleTreeRoot } from "../../utils/merkleTreeUtilities";
 import dotenv from 'dotenv';
 dotenv.config();
@@ -11,7 +13,7 @@ const POLICY: AttestedTransferLimitUpdatePolicy = AttestedTransferLimitUpdatePol
 const ONE_GWEI: bigint = 1_000_000_000n;
 const deployerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 
-const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "https://";
+const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "";
 
 /*
     The callback passed to `buildModule()` provides a module builder object `m`
@@ -23,12 +25,12 @@ const ERC6956Module = buildModule("ERC6956Module", (m) => {
     Instead of named accounts, you get access to the configured accounts
     through the `getAccount()` method.
     */
+    
     const deployer = m.getAccount(0);
-    const tokenOwner = m.getAccount(1);
 
     const name = m.getParameter("name", NAME);
     const symbol = m.getParameter("symbol", SYMBOL);
-    const baseURI = m.getParameter("baseURI", BASE_URI)
+    const baseURI = m.getParameter("baseURI", BASE_URI);
     // const policy = m.getParameter("policy", POLICY);
     // const amount = m.getParameter("amount", ONE_GWEI);
     // const signer = ethers.provider.getSigner(deployerAddress);
@@ -38,9 +40,7 @@ const ERC6956Module = buildModule("ERC6956Module", (m) => {
         as the second argument. The account to use for the deployment transaction
         is set through `from` in the third argument, which is an options object.
     */
-    const erc6956 = m.contract("ERC6956", [name, symbol])//, {
-    //     from: deployer,
-    // });
+    const erc6956 = m.contract("ERC6956", [name, symbol], { from: deployer });
 
     /*
         The call to `m.contract()` returns a future that can be used in other `m.contract()`
@@ -52,11 +52,11 @@ const ERC6956Module = buildModule("ERC6956Module", (m) => {
 
     // QUESTA PARTE VA VERIFICATA, SICURAMENTE mantainer and oracle è MEGLIO SE VENGONO SETTATI QUI
     // MENTRE PER updateValidAnchors LA COSA è DA VERIFICARE
-    const mantainerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
-    m.call(erc6956, "updateMaintainer", [mantainerAddress, true]);
+    // const mantainerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
+    m.call(erc6956, "updateMaintainer", [deployer, true]);
 
-    const oracleAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
-    m.call(erc6956, "updateOracle", [oracleAddress, true]);
+    // const oracleAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
+    m.call(erc6956, "updateOracle", [deployer, true]);
 
     console.log("baseURI: ", baseURI);
     m.call(erc6956, "updateBaseURI", [baseURI]);

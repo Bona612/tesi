@@ -1,4 +1,3 @@
-import { Box, Chip } from '@mui/material';
 import { Tag } from '@/components/Tag';
 import { Tag as TagType, TAGS } from "@/types";
 import { useFilters } from '@/context/FilterContext';

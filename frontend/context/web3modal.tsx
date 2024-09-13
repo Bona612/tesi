@@ -14,6 +14,25 @@ const mainnet = {
   rpcUrl: 'https://cloudflare-eth.com'
 }
 
+const INFURA_BASE_URL = process.env.INFURA_BASE_URL || "";
+const INFURA_API_KEY = process.env.INFURA_API_KEY || "";
+console.log(`${INFURA_BASE_URL}${INFURA_API_KEY}`);
+
+const sepolia = {
+  chainId: 11155111,
+  name: 'Sepolia',
+  chainName: 'Sepolia Testnet',
+  currency: 'ETH',
+  nativeCurrency: {
+    name: 'Sepolia ETH',
+    symbol: 'ETH',
+    decimals: 18,
+  },
+  explorerUrl: 'https://sepolia.etherscan.io',
+  rpcUrl: "https://sepolia.infura.io/v3/97070e614e654251a0578e1f52ccde09"
+  // rpcUrl: `${INFURA_BASE_URL}${INFURA_API_KEY}`
+}
+
 const localhost = {
   chainId: 1337,  // Commonly used chain ID for local development
   name: 'Localhost',
@@ -26,7 +45,7 @@ const localhost = {
 const metadata = {
   name: 'My Website',
   description: 'My Website description',
-  url: 'https://web3modal.com', // origin must match your domain & subdomain
+  url: 'https://localhost', // origin must match your domain & subdomain
   icons: ['https://avatars.githubusercontent.com/u/37784886']
 }
 // 4. Create Ethers config
@@ -45,7 +64,8 @@ const ethersConfig = defaultConfig({
 // 5. Create a Web3Modal instance
 createWeb3Modal({
   ethersConfig,
-  chains: [mainnet, localhost],
+  chains: [mainnet, localhost, sepolia],
+  defaultChain: sepolia,
   projectId,
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
   enableOnramp: true // Optional - false as default

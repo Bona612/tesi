@@ -51,7 +51,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 //     }
 //   });
 
-const httpLink = new HttpLink({ uri: 'http://localhost:8000/subgraphs/name/talentlayer/talent-layer-protocol' })
+const httpLink = new HttpLink({ uri: GRAPHQL_API_ENDPOINT })
 
 const cache = new InMemoryCache({
   typePolicies: {

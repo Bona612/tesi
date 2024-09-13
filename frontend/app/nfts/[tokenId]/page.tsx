@@ -1,21 +1,8 @@
 "use client";
 
-import { notFound } from 'next/navigation';
-import NFTInfo from '@/components/NFTInfo';
-import TokenBar from '@/components/TokenBar';
 import { NFT, NFT_Owner, Tag, Transaction } from "@/types/index";
 
-import { BrowserProvider, Contract, Eip1193Provider, ethers, formatUnits } from 'ethers'
-import { getIPFSContent } from "@/utils/ipfs-pinata";
-
-import ERC6956Full_address from "@/contractsData/ERC6956Full_address.json";
-import ERC6956Full from "@/contractsData/ERC6956Full.json";
-import { ERC6956Full__factory } from '@/typechain/factories/contracts/ERC6956Full__factory';
-// import { ERC6956Full } from '@/typechain/contracts/ERC6956Full';
-import { FC, Suspense, useEffect, useState } from 'react';
-
-import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
-import { setLengthLeft } from 'ethereumjs-util';
+import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react';
 import { Metadata } from "@/types/index";
 import BackButton from '@/components/BackButton';
 import { GetServerSideProps } from 'next';
@@ -97,8 +84,7 @@ function getStartData(tokenId: string) {
   const t: NFT = {
     id: tokenId,
     anchor: tokenId,
-    metadataURI: {title: "titolo", description: "descrizione", imageURI: "https://dummyimage.com/300.png/09f/fff"} as Metadata,
-    tags: [tag],
+    metadata: {title: "titolo", description: "descrizione", imageURI: "https://dummyimage.com/300.png/09f/fff", tags: ["Tag 1"]} as Metadata,
     owner: {} as NFT_Owner,
     transactions: [] as Transaction[],
   }

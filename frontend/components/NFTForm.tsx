@@ -380,11 +380,11 @@ async function createToken(toast: (arg0: { title: string; description: string; }
 
         const ercContractWithSigner = ercContract.connect(signer);
         const nonce = 2
-        // Prepare your transaction parameters
-        const txParams = {
-            maxFeePerGas: 703230725 * 2
-            // other parameters as needed
-        };
+        // // Prepare your transaction parameters
+        // const txParams = {
+        //     maxFeePerGas: 703230725 * 2
+        //     // other parameters as needed
+        // };
 
         console.log("control okay")
         // const oracleAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
@@ -455,9 +455,8 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         /// QUI TOCCHERà PASSARE L'IMMAGINE
         // const responseImageCID = await predeterminingImageCID(formValues.image);
         // console.log("image CID: ", responseImageCID.cid)
-        const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "https://";
-        const imageURI = BASE_URI + imageUploaded2.response.Hash;
-        // const imageURI = BASE_URI + imageUploaded2.response.IpfsHash;
+        const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "";
+        const imageURI = BASE_URI + imageUploaded2.response.IpfsHash;
         
         /// QUI TOCCHERà PASSARE IL JSON DEL METADATA, QUINDI ANCHE CON L'URI DELL'IMMAGINE
         const metadata: Metadata = {
@@ -468,7 +467,7 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         };
         const metadataUploaded = await uploadMetadataToIPFS(metadata);
         console.log("metadataUploaded " + metadataUploaded);
-        const metadataCID: string = metadataUploaded.response.Hash;
+        const metadataCID: string = metadataUploaded.response.IpfsHash;
         // const responseMetadataCID = await predeterminingMetadataCID(metadata);
         // console.log("metadata CID: ", responseMetadataCID)
         // const metadataCID: string = responseMetadataCID.cid;
@@ -487,7 +486,7 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         // else {
         console.log("con data")
         // QUI createAnchor
-        const tx_mint = await ercContract['createAnchor(bytes,string,bytes)'](signedAttestation, metadataCID, data, txParams)
+        const tx_mint = await ercContract['createAnchor(bytes,string,bytes)'](signedAttestation, metadataCID, data)
         receipt_mint = await tx_mint.wait();
         console.log('Transaction receipt:', receipt_mint);
 

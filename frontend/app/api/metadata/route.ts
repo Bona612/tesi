@@ -16,7 +16,7 @@ export const preferredRegion = 'auto'
 export const maxDuration = 5
 
 
-
+const SUBGRAPH_STUDIO_ENDPOINT = process.env.SUBGRAPH_STUDIO_ENDPOINT || "";
 
 export async function POST(request: NextRequest) {
     try {
@@ -24,22 +24,20 @@ export async function POST(request: NextRequest) {
       console.log("JSON data: ", jsonData);
   
       const data = JSON.stringify({
-        // pinataOptions: {cidVersion: 1},
-        pinataContent: jsonData
-        // pinataMetadata: {
-        //   name: jsonData.title ? `${jsonData.title}.json` : 'default.json'
-        // }
+        pinataOptions: {cidVersion: 1},
+        pinataContent: jsonData,
+        pinataMetadata: {
+          name: jsonData.title ? `${jsonData.title}.json` : 'default.json'
+        }
       });
-      const form = new FormData();
-      form.append('file', JSON.stringify(jsonData));
 
-      const res = await fetch("http://localhost:5001/api/v0/add", {
+      const res = await fetch("https://api.pinata.cloud/pinning/pinJSONToIPFS", {
         method: "POST",
-        // headers: {
-        //   Authorization: `Bearer ${process.env.PINATA_JWT}`,
-        //   'Content-Type': 'application/json'
-        // },
-        body: form,
+        headers: {
+          Authorization: `Bearer ${process.env.PINATA_JWT}`,
+          'Content-Type': 'application/json'
+        },
+        body: data,
       });
 
       const resData = await res.json();

@@ -1,29 +1,32 @@
 #!/bin/bash
 
+# Load .env file directly (only works if variables are in correct format)
+set -o allexport
+source .env
+set +o allexport
+
 # Authenticate
-npx graph auth --studio 02eb27dea06d8c328be8c1bda0776657
+npx graph auth --studio "$SUBGRAPH_DEPLOY_KEY"
 
 # Generate Typescript code
-# --output-dir __generated__
-npx graph codegen
+npx graph codegen 
 
 # Build the subgraph
 npx graph build
 
 
-# TO TEST
-
 # Deploy
-# DEPLOY_OUTPUT=$(npx graph deploy --node https://api.staging.thegraph.com/deploy/ --ipfs https://api.staging.thegraph.com/ipfs/ azf20/very-cool-subgraph)
 DEPLOY_OUTPUT=$(npx graph deploy --studio erc6956full)
+
 # Print DEPLOY_OUTPUT to the terminal
 echo "Deployment Output:"
 echo "$DEPLOY_OUTPUT"
 
 # this does not work
 SUBGRAPH_STUDIO_ENDPOINT=$(echo "$DEPLOY_OUTPUT" | 
- sed 's/\x1b\[0m//g' |
-sed -n -e '/Subgraph endpoints:/,/Queries (HTTP):/s/.*Queries (HTTP):[[:space:]]*//p' | sed 's/[[:space:]].*//')
+  sed 's/\x1b\[0m//g' |
+  sed -n -e '/Subgraph endpoints:/,/Queries (HTTP):/s/.*Queries (HTTP):[[:space:]]*//p' | 
+  sed 's/[[:space:]].*//')
 # Print SUBGRAPH_STUDIO_ENDPOINT to the terminal
 echo "Subgraph Studio Endpoint:"
 echo "$SUBGRAPH_STUDIO_ENDPOINT"

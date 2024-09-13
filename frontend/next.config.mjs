@@ -13,6 +13,19 @@
 
 // import relayConfig from './relay.config.json' with { type: 'json' };
 
+const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' blob: data:;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+`
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: config => {
@@ -20,15 +33,16 @@ const nextConfig = {
 
     return config
   },
-  // compiler: {
-  //   relay: relayConfig,
-  // },
   // DA VERIFICARE LA PARTE SOTTO, SOPRATTUTTO LA SINTASSI
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
+          // {
+          //   key: 'Content-Security-Policy',
+          //   value: cspHeader.replace(/\n/g, ''),
+          // },
           {
             key: 'Permission-Policy',
             value: 'camera=(self)', // Allow camera and microphone access only from the same origin
@@ -48,27 +62,7 @@ const nextConfig = {
       },
     ],
   },
+  reactStrictMode: true,
 };
 
 export default nextConfig;
-
-
-// "scripts": {
-  //   "dev": "next dev",
-  //   "build": "next build",
-  //   "start": "next start",
-  //   "lint": "next lint",
-  //   "relay": "relay-compiler"
-  // },
-
-// "relay": {
-//     "src": "./",
-//     "schema": "../thegraph/relayschema.graphql",
-//     "language": "typescript",
-//     "artifactDirectory": "./relay/__generated__",
-//     "excludes": [
-//       "**/node_modules/**",
-//       "**/__mocks__/**",
-//       "**/__generated__/**"
-//     ]
-//   },

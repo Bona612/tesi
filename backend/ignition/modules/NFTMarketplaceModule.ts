@@ -4,8 +4,10 @@ const ONE_GWEI: bigint = 1_000_000_000n;
 
 const NFTMarketplaceModule = buildModule("NFTMarketplaceModule", (m) => {
     const amount = m.getParameter("amount", ONE_GWEI);
+    const deployer = m.getAccount(0);
 
-    const nftmarketplace = m.contract("NFTMarketplace", [/* costruttore */]);
+
+    const nftmarketplace = m.contract("NFTMarketplace", [/* costruttore */], { from: deployer });
     // , {
     //     value: amount, /* third argument is passed ETH */
     // }

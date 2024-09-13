@@ -4,20 +4,6 @@ import * as React from 'react';
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { experimentalStyled as styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Unstable_Grid2';
-import BaseNFTBox from '@/components/BaseNFT';
-import ListedNFTBox from '@/components/ListedNFT';
-import ConnectButton from '@/components/ConnectButton';
-// import NFTsHeader from '@/components/NFTsHeader';
-
-// import { RelayEnvironmentProvider } from '@/components/RelayEnvironmentProvider';
-import { fetchGraphQLQuery } from '@/relay/fetchGraphQLQuery';
-import { graphql } from 'relay-runtime';
-// import { RelayRecordMapPublisher } from '@/components/RelayRecordMapPublisher';
-// import type { page_RootLayoutQuery, page_RootLayoutQuery$variables } from '@/app/marketplace/__generated__/page_RootLayoutQuery.graphql';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NFTsHeader from '@/components/NFTsHeader';
 import { SkeletonCard } from '@/components/SkeletonCard';
@@ -43,7 +29,6 @@ import NFTsPagination from './NFTsPagination';
 import { NFT_Owner, NFTtokens, NFTtokensVariables, Transaction } from "@/types/index";
 import { bigint } from 'zod';
 import { ethToWei } from '@/utils/utils';
-// import { RefetchFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
 
 
 

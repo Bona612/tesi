@@ -13,6 +13,8 @@ export const preferredRegion = 'auto'
 export const maxDuration = 5
 
 
+const SUBGRAPH_STUDIO_ENDPOINT = process.env.SUBGRAPH_STUDIO_ENDPOINT || "";
+
 
 async function compareArrayBuffers(file) {
   const buffer1 = await file.arrayBuffer();
@@ -66,22 +68,22 @@ export async function POST(request: NextRequest) {
     const form = new FormData();
     form.append('file', file);
 
-    // const pinataMetadata = JSON.stringify({
-    //   name: file.name,
-    // });
-    // form.append("pinataMetadata", pinataMetadata);
+    const pinataMetadata = JSON.stringify({
+      name: file.name,
+    });
+    form.append("pinataMetadata", pinataMetadata);
 
-    // const pinataOptions = JSON.stringify({
-    //   cidVersion: 1,
-    // });
-    // form.append("pinataOptions", pinataOptions);
-    // // console.log(form);
+    const pinataOptions = JSON.stringify({
+      cidVersion: 1,
+    });
+    form.append("pinataOptions", pinataOptions);
+    console.log(form);
 
-    const res = await fetch("http://localhost:5001/api/v0/add", {
+    const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
       method: "POST",
-      // headers: {
-      //   Authorization: `Bearer ${process.env.PINATA_JWT}`
-      // },
+      headers: {
+        Authorization: `Bearer ${process.env.PINATA_JWT}`
+      },
       body: form,
     });
 

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Head from 'next/head';
+// import Head from 'next/head';
 import { Inter } from "next/font/google";
 import './globals.css'
 
 import NavBar from "@/components/AppBar";
 import NFTBox from "@/components/BaseNFT";
 import ConnectButton from "@/components/ConnectButton";
-import { StyledEngineProvider } from '@mui/material/styles';
 
 import { Web3Modal } from '../context/web3modal'
 import AppBar from "@/components/ui/appbar";
@@ -59,10 +58,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {/* Other <head> tags like title, favicon, etc., can be added here */}
-      </Head>
+      <head>
+        {/* Add meta tags or other head elements here */}
+      </head>
       <body className={`${inter.className} flex-grow overflow-y-auto pb-16 md:pb-0`}>
         <div>
           {/* <StyledEngineProvider injectFirst>

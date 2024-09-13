@@ -12,7 +12,7 @@ const POLICY: AttestedTransferLimitUpdatePolicy = AttestedTransferLimitUpdatePol
 const ONE_GWEI: bigint = 1_000_000_000n;
 const deployerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 console.log(process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI);
-const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "https://";
+const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "";
 
 /*
     The callback passed to `buildModule()` provides a module builder object `m`
@@ -25,7 +25,6 @@ const ERC6956FullModule = buildModule("ERC6956FullModule", (m) => {
     through the `getAccount()` method.
     */
     const deployer = m.getAccount(0);
-    const tokenOwner = m.getAccount(1);
 
     const name = m.getParameter("name", NAME);
     const symbol = m.getParameter("symbol", SYMBOL);
@@ -40,9 +39,7 @@ const ERC6956FullModule = buildModule("ERC6956FullModule", (m) => {
         as the second argument. The account to use for the deployment transaction
         is set through `from` in the third argument, which is an options object.
     */
-    const erc6956full = m.contract("ERC6956Full", [name, symbol])//, {
-    //     from: deployer,
-    // });
+    const erc6956full = m.contract("ERC6956Full", [name, symbol], { from: deployer });
 
     /*
         The call to `m.contract()` returns a future that can be used in other `m.contract()`
@@ -54,11 +51,11 @@ const ERC6956FullModule = buildModule("ERC6956FullModule", (m) => {
 
     // QUESTA PARTE VA VERIFICATA, SICURAMENTE mantainer and oracle è MEGLIO SE VENGONO SETTATI QUI
     // MENTRE PER updateValidAnchors LA COSA è DA VERIFICARE
-    const mantainerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
-    m.call(erc6956full, "updateMaintainer", [mantainerAddress, true]);
+    // const mantainerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
+    m.call(erc6956full, "updateMaintainer", [deployer, true]);
 
-    const oracleAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
-    m.call(erc6956full, "updateOracle", [oracleAddress, true]);
+    // const oracleAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
+    m.call(erc6956full, "updateOracle", [deployer, true]);
 
     console.log("baseURI: ", baseURI);
     m.call(erc6956full, "updateBaseURI", [baseURI]);

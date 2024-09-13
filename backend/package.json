@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@chainlink/contracts": "^1.1.0",
-    "@pinata/sdk": "^2.1.0",
     "base64-sol": "^1.1.0",
     "commons": "^0.0.1-pre",
     "dotenv": "^16.4.5",

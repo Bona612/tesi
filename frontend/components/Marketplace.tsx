@@ -29,13 +29,11 @@ import NFTsPagination from './NFTsPagination';
 import { NFT_Owner, NFTtokens, NFTtokensVariables, Transaction } from "@/types/index";
 import { bigint } from 'zod';
 import { ethToWei } from '@/utils/utils';
+import { useFilters } from '@/context/FilterContext';
 
 
 
 interface MarketplaceProps {
-    first: number;
-    skip: number;
-    setSkip: React.Dispatch<React.SetStateAction<number>>;
     queryRef: QueryRef<NFTtokens, NFTtokensVariables>;
     isPending: boolean;
     onRefetch: () => void;
@@ -48,119 +46,26 @@ const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 
-export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMore }: MarketplaceProps) {
+export default function Marketplace({ queryRef, onFetchMore }: MarketplaceProps) {
   // const { address, chainId, isConnected } = useWeb3ModalAccount()
   // const { walletProvider } = useWeb3ModalProvider()
 
-  // METTERE QUESTA PARTE IN QUESTO COMPONENT, O COMUNQUE IN UN PARENT COMPONENT RISPETTO ALLA QUERY, QUESTO PER LA PAGINATION
-//   const [skip, setSkip] = useState(0);
-//   const first = 3;
 
+  const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
 
-  // let first = 3;
-  // let skip = 0;
-  // const variables: page_RootLayoutQuery$variables = {first: first, skip: skip}
-
-///  Query with Suspense and Background/Read
-  // const { data } = useReadQuery(queryRef);
-  const data: NFTtokens = {tokens: 
-    [{
-      id: "1",
-      anchor: "1",
-      metadata: {title: "titolo", description: "descrizione", tags: ["Tag 1"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199"} as NFT_Owner,
-      isListed: true,
-      listingPrice: ethToWei(0.01),
-      transactions: [] as Transaction[],
-    },
-    {
-      id: "2",
-      anchor: "2",
-      metadata: {title: "titolo", description: "descrizione", tags: ["Tag 2"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
-      isListed: true,
-      listingPrice: BigInt(0),
-      transactions: [] as Transaction[],
-    },
-    {
-      id: "3",
-      anchor: "3",
-      metadata: {title: "titolo", description: "descrizione", tags: ["Tag 3"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
-      isListed: false,
-      listingPrice: BigInt(0),
-      transactions: [] as Transaction[],
-    },
-    {
-      id: "4",
-      anchor: "4",
-      metadata: {title: "titolo", description: "descrizione", tags: ["Tag 4"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
-      isListed: true,
-      listingPrice: BigInt(0),
-      transactions: [] as Transaction[],
-    },
-    {
-      id: "5",
-      anchor: "5",
-      metadata: {title: "titolo", description: "descrizione", tags: ["Tag 4"],imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
-      isListed: true,
-      listingPrice: BigInt(0),
-      transactions: [] as Transaction[],
-    },
-    {
-      id: "2",
-      anchor: "2",
-      metadata: {title: "titolo", description: "descrizione", tags: ["Tag 2"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
-      isListed: true,
-      listingPrice: BigInt(0),
-      transactions: [] as Transaction[],
-    },
-    {
-      id: "3",
-      anchor: "3",
-      metadata: {title: "titolo", description: "descrizione", tags: ["Tag 3"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
-      isListed: true,
-      listingPrice: BigInt(0),
-      transactions: [] as Transaction[],
-    },
-    {
-      id: "4",
-      anchor: "4",
-      metadata: {title: "titolo", description: "descrizione", tags: ["Tag 4"], imageURI: "https://dummyimage.com/300.png/09f/fff"},
-      owner: {id: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"} as NFT_Owner,
-      isListed: true,
-      listingPrice: BigInt(0),
-      transactions: [] as Transaction[],
-    },]
+  if (!queryRef) {
+    return (<div>undefined</div>);
   }
-  const n_tokens: number = data?.tokens?.length;
-  let n_pages: number = -1;
-  if (first == 0) {
-    n_pages = 0;
-  }
-  else {
-    n_pages = Math.ceil(n_tokens / first);
 
-  }
+  ///  Query with Suspense and Background/Read
+  const { data } = useReadQuery(queryRef);
+  console.log(data)
+  const n_pages = data?.tokens || 0;
   console.log("numero pagine calcolate: ", n_pages);
-  console.log("first ", first);
-//   console.log("data from read query: ", data)
-//   console.log(typeof data)
 
 
-//   // Memoize the fetched data
-//   const memoizedData = useMemo(() => data, [data]) as NFTtokens;
-
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error : {error.message}</p>;
-
-    if (data) {
-      data.tokens = data?.tokens.slice(skip, skip + first)
-    }
+  const pass = {tokens: data?.tokens};
+  console.log(pass);
 
     return (
         <div>
@@ -168,7 +73,7 @@ export default function Marketplace({ first, skip, setSkip, queryRef, onFetchMor
                 <NFTList data={data} />
             </div>
             <div className="pb-4">
-                <NFTsPagination n_pages={n_pages} first={first} onChange={onChange} setSkip={setSkip} onFetchMore={onFetchMore} />
+                <NFTsPagination n_pages={1} onChange={onChange} onFetchMore={onFetchMore} />
             </div>
         </div>
     )

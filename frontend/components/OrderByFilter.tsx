@@ -16,18 +16,11 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useFilters } from "@/context/FilterContext"
-import { OrderBy } from "@/types"
+import { OrderBy, orderByOptions } from "@/types"
 
 
 type OrderByFilterProps = {
 };
-
-const orders: OrderBy[] = [
-    {
-        name: "name",
-        label: "Name"
-    }
-];
 
 export function OrderByFilter({}: OrderByFilterProps) {
   const [open, setOpen] = React.useState(false)
@@ -43,7 +36,7 @@ export function OrderByFilter({}: OrderByFilterProps) {
           <SelectContent>
               <SelectGroup>
                   <SelectLabel>Order by</SelectLabel>
-                  {orders.map((order) => (
+                  {orderByOptions.map((order) => (
                     <SelectItem key={order.name} value={order.label} onSelect={(value) => {
                       setOrderBy(order)
                       setOpen(false)}}

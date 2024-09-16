@@ -143,10 +143,10 @@ contract NFTMarketplace is ReentrancyGuard, Ownable {
         if (price <= 0) {
             revert PriceMustBeAboveZero();
         }
-        IERC721 nft = IERC721(nftAddress);
-        if (nft.getApproved(tokenId) != address(this)) {
-            revert NotApprovedForMarketplace();
-        }
+        // IERC721 nft = IERC721(nftAddress);
+        // if (nft.getApproved(tokenId) != address(this)) {
+        //     revert NotApprovedForMarketplace();
+        // }
         s_listings[nftAddress][tokenId] = Listing(msg.sender, price);
         emit ItemListed(nftAddress, tokenId, msg.sender, price);
     }

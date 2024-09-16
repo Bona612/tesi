@@ -6,7 +6,7 @@ dataSources:
     name: ERC6956Full
     network: sepolia
     source:
-      address: "0xf33e2937F2f2dE9bA30C8341aF93c839C7FbC58D"
+      address: "{{ERC6956Full_ADDRESS}}"
       abi: ERC6956Full
       startBlock: 1
     mapping:
@@ -30,7 +30,7 @@ dataSources:
     name: NFTMarketplace
     network: sepolia
     source:
-      address: "0x493c27bBcB1a00273EBA71e72371aE5750cbDc8B"
+      address: "{{NFTMarketplace_ADDRESS}}"
       abi: NFTMarketplace
       startBlock: 1
     mapping:

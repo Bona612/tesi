@@ -1,10 +1,10 @@
 import { gql, TypedDocumentNode } from "@apollo/client"
-import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT, NFTtokenVariables, NFTtokenFromOwnerVariables, Where_Metadata, tokenOwnerSearchVariables, OwnerNFTtokens, Metadatas, Metadata_e} from "@/types";
+import { NFTtokens, NFTtokensVariables, tokenSearchVariables, Owner, ownerVariables, Data_Owner, tokenOwnerVariables, NFT, NFTtokenVariables, NFTtokenFromOwnerVariables, Where_Metadata, tokenOwnerSearchVariables, OwnerNFTtokens, Metadatas, Metadata_e, token_NFT} from "@/types";
 
 
 // DA CAPIRE QUALE DELLE DUE SIA LA MIGLIORE, IN TERMINI DI PERFORMANCE E SICUREZZA
-export const GET_NFT: TypedDocumentNode<NFT, NFTtokenVariables> = gql`
-  query GetNFT($id: string) {
+export const GET_NFT: TypedDocumentNode<token_NFT, NFTtokenVariables> = gql`
+  query GetNFT($id: String) {
     token(id: $id) {
       id
       anchor
@@ -28,7 +28,7 @@ export const GET_NFT: TypedDocumentNode<NFT, NFTtokenVariables> = gql`
   }
 `;
 export const GET_NFT_FROM_OWNER: TypedDocumentNode<OwnerNFTtokens, NFTtokenFromOwnerVariables> = gql`
-  query GetNFT($owner_id: string, $where_token: Where_Token) {
+  query GetNFT2($owner_id: String, $where_token: Where_Token) {
     owner(id: $owner_id) {
       id
       nfts(where: $where_token) {
@@ -56,7 +56,7 @@ export const GET_NFT_FROM_OWNER: TypedDocumentNode<OwnerNFTtokens, NFTtokenFromO
 `;
 
 export const GET_MARKETPLACE_NFTS: TypedDocumentNode<NFTtokens, NFTtokensVariables> = gql`
-  query GetNFTs($skip: Int, $first: Int, $where_marketplace: Where_Marketplace, $orderBy: String, $orderDirection: OrderDirection) {
+  query GetNFTs($skip: Int, $first: Int, $where_marketplace: Where_Marketplace, $orderBy: String, $orderDirection: String) {
     tokens(skip: $skip, first: $first, where: $where_marketplace, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       anchor
@@ -77,7 +77,7 @@ export const GET_MARKETPLACE_NFTS: TypedDocumentNode<NFTtokens, NFTtokensVariabl
   }
 `;
 
-export const SEARCH_MARKETPLACE_NFTS: TypedDocumentNode<OwnerNFTtokens, tokenSearchVariables> = gql`
+export const SEARCH_MARKETPLACE_NFTS: TypedDocumentNode<NFTtokens, tokenSearchVariables> = gql`
   query SearchNFTs($text: String, $skip: Int, $first: Int, $where_marketplace: Where_Marketplace) {
     tokenSearch(text: $text, skip: $skip, first: $first, where: $where_marketplace) {
       id
@@ -99,26 +99,29 @@ export const SEARCH_MARKETPLACE_NFTS: TypedDocumentNode<OwnerNFTtokens, tokenSea
   }
 `;
 
-// USATA PER TESTARE SUBGRAPH, TUTTO OKAY
-// MANCA DA TESTARE WHERE CLAUSOLA
-export const GET_OWNER_NFTS: TypedDocumentNode<NFTtokens, ownerVariables> = gql`
-  query GetOwnerNFTs($id: String, $skip: Int, $first: Int, $orderBy: String, $orderDirection: String) {
-    tokens(skip: $skip, first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {
+
+//       where: {metadata_: { or: [{ tags_contains: ["Tag 1"] }, { tags_contains: ["Tag 2"] }] }}
+export const GET_OWNER_NFTS: TypedDocumentNode<OwnerNFTtokens, ownerVariables> = gql`
+  query GetOwnerNFTs($id: String, $skip: Int, $first: Int, $where_metadata: Where_Metadata, $orderBy: String, $orderDirection: String) {
+    owner(id: $id) {
       id
-      anchor
-      metadata {
+      nfts(skip: $skip, first: $first, where: $where_metadata, orderBy: $orderBy, orderDirection: $orderDirection) {
         id
-        title
-        description
-        tags
-        imageURI
+        anchor
+        metadata {
+          id
+          title
+          description
+          tags
+          imageURI
+        }
+        owner {
+          id
+        }
+        isListed
+        listingPrice
+        toRedeem
       }
-      owner {
-        id
-      }
-      isListed
-      listingPrice
-      toRedeem
     }
   }
 `;
@@ -145,8 +148,8 @@ export const SEARCH_OWNER_NFTS: TypedDocumentNode<NFTtokens, tokenOwnerSearchVar
   }
 `;
 
-export const GET_OWNER_REDEEM_NFTS: TypedDocumentNode<OwnerNFTtokens, ownerVariables> = gql`
-  query GetOwnerRedeemNFTs($id: String!, $skip: Int, $first: Int, $where_token_redeem: Where_Token_Redeem, $orderBy: String, $orderDirection: OrderDirection) {
+export const GET_OWNER_REDEEM_NFTS: TypedDocumentNode<OwnerNFTtokens, tokenOwnerVariables> = gql`
+  query GetOwnerRedeemNFTs($id: String, $skip: Int, $first: Int, $where_token_redeem: Where_Token_Redeem, $orderBy: String, $orderDirection: OrderDirection) {
     owner(id: $id) {
       id
       nfts(skip: $skip, first: $first, where: $where_token_redeem, orderBy: $orderBy, orderDirection: $orderDirection) {

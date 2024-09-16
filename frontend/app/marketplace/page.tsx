@@ -9,6 +9,7 @@ import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import MarketplaceStructure from '@/components/MarketplaceStructure';
 import { FilterProvider } from '@/context/FilterContext';
+import { NFTperRowProvider } from '@/context/NFTperRowContext';
 
 
 export default function ResponsiveGrid() {
@@ -17,11 +18,13 @@ export default function ResponsiveGrid() {
 
   return (
     <div>
-      <FilterProvider>
-        <ApolloProvider client={client}>
+      <NFTperRowProvider>
+        <FilterProvider>
+          {/* <ApolloProvider client={client}> */}
           <MarketplaceStructure />
-        </ApolloProvider>
-      </FilterProvider>
+          {/* </ApolloProvider> */}
+        </FilterProvider>
+      </NFTperRowProvider>
     </div>
   );
 }

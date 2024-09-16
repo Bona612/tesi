@@ -1,3 +1,5 @@
+import { Tag } from "lucide-react";
+
 // WHY NOT, MAYBE ALSO ICON
 export type Page = {
   title: string;
@@ -27,6 +29,7 @@ export const PAGES: Page[] = [
   },
 ]
 
+
 // Define the Tag type as a union of string literals
 export type Tag = 'Tag 1' | 'Tag 2' | 'Tag 3' | 'Tag 4';
 
@@ -45,10 +48,7 @@ export type OrderBy = {
   label: string,
 };
 export const orderByOptions: OrderBy[] = [
-  { name: 'name', label: 'Name' },
-  { name: 'date', label: 'Date' },
-  { name: 'popularity', label: 'Popularity' }
-  // Add other OrderBy objects as needed
+  { name: 'id', label: 'id' },
 ];
 export enum OrderDirectionEnum {
   asc = 0,
@@ -80,11 +80,13 @@ export type Transaction = {
   timestamp: number,
 }
 
+export type token_NFT = {
+  token: NFT
+}
 export type NFT = {
   id: string,
   anchor: string,
   metadata: Metadata,
-  // tags: Tag[],
   owner: NFT_Owner,
   isListed: boolean,
   listingPrice: bigint,
@@ -108,8 +110,10 @@ export type NFTtokens = {
   tokens: NFT[]
 }
 export type OwnerNFTtokens = {
-  id: string,
-  nfts: NFT[]
+  owner: {
+    id: string,
+    nfts: NFT[]
+  }
 }
 
 export type NFT_Owner = {
@@ -193,7 +197,7 @@ export interface ownerVariables {
   id: string,
   skip: number,
   first: number,
-  // where_metadata: Where_Metadata,
+  where_metadata: Where_Metadata,
   orderBy: string,
   orderDirection: string,
 }
@@ -210,7 +214,7 @@ export interface tokenOwnerVariables {
   id: string,
   skip: number,
   first: number,
-  where_metadata: Where_Token_Metadata,
+  where_token_redeem: Where_Token_Redeem,
   orderBy: string,
   orderDirection: string,
 }

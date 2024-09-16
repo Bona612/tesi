@@ -34,8 +34,8 @@ type NFTListProps = {
 
 // This is the Client Component because it implements pagination with `usePaginationFragment`.
 const NFTList = React.memo(({ data, ownerAddress }: NFTListProps) => {
-  const { address, chainId, isConnected } = useWeb3ModalAccount()
-  const { walletProvider } = useWeb3ModalProvider()
+  // const { address, chainId, isConnected } = useWeb3ModalAccount();
+  // const { walletProvider } = useWeb3ModalProvider();
 
 
   console.log("data: ")
@@ -47,7 +47,7 @@ const NFTList = React.memo(({ data, ownerAddress }: NFTListProps) => {
   return (
     <div>
         <Grid>
-            {data?.tokens.map((nft, idx) => (
+            {data?.tokens && data?.tokens.map((nft, idx) => (
                 <BaseNFTBox nft={nft} key={`${nft.id}-${idx}`} />
             ))}
         </Grid>

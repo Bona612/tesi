@@ -1,5 +1,3 @@
-'use client';
-
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -30,14 +28,14 @@ import { useMediaQueries } from '@/hooks/useMediaQuery';
 
 interface NFTsPaginationProps {
     n_pages: number,
-    first: number,
+    // first: number,
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    setSkip: React.Dispatch<React.SetStateAction<number>>;
+    // setSkip: React.Dispatch<React.SetStateAction<number>>;
     onFetchMore: () => void;
 }
 
 
-export default function NFTsPagination({n_pages, first, onChange, setSkip, onFetchMore}: NFTsPaginationProps) {
+export default function NFTsPagination({n_pages, onChange, onFetchMore}: NFTsPaginationProps) {
     // const { address, chainId, isConnected } = useWeb3ModalAccount()
     // const { walletProvider } = useWeb3ModalProvider()
 
@@ -70,7 +68,7 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
     const handlePrevious = () => {
         if (page > 1) {
             setPage(page - 1);
-            setSkip((page - 1) * first);
+            // setSkip((page - 1) * first);
             onFetchMore();
         }
     };
@@ -78,14 +76,14 @@ export default function NFTsPagination({n_pages, first, onChange, setSkip, onFet
     const handleNext = () => {
         if (page < n_pages) {
             setPage(page + 1);
-            setSkip((page - 1) * first);
+            // setSkip((page - 1) * first);
             onFetchMore();
         }
     };
     
     const handlePageChange = (page: number) => {
         setPage(page);
-        setSkip((page - 1) * first);
+        // setSkip((page - 1) * first);
         onFetchMore();
     };
 

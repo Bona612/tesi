@@ -6,9 +6,9 @@ OUTPUT_PATH="subgraph.yaml"
 ERC6956Full_ADDRESS_JSON_PATH="./abis/ERC6956Full_address.json"
 NFTMarketplace_ADDRESS_JSON_PATH="./abis/NFTMarketplace_address.json"
 
-# Read the JSON file and extract values using jq
-ERC6956Full_ADDRESS=$(jq -r '.address' "$ERC6956Full_ADDRESS_JSON_PATH")
-NFTMarketplace_ADDRESS=$(jq -r '.address' "$NFTMarketplace_ADDRESS_JSON_PATH")
+# Extract the address value from JSON files using grep and sed
+ERC6956Full_ADDRESS=$(grep '"address"' "$ERC6956Full_ADDRESS_JSON_PATH" | sed -E 's/.*"address": ?"([^"]+)".*/\1/')
+NFTMarketplace_ADDRESS=$(grep '"address"' "$NFTMarketplace_ADDRESS_JSON_PATH" | sed -E 's/.*"address": ?"([^"]+)".*/\1/')
 
 # Read the template file
 TEMPLATE=$(<"$TEMPLATE_PATH")
@@ -21,4 +21,4 @@ RESULT=$(echo "$TEMPLATE" | sed \
 # Write the result to the output file
 echo "$RESULT" > "$OUTPUT_PATH"
 
-echo "Generated $OUTPUT_PATH from $TEMPLATE_PATH using $CONFIG_PATH"
+echo "Generated $OUTPUT_PATH from $TEMPLATE_PATH using ERC6956Full_ADDRESS: $ERC6956Full_ADDRESS and NFTMarketplace_ADDRESS: $NFTMarketplace_ADDRESS"

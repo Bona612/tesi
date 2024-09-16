@@ -1,13 +1,14 @@
 import { Attestation, NFT } from "@/types";
 import { Eip1193Provider, ethers } from "ethers";
 import NFTMarketplace_address from "../contractsData/NFTMarketplace_address.json";
-import ERC6956Full_address from "../contractsData/ERC6956Full_address.json";
 import NFTMarketplace from "../contractsData/NFTMarketplace.json";
 import { ERC6956Full__factory } from '@/typechain/factories/contracts/ERC6956Full__factory';
-import { ERC6956Full } from '@/typechain/contracts/ERC6956Full';
 import { NFTMarketplace as NFTM } from '@/typechain/contracts/NFTMarketplace';
 import { ethToWei } from "./utils";
 import { merkleTreeAPI, signAttestationAPI } from "./attestation";
+import ERC6956Full_address from "../contractsData/ERC6956Full_address.json";
+import ERC6956Full from "../contractsData/ERC6956Full.json";
+import { ERC6956Full as IERC6956Full } from "../typechain";
 
 
 
@@ -55,12 +56,12 @@ export async function buyNFT(nft: NFT, isConnected: boolean, address: string | u
         }
 
         const nftmcecontractWithSigner = nftmcecontract.connect(signer);
-        const nonce = 2
-        // Prepare your transaction parameters
-        const txParams = {
-            maxFeePerGas: 703230725 * 2,
-            value: nft.listingPrice
-        };
+        // const nonce = 2
+        // // Prepare your transaction parameters
+        // const txParams = {
+        //     maxFeePerGas: 703230725 * 2,
+        //     value: nft.listingPrice
+        // };
 
         console.log("control okay")
 
@@ -70,7 +71,7 @@ export async function buyNFT(nft: NFT, isConnected: boolean, address: string | u
         
         console.log("senza data")
         // QUI da cambiare in .address
-        const tx_mint = await nftmcecontractWithSigner.buyItem(ERC6956Full_address.address, nft.id, txParams);
+        const tx_mint = await nftmcecontractWithSigner.buyItem(ERC6956Full_address.address, nft.id); // , txParams);
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
@@ -128,12 +129,12 @@ export async function listNFT(nft: NFT, listingPrice: number, isConnected: boole
         }
 
         const nftmcecontractWithSigner = nftmcecontract.connect(signer);
-        const nonce = 2
-        // Prepare your transaction parameters
-        const txParams = {
-            maxFeePerGas: 703230725 * 2
-            // other parameters as needed
-        };
+        // const nonce = 2
+        // // Prepare your transaction parameters
+        // const txParams = {
+        //     maxFeePerGas: 703230725 * 2
+        //     // other parameters as needed
+        // };
 
         console.log("control okay")
 
@@ -141,8 +142,17 @@ export async function listNFT(nft: NFT, listingPrice: number, isConnected: boole
         let receipt_mint: ethers.ContractTransactionReceipt | null = null;
         // const NULLADDR = ethers.ZeroAddress;
         
+        console.log("approve");
+
+        /// QUESTA PARTE è DA VEDERE, SERVE FARE QUESTA OPERAZIONE O UNA VOLTA PER TUTTE, OPPURE OGNI VOLTA PER OGNI TOKEN
+        // // Assuming you have a contract instance for the NFT (IERC721) and the marketplace
+        // const ercContract: IERC6956Full = new ethers.Contract(ERC6956Full_address.address, ERC6956Full.abi, signer) as unknown as IERC6956Full;
+        // // Approve the marketplace to transfer the NFT
+        // await ercContract.approve(NFTMarketplace_address.address, nft.id);
+
+        console.log(ERC6956Full_address.address, nft.id, ethToWei(listingPrice));
         // QUI da cambiare in .address
-        const tx_mint = await nftmcecontractWithSigner.listItem(ERC6956Full_address.address, nft.id, ethToWei(listingPrice), txParams);
+        const tx_mint = await nftmcecontractWithSigner.listItem(ERC6956Full_address.address, nft.id, ethToWei(0.0001)); // , txParams);
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
@@ -201,12 +211,12 @@ export async function cancelListNFT(nft: NFT, isConnected: boolean, address: str
         }
 
         const nftmcecontractWithSigner = nftmcecontract.connect(signer);
-        const nonce = 2
-        // Prepare your transaction parameters
-        const txParams = {
-            maxFeePerGas: 703230725 * 2
-            // other parameters as needed
-        };
+        // const nonce = 2
+        // // Prepare your transaction parameters
+        // const txParams = {
+        //     maxFeePerGas: 703230725 * 2
+        //     // other parameters as needed
+        // };
 
         console.log("control okay")
 
@@ -216,7 +226,7 @@ export async function cancelListNFT(nft: NFT, isConnected: boolean, address: str
         
         console.log(ERC6956Full_address.address, nft.id);
         // QUI da cambiare in .address
-        const tx_mint = await nftmcecontractWithSigner.cancelListing(ERC6956Full_address.address, nft.id, txParams);
+        const tx_mint = await nftmcecontractWithSigner.cancelListing(ERC6956Full_address.address, nft.id); // , txParams);
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
@@ -272,12 +282,12 @@ export async function redeemNFT(nft: NFT, attestation: Attestation, isConnected:
         }
 
         const nftmcecontractWithSigner = nftmcecontract.connect(signer);
-        const nonce = 2
-        // Prepare your transaction parameters
-        const txParams = {
-            maxFeePerGas: 703230725 * 2
-            // other parameters as needed
-        };
+        // const nonce = 2
+        // // Prepare your transaction parameters
+        // const txParams = {
+        //     maxFeePerGas: 703230725 * 2
+        //     // other parameters as needed
+        // };
 
         console.log("control okay")
 
@@ -296,7 +306,7 @@ export async function redeemNFT(nft: NFT, attestation: Attestation, isConnected:
         console.log("response: ", responseMF)
         const data = responseMF.response;
 
-        const tx_mint = await nftmcecontractWithSigner["redeemItem(address,uint256,bytes,bytes)"](ERC6956Full_address.address, nft.id, signedAttestation, data, txParams);
+        const tx_mint = await nftmcecontractWithSigner["redeemItem(address,uint256,bytes,bytes)"](ERC6956Full_address.address, nft.id, signedAttestation, data); // , txParams);
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 

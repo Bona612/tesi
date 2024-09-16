@@ -615,7 +615,7 @@ export default function NFTForm() {
 
         const att: Attestation = {
             to: "",
-            anchor: "0x3ab9a2c6e6a7a11cbf3ec33b9a44926f7b85b6f93a599be75dcb2a1b7a9f9f31",
+            anchor: "0xa0921e50c2a4a929b2f9f2a5496f0d978b3bc73e5e5f598a8a2cfe7651d3b7aa",
             // attestationTime: 0,
             // validStartTime: 0,
             // validEndTime: 0

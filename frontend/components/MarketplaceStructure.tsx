@@ -16,12 +16,13 @@ import { GET_MARKETPLACE_NFTS, SEARCH_MARKETPLACE_NFTS } from "@/apollo/subgraph
 import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import { number } from 'zod';
-import { Tag, TAGS, NFTtokens, NFTtokensVariables, tokenSearchVariables, OrderBy, OrderDirectionEnum, OrderDirection, orderByOptions } from "@/types";
+import { Tag, TAGS, NFTtokens, NFTtokensVariables, tokenSearchVariables, OrderBy, OrderDirectionEnum, OrderDirection, orderByOptions, Where_Marketplace, Where_Token_Metadata, Where_Metadata } from "@/types";
 import SuspenseGrid from './SuspenseGrid';
 import { useMediaQuery, useMediaQueries } from '@/hooks/useMediaQuery';
 import { FloatingButton } from './FloatingButton';
 import { useFilters } from '@/context/FilterContext';
 import { findOrderBy, orderDirectionMap } from '@/utils/utils';
+import { useNFTperRow } from '@/context/NFTperRowContext';
 
 // import { useMediaQuery } from 'react-responsive'
 
@@ -58,6 +59,7 @@ export default function MarketplaceStructure() {
   const [isPending, startTransition] = useTransition();
 
   const { tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { nftPerRow } = useNFTperRow();
 
 
   const updateTags = (tag: Tag) => {
@@ -72,9 +74,13 @@ export default function MarketplaceStructure() {
       setTags(updateTags(tag));
   };
 
+  const wtags: Where_Token_Metadata = { tags_contains: tags };
+  const where_metadata: Where_Metadata = { metadata_: wtags };
+  const where_marketplace: Where_Marketplace = { isListed: true, metadata_: wtags };
+
   // VARAIBLES TO CHANGE
-    const variables = {skip: skip, first: first, tags: tags} as NFTtokensVariables
-    const pollInterval_ms = 5000
+  let variables = {id: address?.toLowerCase(), skip: (page - 1) * nftPerRow, first: nftPerRow, where_marketplace: where_marketplace, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as NFTtokensVariables
+  const pollInterval_ms = 5000
 
   const router = useRouter();
   const pathname = usePathname()
@@ -164,14 +170,14 @@ export default function MarketplaceStructure() {
   // }, [searchParams]);
     
 
-  /// DA SCOMMENTARE SOTTO
-  // let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_NFTS, {
-  //   variables: variables,
-  //   notifyOnNetworkStatusChange: true,
-  //   pollInterval: pollInterval_ms,
-  //   fetchPolicy: 'network-only', // Used for first execution
-  //   nextFetchPolicy: 'cache-first', // Used for subsequent executions
-  // });
+
+  let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_MARKETPLACE_NFTS, {
+    variables: variables,
+    // notifyOnNetworkStatusChange: true,
+    // pollInterval: pollInterval_ms,
+    // fetchPolicy: 'network-only', // Used for first execution
+    // nextFetchPolicy: 'cache-first', // Used for subsequent executions
+  });
 
   // function handleRefetch() {
   //   console.log("REFETCH")
@@ -227,36 +233,35 @@ export default function MarketplaceStructure() {
 
   
 
-  // Log state changes
-  useEffect(() => {
-    console.log("Updated 'first' in useEffect:", first);
-  }, [first]);
+  // // Log state changes
+  // useEffect(() => {
+  //   console.log("Updated 'first' in useEffect:", first);
+  // }, [first]);
 
 
-  const queryRef = [] as QueryRef<NFTtokens, NFTtokensVariables>;
 
-  const screenSize = useMediaQueries()
-  console.log("screen ", screenSize)
+  // const screenSize = useMediaQueries()
+  // console.log("screen ", screenSize)
 
-  useEffect(() => {
-    console.log("Screen size changed to:", screenSize);
-    // Update the state variable based on screen size
-    if (screenSize === 'small') {
-      setFirst(1);
-    } 
-    else if (screenSize === 'medium') {
-      setFirst(2);
-    } 
-    else if (screenSize === 'large') {
-      setFirst(3);
-    }
-    else if (screenSize === 'extralarge') {
-      setFirst(4);
-    }
-    else {
-      setFirst(-1);
-    }
-  }, [screenSize]);
+  // useEffect(() => {
+  //   console.log("Screen size changed to:", screenSize);
+  //   // Update the state variable based on screen size
+  //   if (screenSize === 'small') {
+  //     setFirst(1);
+  //   } 
+  //   else if (screenSize === 'medium') {
+  //     setFirst(2);
+  //   } 
+  //   else if (screenSize === 'large') {
+  //     setFirst(3);
+  //   }
+  //   else if (screenSize === 'extralarge') {
+  //     setFirst(4);
+  //   }
+  //   else {
+  //     setFirst(-1);
+  //   }
+  // }, [screenSize]);
 
   return (
     <div>
@@ -267,7 +272,7 @@ export default function MarketplaceStructure() {
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            <Marketplace first={first} skip={skip} setSkip={setSkip} queryRef={queryRef} isPending={isPending} onRefetch={() => {}} onFetchMore={() => {}} />
+            <Marketplace queryRef={queryRef} isPending={isPending} onRefetch={() => {}} onFetchMore={() => {}} />
           </Suspense>
         </ErrorBoundary>
     </div>

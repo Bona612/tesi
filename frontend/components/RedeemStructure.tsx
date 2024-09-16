@@ -16,9 +16,11 @@ import { SEARCH_OWNER_REDEEM_NFTS, GET_OWNER_REDEEM_NFTS } from "@/apollo/subgra
 import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import { number } from 'zod';
-import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables } from "@/types";
+import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables, Where_Token_Redeem, OrderDirectionEnum, NFTtokensVariables } from "@/types";
 import MyNFT from './MyNFT';
 import { useFilters } from '@/context/FilterContext';
+import { useNFTperRow } from '@/context/NFTperRowContext';
+import Redeem from './Redeem';
 
 
 export default function RedeemStructure() {
@@ -27,22 +29,14 @@ export default function RedeemStructure() {
   // console.log(isConnected)
   // console.log(address)
 
-  const first: number = 3
-  // const skip: number = 0
-  // const [first, setFirst] = useState<number>(3);
-  const [skip, setSkip] = useState<number>(0);
-  // const [tagList, setTagList] = useState<Tag[] | null>([]);
-  // const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [isPending, startTransition] = useTransition();
 
-  const { searchText, tags, setTags, orderBy, orderDirection } = useFilters();
+  const { tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { nftPerRow } = useNFTperRow();
 
   const id: string = address?.toString() || "";
-  const where_tags: Where_Tags = {tags: tags};
-  
-// VARAIBLES TO CHANGE
-  const variables = {id: id, skip: skip, first: first, where_tags: where_tags, orderBy: Token_orderBy.id} as ownerVariables
-  const pollInterval_ms = 5000
+  const where_tags: Where_Tags = { tags_contains: tags };
+  const where_token_redeem: Where_Token_Redeem = {toRedeem: false,  metadata_: where_tags};
 
 
 
@@ -150,21 +144,41 @@ export default function RedeemStructure() {
   //   handleRefetch();
   // }
 
+  // VARAIBLES TO CHANGE
+  let variables = {id: address?.toLowerCase(), skip: (page - 1) * nftPerRow, first: nftPerRow, where_token_redeem: where_token_redeem, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as tokenOwnerVariables
+  const pollInterval_ms = 5000
   
+  let [customQueryRef, { refetch: refetchOwnerRedeemNfts, fetchMore: fetchMoreOwnerRedeemNfts }] = useBackgroundQuery(GET_OWNER_REDEEM_NFTS, {
+    variables: {id: address?.toLowerCase(), where_token_redeem: where_token_redeem, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as tokenOwnerVariables,
+  });
   let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_OWNER_REDEEM_NFTS, {
     variables: variables,
-    notifyOnNetworkStatusChange: true,
-    pollInterval: pollInterval_ms,
-    fetchPolicy: 'network-only', // Used for first execution
-    nextFetchPolicy: 'cache-first', // Used for subsequent executions
+    // notifyOnNetworkStatusChange: true,
+    // pollInterval: pollInterval_ms,
+    // fetchPolicy: 'network-only', // Used for first execution
+    // nextFetchPolicy: 'cache-first', // Used for subsequent executions
   });
+
+  useEffect(() => {
+    console.log("ADDRESS CHANGED !!!");
+    if (address) {
+      console.log("REFETCH !!!");
+      refetchOwnerRedeemNfts(); // Re-query when the address changes
+    }
+  }, [address]);
+  useEffect(() => {
+    console.log("ADDRESS CHANGED !!!");
+    if (address) {
+      console.log("REFETCH !!!");
+      refetch(); // Re-query when the address changes
+    }
+  }, [address]);
 
   function handleRefetch() {
     console.log("REFETCH")
     startTransition(() => {
       refetch({
         // VARAIBLES TO CHANGE
-        where_tags: {tags: tags}
       });
     });
   };
@@ -174,7 +188,6 @@ export default function RedeemStructure() {
     startTransition(() => {
       refetch({
         // VARAIBLES TO CHANGE
-        where_tags: {tags: tags},
         // orderBy: ,
         // orderDirection: ,
       });
@@ -187,7 +200,6 @@ export default function RedeemStructure() {
     startTransition(() => {
       fetchMore({
         variables: {
-          skip: skip
         },
       });
     });
@@ -255,7 +267,7 @@ export default function RedeemStructure() {
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SkeletonCard></SkeletonCard>}>
-            {/* <Redeem first={first} skip={skip} setSkip={setSkip} queryRef={queryRef} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} /> */}
+            <Redeem queryRef={customQueryRef} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
           </Suspense>
         </ErrorBoundary>
     </div>

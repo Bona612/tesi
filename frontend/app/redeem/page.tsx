@@ -10,6 +10,8 @@ import Marketplace from '@/components/Marketplace';
 import MarketplaceStructure from '@/components/MarketplaceStructure';
 import MyNFTStructure from '@/components/MyNFTStructure';
 import RedeemStructure from '@/components/RedeemStructure';
+import { FilterProvider } from '@/context/FilterContext';
+import { NFTperRowProvider } from '@/context/NFTperRowContext';
 
 
 export default function ResponsiveGrid() {
@@ -18,9 +20,13 @@ export default function ResponsiveGrid() {
 
   return (
     <div>
-        <ApolloProvider client={client}>
-          <RedeemStructure />
-        </ApolloProvider>
+        <NFTperRowProvider>
+          <FilterProvider>
+            {/* <ApolloProvider client={client}> */}
+            <RedeemStructure />
+            {/* </ApolloProvider> */}
+          </FilterProvider>
+        </NFTperRowProvider>
     </div>
   );
 }

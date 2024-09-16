@@ -56,7 +56,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'dummyimage.com',
+        hostname: 'gold-magnificent-stork-310.mypinata.cloud',
         port: '',
         pathname: '/**',
       },

@@ -55,6 +55,7 @@ import { DialogList } from "./ListDialog";
 import { DialogCancelList } from "./CancelListDialog";
 import { AlertDialogRedeem } from "./AlertDialogRedeem";
 import { buyNFT, cancelListNFT, listNFT, redeemNFT } from "@/utils/contracts";
+import { useWallet } from "@/context/WalletContext";
 
 
 
@@ -65,18 +66,10 @@ type NFTProps = {
 
 
 export default function BaseNFTBox({ nft }: NFTProps) {
-    // // Definizione di variabili di stato per andare a memorizzare alcune informazioni sul token dopo aver otenuto il token URI
-    // const [imageURI, setImageURI] = useState("") // Definizione della variabile di stato, del metodo per aggiornarla e del valore iniziale (stringa vuota)
-    // const [tokenName, setTokenName] = useState("") // Variabile di stato in cui andremo a memorizzare il nome del token prelevato dal token URI
-    // const [tokenDescription, setTokenDescription] = useState("")
-    // const [tokenCreator, setTokenCreator] = useState("")
-    // const [nftName, setNftName] = useState("")
-    // const [nftAttributes, setNftAttributes] = useState("")
-    // const [showModal, setShowModal] = useState(false)
-    // const hideModal = () => setShowModal(false)
 
-    const { address, chainId, isConnected } = useWeb3ModalAccount()
+    const { chainId, isConnected } = useWeb3ModalAccount()
     const { walletProvider } = useWeb3ModalProvider()
+    const { address } = useWallet();
 
     // const [attestation, setAttestation] = useState<Attestation | undefined>(undefined);
 
@@ -85,6 +78,15 @@ export default function BaseNFTBox({ nft }: NFTProps) {
     console.log("nft")
     console.log(nft)
     console.log(typeof nft)
+
+    useEffect(() => {
+        console.log("Address:", address);
+    }, [address]);
+
+    if (!address) {
+        return <div>Loading...</div>;
+    }
+    const ownerAddress = address.toLowerCase();
 
     // QUI PROBABILMENTE FAR APPARIRE UN ALERT DIALOG O SIMILE PER  LA CONFERMA
     const handleBuyNFT = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -131,10 +133,10 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                 </CardContent>
                 </Link>
                 {nft.isListed ? (
-                    address && nft.owner.id !== address ? (
+                    ownerAddress && nft.owner.id !== ownerAddress ? (
                         <CardFooter className="flex justify-between">
                             {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
-                            <DialogBuy handleOnClick={handleBuyNFT} disabled={nft.owner.id === address} price={weiToEth(nft.listingPrice)} />
+                            <DialogBuy handleOnClick={handleBuyNFT} disabled={nft.owner.id === ownerAddress} price={weiToEth(nft.listingPrice)} />
                             {/* <Button onClick={handleBuyNFT} variant="outline" disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button>
                             <Button onClick={handleBuyNFT} disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button> */}
                         </CardFooter>
@@ -144,7 +146,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                         </CardFooter>
                     )
                 ) : (
-                    nft.owner.id === address ? (
+                    nft.owner.id === ownerAddress ? (
                         nft.toRedeem ? (
                             <CardFooter className="flex justify-between">
                                 <AlertDialogRedeem handleRedeemNFT={handleRedeemNFT} />

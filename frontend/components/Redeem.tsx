@@ -26,15 +26,13 @@ import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, use
 import { GET_OWNER_REDEEM_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import NFTsPagination from './NFTsPagination';
-import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables } from "@/types/index";
+import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables, OwnerNFTtokens, tokenOwnerVariables } from "@/types/index";
+import { useFilters } from '@/context/FilterContext';
 
 
 
 interface MarketplaceProps {
-    first: number;
-    skip: number;
-    setSkip: React.Dispatch<React.SetStateAction<number>>;
-    queryRef: QueryRef<Data_Owner, ownerVariables>;
+    queryRef: QueryRef<OwnerNFTtokens, tokenOwnerVariables>;
     isPending: boolean;
     onRefetch: () => void;
     onFetchMore: () => void;
@@ -46,42 +44,37 @@ const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 
-export default function Redeem({ first, skip, setSkip, queryRef, onFetchMore }: MarketplaceProps) {
+export default function Redeem({ queryRef, onFetchMore }: MarketplaceProps) {
   // const { address, chainId, isConnected } = useWeb3ModalAccount()
   // const { walletProvider } = useWeb3ModalProvider()
 
-  // METTERE QUESTA PARTE IN QUESTO COMPONENT, O COMUNQUE IN UN PARENT COMPONENT RISPETTO ALLA QUERY, QUESTO PER LA PAGINATION
-//   const [skip, setSkip] = useState(0);
-//   const first = 3;
+  const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
 
+  if (!queryRef) {
+    return (<div>undefined</div>);
+  }
 
-  // let first = 3;
-  // let skip = 0;
-  // const variables: page_RootLayoutQuery$variables = {first: first, skip: skip}
-
-///  Query with Suspense and Background/Read
+  ///  Query with Suspense and Background/Read
   const { data } = useReadQuery(queryRef);
   console.log(data)
+  const pass = {tokens: data?.owner?.nfts};
+  console.log(pass);
+
+
   const n_pages = data?.owner?.nfts || 0;
   console.log("numero pagine calcolate: ", n_pages);
-//   console.log("data from read query: ", data)
-//   console.log(typeof data)
 
 
-//   // Memoize the fetched data
-//   const memoizedData = useMemo(() => data, [data]) as NFTtokens;
-
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error : {error.message}</p>;
+  
 
     return (
         <div>
-            {/* <div>
-                <NFTList data={data} />
+            <div>
+                <NFTList data={pass} />
             </div>
             <div>
-                <NFTsPagination n_pages={n_pages} first={first} onChange={onChange} setSkip={setSkip} onFetchMore={onFetchMore} />
-            </div> */}
+                <NFTsPagination n_pages={1} onChange={onChange} onFetchMore={onFetchMore} />
+            </div>
         </div>
     )
 }

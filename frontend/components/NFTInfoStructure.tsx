@@ -41,8 +41,8 @@ type NFTInfoStructureProps = {
 
 
 export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
-  const { address, chainId, isConnected } = useWeb3ModalAccount()
-  const { walletProvider } = useWeb3ModalProvider()
+  // const { address, chainId, isConnected } = useWeb3ModalAccount()
+  // const { walletProvider } = useWeb3ModalProvider()
   // console.log(isConnected)
   // console.log(address)
 
@@ -56,16 +56,15 @@ export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
   const [isPending, startTransition] = useTransition();
 
 
-  const variables = {id: tokenId} as NFTtokenVariables
+  const variables = {id: tokenId} as NFTtokenVariables;
 
-  /// DA SCOMMENTARE SOTTO
-  // let [queryRef] = useBackgroundQuery(GET_NFT, {
-  //   variables: variables,
-  //   notifyOnNetworkStatusChange: true,
-  //   pollInterval: pollInterval_ms,
-  //   fetchPolicy: 'network-only', // Used for first execution
-  //   nextFetchPolicy: 'cache-first', // Used for subsequent executions
-  // });
+  let [queryRef] = useBackgroundQuery(GET_NFT, {
+    variables: variables,
+    // notifyOnNetworkStatusChange: true,
+    // pollInterval: pollInterval_ms,
+    // fetchPolicy: 'network-only', // Used for first execution
+    // nextFetchPolicy: 'cache-first', // Used for subsequent executions
+  });
 
   // function handleRefetch() {
   //   console.log("REFETCH")
@@ -116,7 +115,7 @@ export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
   };
 
 
-  const queryRef = [] as QueryRef<NFT, NFTtokenVariables>;
+  // queryRef = [] as QueryRef<NFT, NFTtokenVariables>;
   console.log(tokenId)
 
   return (

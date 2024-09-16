@@ -1,4 +1,4 @@
-import { OrderBy, OrderDirection, OrderDirectionEnum, Tag } from '@/types';
+import { OrderBy, OrderDirection, OrderDirectionEnum, TAGS, Tag, orderByOptions } from '@/types';
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 
@@ -22,7 +22,7 @@ interface FilterContextType extends FilterStateType {
 const defaultFilterState: FilterStateType = {
   searchText: "",
   tags: [],
-  orderBy: {name: 'name', label: "Name"},
+  orderBy: {name: orderByOptions[0].name, label: orderByOptions[0].label},
   orderDirection: OrderDirectionEnum.desc,
   page: 1,
 };
@@ -32,7 +32,7 @@ const FilterContext = createContext<FilterContextType | undefined>(undefined);
 export const FilterProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [searchText, setSearchText] = useState<string>("");
   const [tags, setTags] = useState<Tag[]>([]);
-  const [orderBy, setOrderBy] = useState<OrderBy>({name: 'name', label: "Name"});
+  const [orderBy, setOrderBy] = useState<OrderBy>({name: orderByOptions[0].name, label: orderByOptions[0].label});
   const [orderDirection, setOrderDirection] = useState<OrderDirection>(OrderDirectionEnum.desc);
   const [page, setPage] = useState<number>(1);
 

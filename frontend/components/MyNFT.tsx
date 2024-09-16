@@ -42,11 +42,11 @@ export default function MyNFT({ totalData, queryRef, onFetchMore }: MarketplaceP
     return (<div>undefined</div>);
   }
 
-///  Query with Suspense and Background/Read
+
   const { data } = useReadQuery(queryRef);
   console.log(data)
   const pass = {tokens: data?.owner?.nfts};
-    console.log(pass);
+  console.log(pass);
 
   const { data: countData } = useReadQuery(totalData);
   const num_data = countData?.owner?.nfts.length || 0;

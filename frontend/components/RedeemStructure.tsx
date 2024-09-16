@@ -21,6 +21,7 @@ import MyNFT from './MyNFT';
 import { useFilters } from '@/context/FilterContext';
 import { useNFTperRow } from '@/context/NFTperRowContext';
 import Redeem from './Redeem';
+import SuspenseGrid from './SuspenseGrid';
 
 
 export default function RedeemStructure() {
@@ -268,7 +269,7 @@ export default function RedeemStructure() {
     <div>
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
-          <Suspense fallback={<SkeletonCard></SkeletonCard>}>
+          <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
             <Redeem totalData={customQueryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
           </Suspense>
         </ErrorBoundary>

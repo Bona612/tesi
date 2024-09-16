@@ -99,11 +99,11 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     //     }
     // }, []);
 
-    if (!queryRef) {
-        return (<div>undefined</div>);
-      }
+    // if (!queryRef) {
+    //     return (<div>undefined</div>);
+    // }
 
-    const { data } = useReadQuery(queryRef);
+    const { data, error } = useReadQuery(queryRef);
     const nft = data.token;
     console.log(data);
 
@@ -132,6 +132,10 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
         return (<div>Loading...</div>);
     }
     const ownerAddress = address.toLowerCase();
+
+    // if (error) {
+    //     return (<div>undefined</div>);
+    // }
 
     return (
         <div className="flex items-center justify-center pt-2 pb-2">

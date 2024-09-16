@@ -63,34 +63,6 @@ interface PageParams {
 //   return NFTMetadata;
 // }
 
-function getStartData(tokenId: string) {
-  // va fatto il get del token da pinata IPFS
-  // const tokenURI: string = await getTokenURI(tokenId);
-  // const token: NFT = await getTokenMetadata(tokenURI);
-
-  // // const nftMetadata: Metadata = await getNFTMetadata(token.metadataURI);
-  // const nftMetadata: Metadata = token.metadataURI;
-  console.log("token id: ", tokenId)
-  let tag: Tag = "Tag 1";
-  let n: number = 1;
-  if (tokenId === '2') {
-    tag = "Tag 2";
-    n = 2;
-  }
-  else if (tokenId === '3') {
-    tag = "Tag 3";
-    n = 3;
-  }
-  const t: NFT = {
-    id: tokenId,
-    anchor: tokenId,
-    metadata: {title: "titolo", description: "descrizione", imageURI: "https://dummyimage.com/300.png/09f/fff", tags: ["Tag 1"]} as Metadata,
-    owner: {} as NFT_Owner,
-    transactions: [] as Transaction[],
-  }
-
-  return t;
-}
 
 
 export default function Page({ params }: PageParams) {
@@ -110,12 +82,11 @@ export default function Page({ params }: PageParams) {
 
   return (
     <div>
-      {/* <TokenBar tokenId="" /> */}
-      <FilterProvider>
-        <ApolloProvider client={client}>
+      {/* <FilterProvider> */}
+        {/* <ApolloProvider client={client}> */}
           <NFTInfoStructure tokenId={tokenId} />
-        </ApolloProvider>
-      </FilterProvider>
+        {/* </ApolloProvider> */}
+      {/* </FilterProvider> */}
     </div>
   );
 };

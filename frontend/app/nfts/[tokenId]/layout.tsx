@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import NavBar from "@/components/AppBar";
 import NFTBox from "@/components/BaseNFT";
 import ConnectButton from "@/components/ConnectButton";
 import TokenBar from "@/components/TokenBar";

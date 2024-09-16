@@ -274,7 +274,9 @@ export default function MarketplaceStructure() {
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onRefetch={() => {}} onFetchMore={() => {}} />
+            {address &&
+              <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onRefetch={() => {}} onFetchMore={() => {}} />
+            }
           </Suspense>
         </ErrorBoundary>
     </div>

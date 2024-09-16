@@ -38,21 +38,25 @@ export default function MyNFT({ totalData, queryRef, onFetchMore }: MarketplaceP
   const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
-  if (!queryRef) {
-    return (<div>undefined</div>);
-  }
+  // if (!queryRef) {
+  //   return (<div>undefined</div>);
+  // }
 
 
-  const { data } = useReadQuery(queryRef);
+  const { data, error } = useReadQuery(queryRef);
   console.log(data)
   const pass = {tokens: data?.owner?.nfts};
   console.log(pass);
 
-  const { data: countData } = useReadQuery(totalData);
-  const num_data = countData?.owner?.nfts.length || 0;
+  const { data: countData, error: errorCount } = useReadQuery(totalData);
+  const num_data = countData?.owner?.nfts.length || 1;
   const n_pages = Math.ceil(num_data / nftPerRow);
   console.log("numero pagine calcolate: ", n_pages);
 
+
+  // if (error) {
+  //   return (<p>undefined</p>);
+  // }
 
     return (
         <div>

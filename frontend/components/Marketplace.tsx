@@ -4,18 +4,6 @@ import * as React from 'react';
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import ErrorBoundary from '@/components/ErrorBoundary';
-import NFTsHeader from '@/components/NFTsHeader';
-import { SkeletonCard } from '@/components/SkeletonCard';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
 import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
 
 import { Suspense, useTransition  } from 'react';
@@ -56,29 +44,34 @@ export default function Marketplace({ totalData, queryRef, onFetchMore }: Market
   const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
-  if (!queryRef) {
-    return (<div>undefined</div>);
-  }
+//   if (!queryRef) {
+//     return (<div>undefined</div>);
+//   }
 
   ///  Query with Suspense and Background/Read
-  const { data } = useReadQuery(queryRef);
+  const { data, error } = useReadQuery(queryRef);
   console.log(data)
+  const pass = {tokens: data?.tokens};
+  console.log(pass);
 
-  const { data: countData } = useReadQuery(totalData);
-  const num_data = countData?.tokens?.length || 0;
+  const { data: countData, error: errorCount } = useReadQuery(totalData);
+  const num_data = countData?.tokens?.length || 1;
   const n_pages = Math.ceil(num_data / nftPerRow);
+  console.log("num data: ", num_data);
   console.log("numero pagine calcolate: ", n_pages);
 
 
-  const pass = {tokens: data?.tokens};
-  console.log(pass);
+  
+//   if (error) {
+//     return (<p>undefined</p>);
+//   }
 
     return (
         <div>
             <div>
                 <NFTList data={data} />
             </div>
-            <div className="pb-4">
+            <div>
                 <NFTsPagination n_pages={n_pages} onChange={onChange} onFetchMore={onFetchMore} />
             </div>
         </div>

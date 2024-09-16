@@ -83,11 +83,6 @@ export default function BaseNFTBox({ nft }: NFTProps) {
         console.log("Address:", address);
     }, [address]);
 
-    if (!address) {
-        return <div>Loading...</div>;
-    }
-    const ownerAddress = address.toLowerCase();
-
     // QUI PROBABILMENTE FAR APPARIRE UN ALERT DIALOG O SIMILE PER  LA CONFERMA
     const handleBuyNFT = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         buyNFT(nft, isConnected, address, walletProvider);
@@ -110,6 +105,10 @@ export default function BaseNFTBox({ nft }: NFTProps) {
     //     setAttestation(attestation);
     // }
     
+    // if (!address) {
+    //     return <div>Loading...</div>;
+    // }
+    const ownerAddress = address?.toLowerCase();
 
     return (
         <div className="w-full p-4">

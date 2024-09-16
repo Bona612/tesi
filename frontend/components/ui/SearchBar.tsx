@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './SearchBar.module.css';
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, useBackgroundQuery, useLoadableQuery, LoadQueryFunction, OperationVariables } from '@apollo/client';
-import { SEARCH_NFTS } from "@/apollo/subgraphQueries";
 import { useFilters } from '@/context/FilterContext';
 
 

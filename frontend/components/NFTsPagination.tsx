@@ -205,12 +205,13 @@ export default function NFTsPagination({n_pages, onChange, onFetchMore}: NFTsPag
     
         // Add next button if not on the last page
         if (page < n_pages) {
-          items.push(
-            <PaginationItem key="next">
-              <PaginationNext href={`${pathname}?${createQueryString('page', (page + 1).toString())}`} onClick={handleNext} text={text} />
-            </PaginationItem>
-          );
+            items.push(
+                <PaginationItem key="next">
+                <PaginationNext href={`${pathname}?${createQueryString('page', (page + 1).toString())}`} onClick={handleNext} text={text} />
+                </PaginationItem>
+            );
         }
+        
     
         return items;
     };

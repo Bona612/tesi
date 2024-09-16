@@ -16,35 +16,35 @@ export const maxDuration = 5
 const SUBGRAPH_STUDIO_ENDPOINT = process.env.SUBGRAPH_STUDIO_ENDPOINT || "";
 
 
-async function compareArrayBuffers(file) {
-  const buffer1 = await file.arrayBuffer();
-  const buffer2 = await new Blob([file], { type: file.type }).arrayBuffer();
-  // const buffer2 = await new File([file], file.name).arrayBuffer();
+// async function compareArrayBuffers(file) {
+//   const buffer1 = await file.arrayBuffer();
+//   const buffer2 = await new Blob([file], { type: file.type }).arrayBuffer();
+//   // const buffer2 = await new File([file], file.name).arrayBuffer();
 
-  // Convert ArrayBuffers to Uint8Array for easy comparison
-  const array1 = new Uint8Array(buffer1);
-  const array2 = new Uint8Array(buffer2);
+//   // Convert ArrayBuffers to Uint8Array for easy comparison
+//   const array1 = new Uint8Array(buffer1);
+//   const array2 = new Uint8Array(buffer2);
 
-  if (array1.length !== array2.length) {
-    console.log('ArrayBuffers have different lengths:', array1.length, array2.length);
-    return;
-  }
+//   if (array1.length !== array2.length) {
+//     console.log('ArrayBuffers have different lengths:', array1.length, array2.length);
+//     return;
+//   }
 
-  // Compare byte by byte
-  let identical = true;
-  for (let i = 0; i < array1.length; i++) {
-    if (array1[i] !== array2[i]) {
-      console.log(`Difference found at index ${i}: ${array1[i]} !== ${array2[i]}`);
-      identical = false;
-    }
-  }
+//   // Compare byte by byte
+//   let identical = true;
+//   for (let i = 0; i < array1.length; i++) {
+//     if (array1[i] !== array2[i]) {
+//       console.log(`Difference found at index ${i}: ${array1[i]} !== ${array2[i]}`);
+//       identical = false;
+//     }
+//   }
 
-  if (identical) {
-    console.log('The content of the two ArrayBuffers is identical.');
-  } else {
-    console.log('The content of the two ArrayBuffers differs.');
-  }
-}
+//   if (identical) {
+//     console.log('The content of the two ArrayBuffers is identical.');
+//   } else {
+//     console.log('The content of the two ArrayBuffers differs.');
+//   }
+// }
 
 
 

@@ -1,5 +1,5 @@
 import { getValidAnchorsForMerkleTree } from "@/lib/valid-anchors";
-import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot as createMerkleTreeRoot } from "../../backend/utils/merkleTreeUtilities";
+import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot as createMerkleTreeRoot } from "../utils/merkleTreeUtilities";
 // import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 
 export function getMerkleTree() { // : StandardMerkleTree<string[]>

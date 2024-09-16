@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { getValidAnchorsUtility, getValidAnchorsForMerkleTreeUtility } from "../../backend/utils/validAnchorsUtilities";
+import { getValidAnchorsUtility, getValidAnchorsForMerkleTreeUtility } from "../utils/validAnchorsUtilities";
 
 
 const filePath = path.resolve(process.env.DATA_FILE_PATH!);

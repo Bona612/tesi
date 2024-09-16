@@ -2,7 +2,7 @@ import { Attestation } from "@/types";
 import { NextResponse, NextRequest } from "next/server";
 import { BrowserProvider, Contract, Eip1193Provider, ethers, formatUnits } from 'ethers'
 import { ecsign, toRpcSig, fromRpcSig } from 'ethereumjs-util';
-import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot } from "../../../../backend/utils/merkleTreeUtilities";
+// import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot } from "../../../utils/merkleTreeUtilities";
 import { ERC6956Full } from '@/typechain/contracts/ERC6956Full';
 
 

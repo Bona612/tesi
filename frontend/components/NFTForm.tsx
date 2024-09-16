@@ -37,7 +37,7 @@ import { ERC6956Full as IERC6956Full } from "../typechain";
 import { ERC6956Full__factory } from '@/typechain/factories/contracts/ERC6956Full__factory';
 // import { ERC6956Full } from '@/typechain/contracts/ERC6956Full';
 import { ecsign, toRpcSig, fromRpcSig } from 'ethereumjs-util';
-import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot } from "../../backend/utils/merkleTreeUtilities";
+// import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot } from "../utils/merkleTreeUtilities";
 import { Tag, Attestation, Metadata, TAGS, zod_TAGS } from "@/types/index";
 import { AlertDialogRedeem } from "./AlertDialogRedeem";
 

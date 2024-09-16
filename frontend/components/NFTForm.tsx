@@ -56,6 +56,7 @@ import { fixedSize } from "ipfs-unixfs-importer/chunker"
 import { balanced } from "ipfs-unixfs-importer/layout"
 import { CreateDialog } from "./CreateDialog";
 import { AttestationShower } from "./AttestationShower";
+import { valueToObjectRepresentation } from "@apollo/client/utilities";
 
 
 
@@ -336,7 +337,7 @@ const merkleTreeAPI = async (data: {anchor: string}) => {
 // }
 
 /// DA RIVEDERE E MIGLIORARE
-async function createToken(toast: (arg0: { title: string; description: string; }) => void, formValues: { title: string; image: File; tags: Tag[]; description: string; }, attestation: Attestation, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
+async function createToken(toast: (arg0: { title: string; description: string; }) => void, formValues: { title: string; image: File; tags: Tag[]; description: string; attestation: Attestation}, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
     console.log("isConnected: ", isConnected)
     console.log("address: ", address)
 
@@ -379,7 +380,7 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         }
 
         const ercContractWithSigner = ercContract.connect(signer);
-        const nonce = 2
+        // const nonce = 2
         // // Prepare your transaction parameters
         // const txParams = {
         //     maxFeePerGas: 703230725 * 2
@@ -402,7 +403,10 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         
         
         const to = await signer.getAddress()
-        attestation.to = to
+        const attestation: Attestation = {
+            to: to,
+            anchor: formValues.attestation.anchor
+        }
         // const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
         // attestation.attestationTime = attestationTime
         // const validStartTime = 0;
@@ -613,24 +617,11 @@ export default function NFTForm() {
         // ✅ This will be type-safe and validated.
         console.log(values)
 
-        const att: Attestation = {
-            to: "",
-            anchor: "0xa0921e50c2a4a929b2f9f2a5496f0d978b3bc73e5e5f598a8a2cfe7651d3b7aa",
-            // attestationTime: 0,
-            // validStartTime: 0,
-            // validEndTime: 0
-        }
-
-        // DA SISTEMARE QUI, andrà aggiunta probabilmente parte async/await
-        // E DA CAPIRE SE DOVRà ESSERE MESSA LATO SERVER
-        const result = await createToken(toast, values, att, isConnected, address, walletProvider);
+        const result = await createToken(toast, values, isConnected, address, walletProvider);
         console.log("result: ", result);
 
-        setTransactionResult(result)
-        setTransactionCompleted(true)
-
-        // uploadImageToIPFS(values.image);
-        // pre2(new Uint8Array(await values.image.arrayBuffer()));
+        // setTransactionResult(result)
+        // setTransactionCompleted(true)
     }
 
     // const onError = (errors) => {

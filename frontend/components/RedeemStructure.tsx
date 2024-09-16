@@ -16,7 +16,7 @@ import { SEARCH_OWNER_REDEEM_NFTS, GET_OWNER_REDEEM_NFTS } from "@/apollo/subgra
 import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import { number } from 'zod';
-import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables, Where_Token_Redeem, OrderDirectionEnum, NFTtokensVariables } from "@/types";
+import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables, Where_Token_Redeem, OrderDirectionEnum, NFTtokensVariables, OwnerNFTtokens } from "@/types";
 import MyNFT from './MyNFT';
 import { useFilters } from '@/context/FilterContext';
 import { useNFTperRow } from '@/context/NFTperRowContext';
@@ -148,11 +148,13 @@ export default function RedeemStructure() {
   let variables = {id: address?.toLowerCase(), skip: (page - 1) * nftPerRow, first: nftPerRow, where_token_redeem: where_token_redeem, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as tokenOwnerVariables
   const pollInterval_ms = 5000
   
-  let [customQueryRef, { refetch: refetchOwnerRedeemNfts, fetchMore: fetchMoreOwnerRedeemNfts }] = useBackgroundQuery(GET_OWNER_REDEEM_NFTS, {
+  let [customQueryRef, { refetch: refetchOwnerRedeemNfts}] = useBackgroundQuery(GET_OWNER_REDEEM_NFTS, {
     variables: {id: address?.toLowerCase(), where_token_redeem: where_token_redeem, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as tokenOwnerVariables,
+    skip: !address
   });
   let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_OWNER_REDEEM_NFTS, {
     variables: variables,
+    skip: !address
     // notifyOnNetworkStatusChange: true,
     // pollInterval: pollInterval_ms,
     // fetchPolicy: 'network-only', // Used for first execution
@@ -160,9 +162,9 @@ export default function RedeemStructure() {
   });
 
   useEffect(() => {
-    console.log("ADDRESS CHANGED !!!");
+    console.log("ADDRESS CHANGED CUSTOM !!!");
     if (address) {
-      console.log("REFETCH !!!");
+      console.log("REFETCH CUSTOM !!!");
       refetchOwnerRedeemNfts(); // Re-query when the address changes
     }
   }, [address]);
@@ -267,7 +269,7 @@ export default function RedeemStructure() {
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SkeletonCard></SkeletonCard>}>
-            <Redeem queryRef={customQueryRef} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
+            <Redeem totalData={customQueryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
           </Suspense>
         </ErrorBoundary>
     </div>

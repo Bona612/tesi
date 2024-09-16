@@ -31,10 +31,10 @@ export const NFTperRowProvider: React.FC<{ children: ReactNode }> = ({ children 
         setNftPerRow(4); // Large screens show 4 NFTs per row
         break;
       case 'medium':
-        setNftPerRow(3); // Medium screens show 3 NFTs per row
+        setNftPerRow(2); // Medium screens show 3 NFTs per row
         break;
       case 'small':
-        setNftPerRow(2); // Small screens show 2 NFTs per row
+        setNftPerRow(1); // Small screens show 2 NFTs per row
         break;
       default:
         setNftPerRow(3); // Default to 3 NFTs per row

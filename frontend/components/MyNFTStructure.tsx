@@ -129,8 +129,10 @@ export default function ResponsiveGrid() {
   const pollInterval_ms = 5000
   console.log("variables: ", variables);
   
-  // const { data } = useSuspenseQuery(GET_OWNER_NFTS, { variables: variables, skip: !address });
-  // console.log("suspense query data: ", data);
+  let [customQueryRef, { refetch: refetchOwnerRedeemNfts}] = useBackgroundQuery(GET_OWNER_NFTS, {
+    variables: {id: address?.toLowerCase(), where_metadata: where_metadata, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables,
+    skip: !address
+  });
   let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_OWNER_NFTS, {
     variables: variables,
     skip: !address
@@ -141,6 +143,13 @@ export default function ResponsiveGrid() {
     // // nextFetchPolicy: 'cache-first', // Used for subsequent executions
   });
 
+  useEffect(() => {
+    console.log("ADDRESS CHANGED CUSTOM !!!");
+    if (address) {
+      console.log("REFETCH CUSTOM !!!");
+      refetchOwnerRedeemNfts(); // Re-query when the address changes
+    }
+  }, [address]);
   useEffect(() => {
     console.log("ADDRESS CHANGED !!!");
     if (address) {
@@ -235,7 +244,7 @@ export default function ResponsiveGrid() {
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            <MyNFT queryRef={queryRef as QueryRef<OwnerNFTtokens, ownerVariables>} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
+            <MyNFT totalData={customQueryRef as QueryRef<OwnerNFTtokens, ownerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, ownerVariables>} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
           </Suspense>
         </ErrorBoundary>
     </div>

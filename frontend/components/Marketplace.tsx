@@ -30,10 +30,12 @@ import { NFT_Owner, NFTtokens, NFTtokensVariables, Transaction } from "@/types/i
 import { bigint } from 'zod';
 import { ethToWei } from '@/utils/utils';
 import { useFilters } from '@/context/FilterContext';
+import { useNFTperRow } from '@/context/NFTperRowContext';
 
 
 
 interface MarketplaceProps {
+    totalData: QueryRef<NFTtokens, NFTtokensVariables>;
     queryRef: QueryRef<NFTtokens, NFTtokensVariables>;
     isPending: boolean;
     onRefetch: () => void;
@@ -46,12 +48,13 @@ const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 
-export default function Marketplace({ queryRef, onFetchMore }: MarketplaceProps) {
+export default function Marketplace({ totalData, queryRef, onFetchMore }: MarketplaceProps) {
   // const { address, chainId, isConnected } = useWeb3ModalAccount()
   // const { walletProvider } = useWeb3ModalProvider()
 
 
   const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { nftPerRow } = useNFTperRow();
 
   if (!queryRef) {
     return (<div>undefined</div>);
@@ -60,7 +63,10 @@ export default function Marketplace({ queryRef, onFetchMore }: MarketplaceProps)
   ///  Query with Suspense and Background/Read
   const { data } = useReadQuery(queryRef);
   console.log(data)
-  const n_pages = data?.tokens || 0;
+
+  const { data: countData } = useReadQuery(totalData);
+  const num_data = countData?.tokens?.length || 0;
+  const n_pages = Math.ceil(num_data / nftPerRow);
   console.log("numero pagine calcolate: ", n_pages);
 
 
@@ -73,7 +79,7 @@ export default function Marketplace({ queryRef, onFetchMore }: MarketplaceProps)
                 <NFTList data={data} />
             </div>
             <div className="pb-4">
-                <NFTsPagination n_pages={1} onChange={onChange} onFetchMore={onFetchMore} />
+                <NFTsPagination n_pages={n_pages} onChange={onChange} onFetchMore={onFetchMore} />
             </div>
         </div>
     )

@@ -28,10 +28,12 @@ import client from "@/lib/apollo-client";
 import NFTsPagination from './NFTsPagination';
 import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables, OwnerNFTtokens, tokenOwnerVariables } from "@/types/index";
 import { useFilters } from '@/context/FilterContext';
+import { useNFTperRow } from '@/context/NFTperRowContext';
 
 
 
 interface MarketplaceProps {
+    totalData: QueryRef<OwnerNFTtokens, tokenOwnerVariables>;
     queryRef: QueryRef<OwnerNFTtokens, tokenOwnerVariables>;
     isPending: boolean;
     onRefetch: () => void;
@@ -44,11 +46,12 @@ const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 
-export default function Redeem({ queryRef, onFetchMore }: MarketplaceProps) {
+export default function Redeem({ totalData, queryRef, onFetchMore }: MarketplaceProps) {
   // const { address, chainId, isConnected } = useWeb3ModalAccount()
   // const { walletProvider } = useWeb3ModalProvider()
 
   const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { nftPerRow } = useNFTperRow();
 
   if (!queryRef) {
     return (<div>undefined</div>);
@@ -60,11 +63,10 @@ export default function Redeem({ queryRef, onFetchMore }: MarketplaceProps) {
   const pass = {tokens: data?.owner?.nfts};
   console.log(pass);
 
-
-  const n_pages = data?.owner?.nfts || 0;
+  const { data: countData } = useReadQuery(totalData);
+  const num_data = countData?.owner?.nfts.length || 0;
+  const n_pages = Math.ceil(num_data / nftPerRow);
   console.log("numero pagine calcolate: ", n_pages);
-
-
   
 
     return (
@@ -73,7 +75,7 @@ export default function Redeem({ queryRef, onFetchMore }: MarketplaceProps) {
                 <NFTList data={pass} />
             </div>
             <div>
-                <NFTsPagination n_pages={1} onChange={onChange} onFetchMore={onFetchMore} />
+                <NFTsPagination n_pages={n_pages} onChange={onChange} onFetchMore={onFetchMore} />
             </div>
         </div>
     )

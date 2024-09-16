@@ -79,7 +79,7 @@ export default function MarketplaceStructure() {
   const where_marketplace: Where_Marketplace = { isListed: true, metadata_: wtags };
 
   // VARAIBLES TO CHANGE
-  let variables = {id: address?.toLowerCase(), skip: (page - 1) * nftPerRow, first: nftPerRow, where_marketplace: where_marketplace, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as NFTtokensVariables
+  let variables = {skip: (page - 1) * nftPerRow, first: nftPerRow, where_marketplace: where_marketplace, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as NFTtokensVariables
   const pollInterval_ms = 5000
 
   const router = useRouter();
@@ -170,7 +170,9 @@ export default function MarketplaceStructure() {
   // }, [searchParams]);
     
 
-
+  let [customQueryRef, { refetch: refetchOwnerRedeemNfts}] = useBackgroundQuery(GET_MARKETPLACE_NFTS, {
+    variables: {where_marketplace: where_marketplace, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as NFTtokensVariables,
+  });
   let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_MARKETPLACE_NFTS, {
     variables: variables,
     // notifyOnNetworkStatusChange: true,
@@ -272,7 +274,7 @@ export default function MarketplaceStructure() {
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            <Marketplace queryRef={queryRef} isPending={isPending} onRefetch={() => {}} onFetchMore={() => {}} />
+            <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onRefetch={() => {}} onFetchMore={() => {}} />
           </Suspense>
         </ErrorBoundary>
     </div>

@@ -13,13 +13,12 @@ import NFTsPagination from './NFTsPagination';
 import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables, OwnerNFTtokens, Metadatas, Metadata_e } from "@/types/index";
 import NFTList from './NFTList';
 import { useFilters } from '@/context/FilterContext';
+import { useNFTperRow } from '@/context/NFTperRowContext';
 
 
 
 interface MarketplaceProps {
-    // first: number;
-    // skip: number;
-    // setSkip: React.Dispatch<React.SetStateAction<number>>;
+    totalData: QueryRef<OwnerNFTtokens, ownerVariables>;
     queryRef: QueryRef<OwnerNFTtokens, ownerVariables>;
     isPending: boolean;
     onRefetch: () => void;
@@ -32,11 +31,12 @@ const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 
-export default function MyNFT({ queryRef, onFetchMore }: MarketplaceProps) {
+export default function MyNFT({ totalData, queryRef, onFetchMore }: MarketplaceProps) {
   // const { address, chainId, isConnected } = useWeb3ModalAccount()
   // const { walletProvider } = useWeb3ModalProvider()
 
   const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { nftPerRow } = useNFTperRow();
 
   if (!queryRef) {
     return (<div>undefined</div>);
@@ -45,27 +45,22 @@ export default function MyNFT({ queryRef, onFetchMore }: MarketplaceProps) {
 ///  Query with Suspense and Background/Read
   const { data } = useReadQuery(queryRef);
   console.log(data)
-  const n_pages = data?.owner?.nfts || 0;
-  console.log("numero pagine calcolate: ", n_pages);
-//   console.log("data from read query: ", data)
-//   console.log(typeof data)
-
-
-//   // Memoize the fetched data
-//   const memoizedData = useMemo(() => data, [data]) as NFTtokens;
-
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error : {error.message}</p>;
-
-    const pass = {tokens: data?.owner?.nfts};
+  const pass = {tokens: data?.owner?.nfts};
     console.log(pass);
+
+  const { data: countData } = useReadQuery(totalData);
+  const num_data = countData?.owner?.nfts.length || 0;
+  const n_pages = Math.ceil(num_data / nftPerRow);
+  console.log("numero pagine calcolate: ", n_pages);
+
+
     return (
         <div>
             <div>
                 <NFTList data={pass} />
             </div>
             <div>
-                <NFTsPagination n_pages={1} onChange={onChange} onFetchMore={onFetchMore} />
+                <NFTsPagination n_pages={n_pages} onChange={onChange} onFetchMore={onFetchMore} />
             </div>
         </div>
     )

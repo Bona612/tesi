@@ -21,7 +21,7 @@ interface MarketplaceProps {
     totalData: QueryRef<OwnerNFTtokens, ownerVariables>;
     queryRef: QueryRef<OwnerNFTtokens, ownerVariables>;
     isPending: boolean;
-    onRefetch: () => void;
+    // onRefetch: () => void;
     onFetchMore: () => void;
 }
 
@@ -60,8 +60,9 @@ export default function MyNFT({ totalData, queryRef, onFetchMore }: MarketplaceP
   console.log(pass);
 
   const { data: countData, error: errorCount } = useReadQuery(totalData);
-  const num_data = countData?.owner?.nfts.length || 1;
-  const n_pages = Math.ceil(num_data / nftPerRow);
+  // const data_length = countData?.owner?.nfts.length;
+  const num_data = countData?.owner?.nfts.length
+  const n_pages = Math.ceil(num_data / nftPerRow) || 1;
   console.log("numero pagine calcolate: ", n_pages);
 
 
@@ -74,9 +75,11 @@ export default function MyNFT({ totalData, queryRef, onFetchMore }: MarketplaceP
             <div>
                 <NFTList data={pass} />
             </div>
-            <div>
-                <NFTsPagination n_pages={n_pages} onChange={onChange} onFetchMore={onFetchMore} />
-            </div>
+            {num_data &&
+              <div>
+                  <NFTsPagination n_pages={n_pages} onChange={onChange} onFetchMore={onFetchMore} />
+              </div>
+            }  
         </div>
     )
 }

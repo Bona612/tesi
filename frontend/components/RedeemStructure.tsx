@@ -36,7 +36,7 @@ export default function RedeemStructure() {
   const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
-  const id: string = address?.toString() || "";
+  // const id: string = address?.toString() || "";
   // const where_tags: Where_Tags = { tags_contains: tags };
   const wtm: Where_Token_Metadata = { title_contains_nocase: searchText, tags_contains: tags };
   const where_token_redeem: Where_Token_Redeem = {toRedeem: false,  metadata_: wtm};
@@ -205,16 +205,16 @@ export default function RedeemStructure() {
   // }
 
   // VARAIBLES TO CHANGE
-  let variables = {id: address?.toLowerCase(), skip: (page - 1) * nftPerRow, first: nftPerRow, where_token_redeem: where_token_redeem, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as tokenOwnerVariables
+  let variables = {id: address ? address.toLowerCase() : "", skip: (page - 1) * nftPerRow, first: nftPerRow, where_token_redeem: where_token_redeem, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as tokenOwnerVariables
   const pollInterval_ms = 5000
   
   let [customQueryRef, { refetch: refetchOwnerRedeemNfts}] = useBackgroundQuery(GET_OWNER_REDEEM_NFTS, {
-    variables: {id: address?.toLowerCase(), where_token_redeem: where_token_redeem, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as tokenOwnerVariables,
-    skip: !address
+    variables: {id: address ? address.toLowerCase() : "", where_token_redeem: where_token_redeem, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as tokenOwnerVariables,
+    // skip: !address
   });
   let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_OWNER_REDEEM_NFTS, {
     variables: variables,
-    skip: !address
+    // skip: !address
     // notifyOnNetworkStatusChange: true,
     // pollInterval: pollInterval_ms,
     // fetchPolicy: 'network-only', // Used for first execution
@@ -236,33 +236,32 @@ export default function RedeemStructure() {
     }
   }, [address]);
 
-  function handleRefetch() {
-    console.log("REFETCH")
-    startTransition(() => {
-      refetch({
-        // VARAIBLES TO CHANGE
-      });
-    });
-  };
+  // function handleRefetch() {
+  //   console.log("REFETCH")
+  //   startTransition(() => {
+  //     refetch({
+  //       // VARAIBLES TO CHANGE
+  //     });
+  //   });
+  // };
 
-  useEffect(() => {
-    console.log("REFETCH")
-    startTransition(() => {
-      refetch({
-        // VARAIBLES TO CHANGE
-        // orderBy: ,
-        // orderDirection: ,
-      });
-    });
-  }, [orderBy, orderDirection]);
+  // useEffect(() => {
+  //   console.log("REFETCH")
+  //   startTransition(() => {
+  //     refetch({
+  //       // VARAIBLES TO CHANGE
+  //       // orderBy: ,
+  //       // orderDirection: ,
+  //     });
+  //   });
+  // }, [orderBy, orderDirection]);
   
 
   function handleFetchMore() {
     console.log("FETCH MORE")
     startTransition(() => {
       fetchMore({
-        variables: {
-        },
+        variables: variables,
       });
     });
   };
@@ -330,7 +329,7 @@ export default function RedeemStructure() {
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
             {address &&
-              <Redeem totalData={customQueryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
+              <Redeem totalData={customQueryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
             }
           </Suspense>
         </ErrorBoundary>

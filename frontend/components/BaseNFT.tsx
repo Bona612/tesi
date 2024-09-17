@@ -75,10 +75,6 @@ export default function BaseNFTBox({ nft }: NFTProps) {
 
     console.log(address);
 
-    console.log("nft")
-    console.log(nft)
-    console.log(typeof nft)
-
     useEffect(() => {
         console.log("Address:", address);
     }, [address]);
@@ -108,7 +104,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
     // if (!address) {
     //     return <div>Loading...</div>;
     // }
-    const ownerAddress = address?.toLowerCase();
+    const ownerAddress = address ? address.toLowerCase() : "";
 
     return (
         <div className="w-full p-4">

@@ -22,7 +22,6 @@ const SuspenseGrid = React.memo(() => {
 
   const componentsArray = Array.from({ length: nftPerRow });
 
-
   return (
     <div>
         <Grid>

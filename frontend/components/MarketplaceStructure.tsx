@@ -275,16 +275,14 @@ export default function MarketplaceStructure() {
   //   });
   // };
 
-  // function handleFetchMore() {
-  //   console.log("FETCH MORE")
-  //   startTransition(() => {
-  //     fetchMore({
-  //       variables: {
-  //         skip: skip
-  //       },
-  //     });
-  //   });
-  // };
+  function handleFetchMore() {
+    console.log("FETCH MORE")
+    startTransition(() => {
+      fetchMore({
+        variables: variables,
+      });
+    });
+  };
 
   
   // const [loadNfts, searchQueryRef] = useLoadableQuery(SEARCH_NFTS);
@@ -351,7 +349,7 @@ export default function MarketplaceStructure() {
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
             {address &&
-              <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onRefetch={() => {}} onFetchMore={() => {}} />
+              <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onFetchMore={handleFetchMore} />
             }
           </Suspense>
         </ErrorBoundary>

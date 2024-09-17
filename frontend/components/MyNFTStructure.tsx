@@ -39,8 +39,8 @@ export default function ResponsiveGrid() {
   const { searchText, setSearchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
-  const id: string = address?.toString() || "";
-  console.log("address: ", id);
+  // const id: string = address?.toString() || "";
+  // console.log("address: ", id);
   
   const wtm: Where_Token_Metadata = { title_contains_nocase: searchText, tags_contains: tags };
   const where_metadata: Where_Metadata = { metadata_: wtm };
@@ -142,17 +142,17 @@ export default function ResponsiveGrid() {
   
   // const where_token_owner: Where_Token_Owner = {owner_: {id: address?.toLowerCase() as string}, metadata_: wtags};
   //       where: {metadata_: { or: [{ tags_contains: ["Tag 1"] }, { tags_contains: ["Tag 2"] }] }}
-  let variables = {id: address?.toLowerCase(), skip: (page - 1) * nftPerRow, first: nftPerRow, where_metadata: where_metadata, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables
+  let variables = {id: address ? address.toLowerCase() : "", skip: (page - 1) * nftPerRow, first: nftPerRow, where_metadata: where_metadata, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables
   const pollInterval_ms = 5000
   console.log("variables: ", variables);
   
   let [customQueryRef, { refetch: refetchOwnerRedeemNfts}] = useBackgroundQuery(GET_OWNER_NFTS, {
-    variables: {id: address?.toLowerCase(), where_metadata: where_metadata, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables,
-    skip: !address
+    variables: {id: address ? address.toLowerCase() : "", where_metadata: where_metadata, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables,
+    // skip: !address
   });
   let [queryRef, { refetch, fetchMore }] = useBackgroundQuery(GET_OWNER_NFTS, {
     variables: variables,
-    skip: !address
+    // skip: !address
     // notifyOnNetworkStatusChange: true,
     // pollInterval: pollInterval_ms,
     // fetchPolicy: 'network-only', // Used for first execution
@@ -176,15 +176,15 @@ export default function ResponsiveGrid() {
   }, [address]);
   // }, [address, refetch]);
 
-  function handleRefetch() {
-    console.log("REFETCH")
-    startTransition(() => {
-      refetch({
-        // VARAIBLES TO CHANGE
-        // where_metadata: where_metadata
-      });
-    });
-  };  
+  // function handleRefetch() {
+  //   console.log("REFETCH")
+  //   startTransition(() => {
+  //     refetch({
+  //       // VARAIBLES TO CHANGE
+  //       // where_metadata: where_metadata
+  //     });
+  //   });
+  // };  
 
   function handleFetchMore() {
     console.log("FETCH MORE")
@@ -269,7 +269,7 @@ export default function ResponsiveGrid() {
         <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            <MyNFT totalData={customQueryRef as QueryRef<OwnerNFTtokens, ownerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, ownerVariables>} isPending={isPending} onRefetch={handleRefetch} onFetchMore={handleFetchMore} />
+            <MyNFT totalData={customQueryRef as QueryRef<OwnerNFTtokens, ownerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, ownerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
           </Suspense>
         </ErrorBoundary>
     </div>

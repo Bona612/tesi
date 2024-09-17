@@ -106,34 +106,111 @@ export default function MarketplaceStructure() {
   //   },
   //   [searchParams, router]
   // );
-  const updateURL = useCallback(
-    (tags: Tag[], orderBy: OrderBy, orderDirection: OrderDirection, page: number) => {
-      const params = new URLSearchParams(searchParams.toString());
+  // const updateURL = useCallback(
+  //   (tags: Tag[], orderBy: OrderBy, orderDirection: OrderDirection, page: number) => {
+  //     const params = new URLSearchParams(searchParams.toString());
 
-      // Update the 'tags' parameter
-      if (tags.length > 0) {
-        params.set('tags', tags.join(','));
-      } else {
-        params.delete('tags');
-      }
-      // Update the 'orderBy' parameter
-      params.set('orderBy', orderBy.name);
-      // Update the 'orderDirection' parameter
-      params.set('orderDirection', OrderDirectionEnum[orderDirection]);
-      // Update the 'page' parameter
-      params.set('page', page.toString());
+  //     // Update the 'tags' parameter
+  //     if (tags.length > 0) {
+  //       params.set('tags', tags.join(','));
+  //     } else {
+  //       params.delete('tags');
+  //     }
+  //     // Update the 'orderBy' parameter
+  //     params.set('orderBy', orderBy.name);
+  //     // Update the 'orderDirection' parameter
+  //     params.set('orderDirection', OrderDirectionEnum[orderDirection]);
+  //     // Update the 'page' parameter
+  //     params.set('page', page.toString());
 
-      // Replace the URL with the updated search params
-      const newUrl = params.toString() ? `?${params.toString()}` : pathname;
-      router.push(newUrl);
-      // router.replace(newUrl);
-    },
-    [searchParams, router, pathname]
-  );
+  //     // Replace the URL with the updated search params
+  //     const newUrl = params.toString() ? `?${params.toString()}` : pathname;
+  //     router.push(newUrl);
+  //     // router.replace(newUrl);
+  //   },
+  //   [searchParams, router, pathname]
+  // );
+
+  // useEffect(() => {
+  //   updateURL(tags, orderBy, orderDirection, page);
+  // }, [tags, orderBy, orderDirection, page]);
 
   useEffect(() => {
-    updateURL(tags, orderBy, orderDirection, page);
+    setPage(1);
+    // updateURL(tags, orderBy, orderDirection, page);
+  }, [nftPerRow]);
+
+  // QUESTO PIù QUELLO DOPO SEMBRA VENIRE
+  useEffect(() => {
+    // updateURL(tags, orderBy, orderDirection, page);
+    console.log("CALLBACK START");
+    const params = new URLSearchParams(searchParams.toString());
+    console.log("params: ", params)
+
+    // Update the 'tags' parameter
+    if (tags.length > 0) {
+      params.set('tags', tags.join(','));
+    } else {
+      params.delete('tags');
+    }
+    // Update the 'orderBy' parameter
+    params.set('orderBy', orderBy.name);
+    // Update the 'orderDirection' parameter
+    console.log("OrderDirectionEnum[orderDirection]: ", OrderDirectionEnum[orderDirection]);
+    params.set('orderDirection', OrderDirectionEnum[orderDirection]);
+    // Update the 'page' parameter
+    params.set('page', page.toString());
+
+    // Replace the URL with the updated search params
+    const newUrl = params.toString() ? `?${params.toString()}` : pathname;
+    router.push(newUrl);
   }, [tags, orderBy, orderDirection, page]);
+
+  // Initialize state based on URL parameters
+  useEffect(() => {
+    console.log("searchParams START");
+    console.log(orderBy.name);
+    console.log(orderDirection);
+    console.log(page);
+    // console.log(searchParams.get('orderDirection'));
+    const tagsParam = searchParams.get('tags') || '';
+    const tagsArray = tagsParam.split(',').filter(Boolean);
+    const orderByParam = searchParams.get('orderBy') || orderBy.name;
+    console.log(searchParams.get('orderDirection'));
+    console.log(OrderDirectionEnum[orderDirection]);
+    console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
+    const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
+    const pageParam = searchParams.get('page') || page;
+    setTags(tagsArray as Tag[]);
+    setOrderBy(findOrderBy(orderByParam));
+    setOrderDirection(orderDirectionMap[orderDirectionParam]);
+    setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    console.log("orderDirectionParam: ", orderDirectionParam);
+    console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
+    console.log("fem sta prova2: ", orderDirectionParam);
+  }, []);
+  useEffect(() => {
+    console.log("searchParams START");
+    console.log(orderBy.name);
+    console.log(orderDirection);
+    console.log(page);
+    // console.log(searchParams.get('orderDirection'));
+    const tagsParam = searchParams.get('tags') || '';
+    const tagsArray = tagsParam.split(',').filter(Boolean);
+    const orderByParam = searchParams.get('orderBy') || orderBy.name;
+    console.log(searchParams.get('orderDirection'));
+    console.log(OrderDirectionEnum[orderDirection]);
+    console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
+    const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
+    const pageParam = searchParams.get('page') || page;
+    setTags(tagsArray as Tag[]);
+    setOrderBy(findOrderBy(orderByParam));
+    setOrderDirection(orderDirectionMap[orderDirectionParam]);
+    setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    console.log("orderDirectionParam: ", orderDirectionParam);
+    console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
+    console.log("fem sta prova2: ", orderDirectionParam);
+  }, [searchParams]);
 
   // // Function to handle tag selection
   // const handleTagChange = (tag: Tag) => {

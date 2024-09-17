@@ -22,6 +22,7 @@ import { useFilters } from '@/context/FilterContext';
 import { useNFTperRow } from '@/context/NFTperRowContext';
 import Redeem from './Redeem';
 import SuspenseGrid from './SuspenseGrid';
+import { findOrderBy, orderDirectionMap } from '@/utils/utils';
 
 
 export default function RedeemStructure() {
@@ -45,52 +46,109 @@ export default function RedeemStructure() {
   const pathname = usePathname()
   const searchParams = useSearchParams();
 
-  // // Function to update the URL with the selected tags
+  useEffect(() => {
+    setPage(1);
+    // updateURL(tags, orderBy, orderDirection, page);
+  }, [nftPerRow]);
+
+  // QUESTO PIù QUELLO DOPO SEMBRA VENIRE
+  useEffect(() => {
+    // updateURL(tags, orderBy, orderDirection, page);
+    console.log("CALLBACK START");
+    const params = new URLSearchParams(searchParams.toString());
+    console.log("params: ", params)
+
+    // Update the 'tags' parameter
+    if (tags.length > 0) {
+      params.set('tags', tags.join(','));
+    } else {
+      params.delete('tags');
+    }
+    // Update the 'orderBy' parameter
+    params.set('orderBy', orderBy.name);
+    // Update the 'orderDirection' parameter
+    console.log("OrderDirectionEnum[orderDirection]: ", OrderDirectionEnum[orderDirection]);
+    params.set('orderDirection', OrderDirectionEnum[orderDirection]);
+    // Update the 'page' parameter
+    params.set('page', page.toString());
+
+    // Replace the URL with the updated search params
+    const newUrl = params.toString() ? `?${params.toString()}` : pathname;
+    router.push(newUrl);
+  }, [tags, orderBy, orderDirection, page]);
+
+  // Initialize state based on URL parameters
+  useEffect(() => {
+    console.log("searchParams START");
+    console.log(orderBy.name);
+    console.log(orderDirection);
+    console.log(page);
+    // console.log(searchParams.get('orderDirection'));
+    const tagsParam = searchParams.get('tags') || '';
+    const tagsArray = tagsParam.split(',').filter(Boolean);
+    const orderByParam = searchParams.get('orderBy') || orderBy.name;
+    console.log(searchParams.get('orderDirection'));
+    console.log(OrderDirectionEnum[orderDirection]);
+    console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
+    const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
+    const pageParam = searchParams.get('page') || page;
+    setTags(tagsArray as Tag[]);
+    setOrderBy(findOrderBy(orderByParam));
+    setOrderDirection(orderDirectionMap[orderDirectionParam]);
+    setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    console.log("orderDirectionParam: ", orderDirectionParam);
+    console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
+    console.log("fem sta prova2: ", orderDirectionParam);
+  }, []);
+  useEffect(() => {
+    console.log("searchParams START");
+    console.log(orderBy.name);
+    console.log(orderDirection);
+    console.log(page);
+    // console.log(searchParams.get('orderDirection'));
+    const tagsParam = searchParams.get('tags') || '';
+    const tagsArray = tagsParam.split(',').filter(Boolean);
+    const orderByParam = searchParams.get('orderBy') || orderBy.name;
+    console.log(searchParams.get('orderDirection'));
+    console.log(OrderDirectionEnum[orderDirection]);
+    console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
+    const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
+    const pageParam = searchParams.get('page') || page;
+    setTags(tagsArray as Tag[]);
+    setOrderBy(findOrderBy(orderByParam));
+    setOrderDirection(orderDirectionMap[orderDirectionParam]);
+    setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    console.log("orderDirectionParam: ", orderDirectionParam);
+    console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
+    console.log("fem sta prova2: ", orderDirectionParam);
+  }, [searchParams]);
+
   // const updateURL = useCallback(
   //   (tags: Tag[]) => {
   //     const params = new URLSearchParams(searchParams.toString());
-  //     console.log(tags.length)
-  //     console.log("params: ", params)
-  //     console.log(params.get('tags'))
+  
   //     if (tags.length > 0) {
+  //       // Set the 'tags' query parameter
   //       params.set('tags', tags.join(','));
-  //       router.push(`?${params.toString()}`);
-  //     }
-  //     else {
-  //       console.log("vediamo se entra")
-  //       params.delete('tags')
-  //       router.replace(pathname);
-  //     }
-      
-  //   },
-  //   [searchParams, router]
-  // );
-  const updateURL = useCallback(
-    (tags: Tag[]) => {
-      const params = new URLSearchParams(searchParams.toString());
-  
-      if (tags.length > 0) {
-        // Set the 'tags' query parameter
-        params.set('tags', tags.join(','));
-        // Replace the current entry in the history stack
-        router.replace(`?${params.toString()}`);
-      } else {
-        // If no tags, remove the 'tags' parameter
-        params.delete('tags');
+  //       // Replace the current entry in the history stack
+  //       router.replace(`?${params.toString()}`);
+  //     } else {
+  //       // If no tags, remove the 'tags' parameter
+  //       params.delete('tags');
         
-        // Check if there are any other query parameters
-        const hasOtherParams = Array.from(params.keys()).length > 0;
+  //       // Check if there are any other query parameters
+  //       const hasOtherParams = Array.from(params.keys()).length > 0;
   
-        // Replace the URL accordingly
-        if (hasOtherParams) {
-          router.replace(`?${params.toString()}`);
-        } else {
-          router.replace(pathname);
-        }
-      }
-    },
-    [searchParams, router, pathname]
-  );
+  //       // Replace the URL accordingly
+  //       if (hasOtherParams) {
+  //         router.replace(`?${params.toString()}`);
+  //       } else {
+  //         router.replace(pathname);
+  //       }
+  //     }
+  //   },
+  //   [searchParams, router, pathname]
+  // );
 
   // // Function to handle tag selection
   // const handleTagChange = (tag: Tag) => {

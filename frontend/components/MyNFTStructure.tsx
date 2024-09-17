@@ -51,6 +51,12 @@ export default function ResponsiveGrid() {
   const pathname = usePathname()
   const searchParams = useSearchParams();
 
+  
+  useEffect(() => {
+    setPage(1);
+    // updateURL(tags, orderBy, orderDirection, page);
+  }, [nftPerRow]);
+
   // QUESTO PIù QUELLO DOPO SEMBRA VENIRE
   useEffect(() => {
     // updateURL(tags, orderBy, orderDirection, page);

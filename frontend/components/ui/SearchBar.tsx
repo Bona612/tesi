@@ -21,7 +21,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, onChange }) => {
 
 
   return (
-    <div className="flex justify-center flex-grow"> {/*<div className={styles.searchContainer}>*/}
+    <div className="flex justify-center flex-grow">
       <input
         type="text"
         placeholder={placeholder}

@@ -62,6 +62,9 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
 
     transaction.timestamp = event.block.timestamp;
     transaction.save();
+
+    const txs = token.transactions.load();
+    txs.push(transaction);
   }
 
   // Load or create the new Owner entity
@@ -71,6 +74,8 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
   }
   let tokens = newOwner.nfts.load()
   tokens.push(token);
+  const txsReceived = newOwner.transactionsReceived.load();
+  txsReceived.push(transaction);
 
   newOwner.save();
   log.info('New Owner: {}', [newOwner.id]);
@@ -82,6 +87,8 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
   if (!prevOwner) {
     prevOwner = new Owner(event.params.from.toHexString());
   }
+  const txs = newOwner.transactions.load();
+  txs.push(transaction);
   prevOwner.save();
 
   token.owner = event.params.to.toHexString();

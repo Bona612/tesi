@@ -228,9 +228,9 @@ export interface tokenOwnerSearchVariables {
 export type Attestation = {
   to: string;
   anchor: string;
-  // attestationTime: number;
-  // validStartTime: number;
-  // validEndTime: number;
+}
+export type Anchor = {
+  anchor: string;
 }
 
 export enum Token_orderBy {

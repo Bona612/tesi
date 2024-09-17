@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { Attestation } from "@/types"
+import { Anchor, Attestation } from "@/types"
 import { useState } from "react"
 import { AttestationShower } from "./AttestationShower"
 import QrReader from "./QrReader"
@@ -62,7 +62,7 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
         </AlertDialogHeader>
         <div className="grid gap-4 py-4">
           {scannedAttestation &&
-            <AttestationShower attestation={scannedAttestation as Attestation} />
+            <AttestationShower attestation={scannedAttestation as Anchor} />
           }
           <QrReader handleOnScanSuccess={handleNewAttestation} />
         </div>

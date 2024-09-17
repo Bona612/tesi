@@ -143,12 +143,23 @@ export async function listNFT(nft: NFT, listingPrice: number, isConnected: boole
         // const NULLADDR = ethers.ZeroAddress;
         
         console.log("approve");
-
+        
         /// QUESTA PARTE è DA VEDERE, SERVE FARE QUESTA OPERAZIONE O UNA VOLTA PER TUTTE, OPPURE OGNI VOLTA PER OGNI TOKEN
-        // // Assuming you have a contract instance for the NFT (IERC721) and the marketplace
-        // const ercContract: IERC6956Full = new ethers.Contract(ERC6956Full_address.address, ERC6956Full.abi, signer) as unknown as IERC6956Full;
-        // // Approve the marketplace to transfer the NFT
-        // await ercContract.approve(NFTMarketplace_address.address, nft.id);
+        // Assuming you have a contract instance for the NFT (IERC721) and the marketplace
+        const ercContract: IERC6956Full = new ethers.Contract(ERC6956Full_address.address, ERC6956Full.abi, signer) as unknown as IERC6956Full;
+        // Check if the NFT is already approved for the marketplace
+        const approvedAddress = await ercContract.getApproved(nft.id);
+        console.log(`Approved address for token ${nft.id}:`, approvedAddress);
+
+        // If not approved, approve the marketplace to transfer the NFT
+        if (approvedAddress !== NFTMarketplace_address.address) {
+            console.log("Approving the marketplace to transfer the NFT...");
+            // Approve the marketplace to transfer the NFT
+            await ercContract.approve(NFTMarketplace_address.address, nft.id);
+        } else {
+            console.log("Marketplace is already approved for this NFT.");
+        }
+        
 
         console.log(ERC6956Full_address.address, nft.id, ethToWei(listingPrice));
         // QUI da cambiare in .address

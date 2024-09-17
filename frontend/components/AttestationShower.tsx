@@ -2,16 +2,16 @@
 
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Attestation } from "@/types";
+import { Anchor, Attestation } from "@/types";
 import { Button } from "./ui/button";
 import { useEffect, useRef } from "react";
 
 
 interface AttestationProps {
-    attestation: Attestation;
+    attestation: Anchor;
 }
 
-function attestationToJSON(attestation: Attestation): string {
+function attestationToJSON(attestation: Anchor): string {
     if (!attestation) {
         return "";
     }

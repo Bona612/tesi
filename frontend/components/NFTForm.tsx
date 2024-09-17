@@ -38,7 +38,7 @@ import { ERC6956Full__factory } from '@/typechain/factories/contracts/ERC6956Ful
 // import { ERC6956Full } from '@/typechain/contracts/ERC6956Full';
 import { ecsign, toRpcSig, fromRpcSig } from 'ethereumjs-util';
 // import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot } from "../utils/merkleTreeUtilities";
-import { Tag, Attestation, Metadata, TAGS, zod_TAGS } from "@/types/index";
+import { Tag, Attestation, Anchor, Metadata, TAGS, zod_TAGS } from "@/types/index";
 import { AlertDialogRedeem } from "./AlertDialogRedeem";
 
 import { useToast } from "@/components/ui/use-toast"
@@ -69,8 +69,8 @@ type FileOrUndefined = File | undefined;
 
 const TagSchema = z.enum(zod_TAGS);
 
-const AttestationSchema = z.object({
-    to: z.string().min(1, "receiver address cannot be empty"),
+const AnchorSchema = z.object({
+    // to: z.string().min(1, "receiver address cannot be empty"),
     anchor: z.string().min(1, "anchor cannot be empty"),
     // attestationTime: ,
     // validStartTime: ,
@@ -91,7 +91,7 @@ const formSchema = z.object({
     description: z.string().min(10, {
         message: "Description must be at least 10 characters.",
     }),
-    attestation: AttestationSchema.required(),
+    attestation: AnchorSchema.required(),
 })
 
 
@@ -337,7 +337,7 @@ const merkleTreeAPI = async (data: {anchor: string}) => {
 // }
 
 /// DA RIVEDERE E MIGLIORARE
-async function createToken(toast: (arg0: { title: string; description: string; }) => void, formValues: { title: string; image: File; tags: Tag[]; description: string; attestation: Attestation}, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
+async function createToken(toast: (arg0: { title: string; description: string; }) => void, formValues: { title: string; image: File; attestation: { anchor: string; }; tags: ("Tag 1" | "Tag 2" | "Tag 3" | "Tag 4")[]; description: string; }, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
     console.log("isConnected: ", isConnected)
     console.log("address: ", address)
 
@@ -405,6 +405,7 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         const to = await signer.getAddress()
         const attestation: Attestation = {
             to: to,
+            // anchor: "0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536"
             anchor: formValues.attestation.anchor
         }
         // const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC

@@ -12,7 +12,7 @@ import NFTList from '@/components/NFTList';
 
 // Import everything needed to use the `useQuery` hook
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, useBackgroundQuery, useLoadableQuery, LoadQueryFunction, OperationVariables, QueryRef } from '@apollo/client';
-import { GET_MARKETPLACE_NFTS, SEARCH_MARKETPLACE_NFTS } from "@/apollo/subgraphQueries"
+import { GET_MARKETPLACE_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import { number } from 'zod';
@@ -58,7 +58,7 @@ export default function MarketplaceStructure() {
   // const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [isPending, startTransition] = useTransition();
 
-  const { tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
 
@@ -74,9 +74,8 @@ export default function MarketplaceStructure() {
       setTags(updateTags(tag));
   };
 
-  const wtags: Where_Token_Metadata = { tags_contains: tags };
-  const where_metadata: Where_Metadata = { metadata_: wtags };
-  const where_marketplace: Where_Marketplace = { isListed: true, metadata_: wtags };
+  const wtm: Where_Token_Metadata = { title_contains_nocase: searchText, tags_contains: tags };
+  const where_marketplace: Where_Marketplace = { isListed: true, metadata_: wtm };
 
   // VARAIBLES TO CHANGE
   let variables = {skip: (page - 1) * nftPerRow, first: nftPerRow, where_marketplace: where_marketplace, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as NFTtokensVariables

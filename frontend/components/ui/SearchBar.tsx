@@ -11,7 +11,7 @@ interface SearchBarProps {
 
 
 const SearchBar: React.FC<SearchBarProps> = ({ placeholder, onChange }) => {
-  const { setSearchText } = useFilters();
+  const { searchText, setSearchText } = useFilters();
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const inputValue = event.target.value;
@@ -25,6 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, onChange }) => {
       <input
         type="text"
         placeholder={placeholder}
+        value={searchText}
         onChange={handleOnChange}
         className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"// className={styles.searchInput}
       />

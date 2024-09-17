@@ -5,15 +5,8 @@
 #     name: "tokenSearch"
 #     language: en
 #     algorithm: proximityRank
-#     include: [{ entity: "Token", fields: [{ name: "anchor" }] }]
+#     include: [{ entity: "Token", fields: [{ name: "metadata.title" }] }]
 #   )
-
-  # @fulltext(
-  #   name: "ownerTokenSearch"
-  #   language: en
-  #   algorithm: proximityRank
-  #   include: [{ entity: "Token", fields: [{ name: "anchor" }] }]
-  # )
 
 
 # Define the Node interface required by Relay
@@ -50,6 +43,7 @@ input Where_Token {
   id: String,
 }
 input Where_Token_Metadata {
+  title_contains_nocase: String!
   tags_contains: [String!]
 }
 input Where_Metadata {

@@ -12,11 +12,11 @@ import NFTList from '@/components/NFTList';
 
 // Import everything needed to use the `useQuery` hook
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, useBackgroundQuery, useLoadableQuery, LoadQueryFunction, OperationVariables, QueryRef } from '@apollo/client';
-import { SEARCH_OWNER_REDEEM_NFTS, GET_OWNER_REDEEM_NFTS } from "@/apollo/subgraphQueries"
+import { GET_OWNER_REDEEM_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import { number } from 'zod';
-import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables, Where_Token_Redeem, OrderDirectionEnum, NFTtokensVariables, OwnerNFTtokens } from "@/types";
+import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, Token_orderBy, OrderDirection, tokenOwnerVariables, Where_Token_Redeem, OrderDirectionEnum, NFTtokensVariables, OwnerNFTtokens, Where_Token_Metadata } from "@/types";
 import MyNFT from './MyNFT';
 import { useFilters } from '@/context/FilterContext';
 import { useNFTperRow } from '@/context/NFTperRowContext';
@@ -33,12 +33,13 @@ export default function RedeemStructure() {
 
   const [isPending, startTransition] = useTransition();
 
-  const { tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
   const id: string = address?.toString() || "";
-  const where_tags: Where_Tags = { tags_contains: tags };
-  const where_token_redeem: Where_Token_Redeem = {toRedeem: false,  metadata_: where_tags};
+  // const where_tags: Where_Tags = { tags_contains: tags };
+  const wtm: Where_Token_Metadata = { title_contains_nocase: searchText, tags_contains: tags };
+  const where_token_redeem: Where_Token_Redeem = {toRedeem: false,  metadata_: wtm};
 
 
 
@@ -267,7 +268,7 @@ export default function RedeemStructure() {
   };
 
   
-  const [loadNfts, searchQueryRef] = useLoadableQuery(SEARCH_OWNER_REDEEM_NFTS);
+  // const [loadNfts, searchQueryRef] = useLoadableQuery(SEARCH_OWNER_REDEEM_NFTS);
 
   // const handleSearchBarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   // console.log(event)

@@ -73,5 +73,5 @@ templates:
       handler: handleIpfsData
       file: ./src/ipfs-data.ts
 
-features:
-  - fullTextSearch
+# features:
+#   - fullTextSearch

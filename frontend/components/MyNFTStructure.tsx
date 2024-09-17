@@ -15,11 +15,11 @@ import NFTList from '@/components/NFTList';
 
 // Import everything needed to use the `useQuery` hook
 import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, useBackgroundQuery, useLoadableQuery, LoadQueryFunction, OperationVariables, QueryRef } from '@apollo/client';
-import { SEARCH_OWNER_NFTS, GET_OWNER_NFTS } from "@/apollo/subgraphQueries"
+import { GET_OWNER_NFTS } from "@/apollo/subgraphQueries"
 // import client from "@/lib/apollo-client";
 import Marketplace from '@/components/Marketplace';
 import { number } from 'zod';
-import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, OrderBy, OrderDirection, tokenOwnerVariables, Where_Owner_Id, Where_Token_Owner, OrderDirectionEnum, Where_Token_Metadata, Where_Metadata, OwnerNFTtokens, NFTtokens, zod_TAGS } from "@/types";
+import { Tag, TAGS, Owner, Data_Owner, ownerVariables, tokenSearchVariables, Where_Tags, OrderBy, OrderDirection, tokenOwnerVariables, Where_Owner_Id, Where_Token_Owner, OrderDirectionEnum, Where_Token_Metadata, Where_Metadata, OwnerNFTtokens, NFTtokens, zod_TAGS, searchOwnerVariables } from "@/types";
 import MyNFT from './MyNFT';
 import { useFilters } from '@/context/FilterContext';
 import { findOrderBy, orderDirectionMap } from '@/utils/utils';
@@ -36,15 +36,14 @@ export default function ResponsiveGrid() {
 
   const [isPending, startTransition] = useTransition();
 
-  const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { searchText, setSearchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
   const id: string = address?.toString() || "";
   console.log("address: ", id);
   
-  // const var_tags: Tag[] = tags.length === 0 ? [] : tags;
-  const wtags: Where_Token_Metadata = { tags_contains: tags };
-  const where_metadata: Where_Metadata = { metadata_: wtags };
+  const wtm: Where_Token_Metadata = { title_contains_nocase: searchText, tags_contains: tags };
+  const where_metadata: Where_Metadata = { metadata_: wtm };
 
 
   const router = useRouter();
@@ -78,10 +77,17 @@ export default function ResponsiveGrid() {
     // Update the 'page' parameter
     params.set('page', page.toString());
 
+    // Update the 'searchText' parameter (only if searchText is not empty)
+    if (searchText !== "") {
+      params.set('searchText', searchText);
+    } else {
+      params.delete('searchText');
+    }
+
     // Replace the URL with the updated search params
     const newUrl = params.toString() ? `?${params.toString()}` : pathname;
     router.push(newUrl);
-  }, [tags, orderBy, orderDirection, page]);
+  }, [searchText, tags, orderBy, orderDirection, page]);
 
   // Initialize state based on URL parameters
   useEffect(() => {
@@ -98,10 +104,12 @@ export default function ResponsiveGrid() {
     console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
     const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
     const pageParam = searchParams.get('page') || page;
+    const searchTextParam = searchParams.get('searchText') || searchText;
     setTags(tagsArray as Tag[]);
     setOrderBy(findOrderBy(orderByParam));
     setOrderDirection(orderDirectionMap[orderDirectionParam]);
     setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    setSearchText(searchTextParam);
     console.log("orderDirectionParam: ", orderDirectionParam);
     console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
     console.log("fem sta prova2: ", orderDirectionParam);
@@ -120,16 +128,19 @@ export default function ResponsiveGrid() {
     console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
     const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
     const pageParam = searchParams.get('page') || page;
+    const searchTextParam = searchParams.get('searchText') || searchText;
     setTags(tagsArray as Tag[]);
     setOrderBy(findOrderBy(orderByParam));
     setOrderDirection(orderDirectionMap[orderDirectionParam]);
     setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    setSearchText(searchTextParam);
     console.log("orderDirectionParam: ", orderDirectionParam);
     console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
     console.log("fem sta prova2: ", orderDirectionParam);
   }, [searchParams]);
 
   
+  // const where_token_owner: Where_Token_Owner = {owner_: {id: address?.toLowerCase() as string}, metadata_: wtags};
   //       where: {metadata_: { or: [{ tags_contains: ["Tag 1"] }, { tags_contains: ["Tag 2"] }] }}
   let variables = {id: address?.toLowerCase(), skip: (page - 1) * nftPerRow, first: nftPerRow, where_metadata: where_metadata, orderBy: orderBy.name, orderDirection: OrderDirectionEnum[orderDirection]} as ownerVariables
   const pollInterval_ms = 5000
@@ -184,37 +195,45 @@ export default function ResponsiveGrid() {
     });
   };
 
-  
+  // let mixedQuery: QueryRef<OwnerNFTtokens, ownerVariables> | QueryRef<NFTtokens, searchOwnerVariables> = queryRef as QueryRef<OwnerNFTtokens, ownerVariables>; 
   // const [loadNfts, searchQueryRef] = useLoadableQuery(SEARCH_OWNER_NFTS);
 
   // const handleSearchBarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   // console.log(event)
   //   const inputValue = event.target.value;
   //   console.log(inputValue);
+  //   setSearchText(inputValue);
   
+  //   let where_token_owner: Where_Token_Owner = {owner_: {id: address?.toLowerCase() as string}, metadata_: wtags};
   //   startTransition(() => {
-  //     loadNfts({ 
-  //       text: inputValue,
-  //       skip: skip,
-  //       first: first,
-  //       where_token_owner: {owner_: {address: ""}}
-  //     } as tokenOwnerVariables);
+  //     loadNfts({
+  //       text: searchText, 
+  //       skip: (page - 1) * nftPerRow, 
+  //       first: nftPerRow, 
+  //       where_token_owner: where_token_owner, 
+  //       orderBy: orderBy.name, 
+  //       orderDirection: OrderDirectionEnum[orderDirection]} as searchOwnerVariables)
   //   });
 
   //   // da scommentare dopo
-  //   // queryRef = searchQueryRef as QueryRef<Owner, ownerVariables>; // Update queryRef to point to the search query
+  //   queryRef = searchQueryRef ; // Update queryRef to point to the search query
   // };
 
   // useEffect(() => {
   //   console.log("REFETCH SEARCH BAR")
   //   startTransition(() => {
+  //     let where_token_owner: Where_Token_Owner = {owner_: {id: address?.toLowerCase() as string}, metadata_: wtags};
+
   //     loadNfts({ 
-  //       text: inputValue,
-  //       skip: skip,
-  //       first: first,
-  //       where_token_owner: {owner_: {address: ""}}
-  //     } as tokenOwnerVariables);
+  //       text: searchText, 
+  //       skip: (page - 1) * nftPerRow, 
+  //       first: nftPerRow, 
+  //       where_token_owner: where_token_owner, 
+  //       orderBy: orderBy.name, 
+  //       orderDirection: OrderDirectionEnum[orderDirection]} as searchOwnerVariables)
   //   });
+
+  //   mixedQuery = searchQueryRef as QueryRef<NFTtokens, searchOwnerVariables>; // Update queryRef to point to the search query
   // }, [searchText]);
 
 

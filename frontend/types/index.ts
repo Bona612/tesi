@@ -165,6 +165,7 @@ export interface tokenSearchVariables {
 
 
 export type Where_Token_Metadata = {
+  title_contains_nocase: string,
   tags_contains: Tag[]
 }
 export type Where_Metadata = {
@@ -198,6 +199,15 @@ export interface ownerVariables {
   skip: number,
   first: number,
   where_metadata: Where_Metadata,
+  orderBy: string,
+  orderDirection: string,
+}
+export interface searchOwnerVariables {
+  text: string,
+  id: string,
+  skip: number,
+  first: number,
+  where_token_owner: Where_Token_Owner
   orderBy: string,
   orderDirection: string,
 }

@@ -10,7 +10,7 @@ import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery, use
 import { GET_OWNER_NFTS } from "@/apollo/subgraphQueries"
 import client from "@/lib/apollo-client";
 import NFTsPagination from './NFTsPagination';
-import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables, OwnerNFTtokens, Metadatas, Metadata_e } from "@/types/index";
+import { NFTtokens, NFTtokensVariables, Owner, Data_Owner, ownerVariables, OwnerNFTtokens, Metadatas, Metadata_e, searchOwnerVariables } from "@/types/index";
 import NFTList from './NFTList';
 import { useFilters } from '@/context/FilterContext';
 import { useNFTperRow } from '@/context/NFTperRowContext';
@@ -41,6 +41,17 @@ export default function MyNFT({ totalData, queryRef, onFetchMore }: MarketplaceP
   // if (!queryRef) {
   //   return (<div>undefined</div>);
   // }
+
+  
+
+//   let query: QueryRef<OwnerNFTtokens, ownerVariables> = undefined;
+//   let searchQuery: QueryRef<NFTtokens, searchOwnerVariables> = undefined;
+//   if (queryRef instanceof QueryRef<OwnerNFTtokens, ownerVariables>) {
+//     query = queryRef as QueryRef<OwnerNFTtokens, ownerVariables>;
+//   } 
+//   else if (queryRef instanceof QueryRef<NFTtokens, searchOwnerVariables>) {
+//     searchQuery = queryRef as QueryRef<NFTtokens, searchOwnerVariables>;
+//   }
 
 
   const { data, error } = useReadQuery(queryRef);

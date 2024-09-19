@@ -14,6 +14,7 @@ import { Anchor, Attestation } from "@/types"
 import { useState } from "react"
 import { AttestationShower } from "./AttestationShower"
 import QrReader from "./QrReader"
+import { cn } from "@/lib/utils"
 
 
 interface AlertDialogRedeemProps {
@@ -60,15 +61,23 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
             account and remove your data from our servers.
           </AlertDialogDescription> */}
         </AlertDialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-1 sm:py-4">
           {scannedAttestation &&
             <AttestationShower attestation={scannedAttestation as Anchor} />
           }
           <QrReader handleOnScanSuccess={handleNewAttestation} />
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={resetScannedAttestation}>Cancel</AlertDialogCancel>
-          <AlertDialogAction asChild>
+          <AlertDialogCancel 
+          className={cn(
+            "w-3/4 sm:w-full mx-auto"
+          )}
+          onClick={resetScannedAttestation}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className={cn(
+              "w-3/4 sm:w-full mx-auto"
+            )}
+            asChild>
             {handleRedeemNFT ? (
               <Button type="button" onClick={handleOnClick}>Redeem</Button>
             ) : (

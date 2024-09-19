@@ -61,23 +61,18 @@ const NFTsHeader: React.FC<SearchBarProps> = ({}: SearchBarProps) => {
                     </>
                 )}
             </div> */}
-            <div className="flex m-4">
-                <SearchBar placeholder="Search..." />
-                {/* <div>
-                    <TagFilter tagList={tagList} handleOnClick={handleOnClick}/>
-                    <OrderByFilter />
-                </div> */}
-                <Filters isDesktop={isDesktop} ></Filters>
-                {/* {isDesktop ??
-                    <div>
-                        <TagFilter tagList={tagList} handleOnClick={handleOnClick}/>
-                        <OrderByFilter />
+            {isDesktop !== undefined && (
+                <div>
+                    <div className="flex m-4">
+                        <SearchBar placeholder="Search..." />
+                        <Filters isDesktop={isDesktop} ></Filters>
                     </div>
-                } */}
-            </div>
-            <div>
-                {tags && <TagListWithContext ></TagListWithContext>}
-            </div>
+                    <div>
+                        {tags && <TagListWithContext ></TagListWithContext>}
+                    </div>
+                </div>
+            )}
+            
             {/* {!isDesktop ??
                 <div>
                     <FloatingButton onClick={onClick}>Filters</FloatingButton>

@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Anchor, Attestation } from "@/types";
 import { Button } from "./ui/button";
 import { useEffect, useRef } from "react";
+import { useMediaQueries } from "@/hooks/useMediaQuery";
 
 
 interface AttestationProps {
@@ -30,16 +31,33 @@ export function AttestationShower({attestation}: AttestationProps) {
     const attestationJSON = attestationToJSON(attestation);
     
     useEffect(() => {
+        console.log("CHIAMATO");
         const textarea = textareaRef.current;
-
-        if (textarea) {
-            textarea.style.height = 'auto'; // Reset height to auto
-            // con 10 funziona
-            const height = textarea.scrollHeight;
-            textarea.style.height = `${height}px`; // Set height to scrollHeight
-        }
-    }, [attestationJSON]); // Depend on attestationJSON to update height on content change
-
+    
+        const adjustHeight = () => {
+            if (textarea) {
+                textarea.style.height = 'auto'; // Reset height to auto
+                const height = textarea.scrollHeight + 2; // Adjust the height based on scrollHeight
+                textarea.style.height = `${height}px`; // Set height to calculated scrollHeight
+            }
+        };
+    
+        // Adjust height on initial render and when attestationJSON changes
+        adjustHeight();
+    
+        // Listen for window resize events and adjust textarea height
+        const handleResize = () => {
+            adjustHeight();
+        };
+    
+        window.addEventListener('resize', handleResize);
+    
+        // Cleanup the event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [attestationJSON]); // Depend on attestationJSON and handle resize events
+    
 
     return (
         <>

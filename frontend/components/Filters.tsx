@@ -43,7 +43,7 @@ import { useFilters } from "@/context/FilterContext";
 
 
 type TagFilterProps = {
-    isDesktop: boolean,
+    isDesktop: boolean | undefined,
 };
 
 
@@ -83,7 +83,10 @@ export function Filters({isDesktop}: TagFilterProps) {
     }
     
 
-
+    if (isDesktop === undefined) {
+        return <div></div>;
+    }
+    
     if (isDesktop) {
         return (
             <div className="flex">

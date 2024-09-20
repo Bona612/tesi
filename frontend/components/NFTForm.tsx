@@ -81,10 +81,18 @@ const formSchema = z.object({
     title: z.string().min(2, {
         message: "Username must be at least 2 characters.",
     }),
-    image: z.instanceof(File)
+    image: z
+        .any() // Allows any input initially
+        .refine((file) => file instanceof File, {
+            message: "Invalid file type. Please upload a valid image.",
+        })
         .refine(fileValidation, {
-        message: "Image is required.",
-    }),
+            message: "Image is required and must meet specific criteria.",
+        }),
+    // image: z.instanceof(File)
+    //     .refine(fileValidation, {
+    //     message: "Image is required.",
+    // }),
     tags: z.array(TagSchema).min(1, {
         message: "At least one tag must be selected.",
     }),

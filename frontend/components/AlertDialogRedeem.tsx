@@ -25,17 +25,33 @@ interface AlertDialogRedeemProps {
 
 
 export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertDialogRedeemProps) {
-
+  const [isQrReaderVisible, setIsQrReaderVisible] = useState<boolean>(false);
   const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
+
+  const handleOpenQrReader = () => {
+      setIsQrReaderVisible(true);
+  };
+
+  const handleCloseQrReader = () => {
+      setIsQrReaderVisible(false);
+  };
 
   
   const handleConfirmAttestation = () => {
+    if (isQrReaderVisible) {
+      handleCloseQrReader();
+    }
+
     if (handleOnScanSuccess) {
       handleOnScanSuccess(scannedAttestation as Attestation)
     }
     resetScannedAttestation()
   }
   const handleOnClick = () => {
+    if (isQrReaderVisible) {
+      handleCloseQrReader();
+    }
+   
     if (handleRedeemNFT) {
       handleRedeemNFT(scannedAttestation as Attestation);
     }
@@ -45,6 +61,9 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
     setScannedAttestation(attestation)
   }
   const resetScannedAttestation = () => {
+    if (isQrReaderVisible) {
+      handleCloseQrReader();
+    }
     setScannedAttestation(undefined)
   }
 
@@ -65,7 +84,7 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
           {scannedAttestation &&
             <AttestationShower attestation={scannedAttestation as Anchor} />
           }
-          <QrReader handleOnScanSuccess={handleNewAttestation} />
+          <QrReader isQrReaderVisible={isQrReaderVisible} handleOnScanSuccess={handleNewAttestation} handleOpenQrReader={handleOpenQrReader} handleCloseQrReader={handleCloseQrReader} />
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel 

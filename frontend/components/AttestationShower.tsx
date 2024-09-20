@@ -33,12 +33,24 @@ export function AttestationShower({attestation}: AttestationProps) {
     useEffect(() => {
         console.log("CHIAMATO");
         const textarea = textareaRef.current;
-    
+
         const adjustHeight = () => {
             if (textarea) {
                 textarea.style.height = 'auto'; // Reset height to auto
-                const height = textarea.scrollHeight + 2; // Adjust the height based on scrollHeight
-                textarea.style.height = `${height}px`; // Set height to calculated scrollHeight
+                const height = textarea.scrollHeight;
+                
+                // Get padding from the className
+                const classNames = textarea.className.split(" ");
+                const paddingClasses = classNames.filter(cls => cls.startsWith('py-'));
+                const number = paddingClasses[0].split("-")[1]
+                const classPadding = parseFloat(number);
+                console.log(classPadding);
+
+                // Calculate the new height (scrollHeight + total padding)
+                const newHeight = height + (classPadding * 4);
+
+                // Set the height to the calculated height
+                textarea.style.height = `${newHeight}px`;
             }
         };
     
@@ -62,7 +74,7 @@ export function AttestationShower({attestation}: AttestationProps) {
     return (
         <>
             {attestation &&
-                <div className="grid w-full gap-1.5">
+                <div className="grid w-full">
                     {/* <Label htmlFor="message">Attestation</Label> */}
                     <Textarea id="message" ref={textareaRef} value={attestationJSON} className="resize-none h-auto" readOnly />
                 </div>

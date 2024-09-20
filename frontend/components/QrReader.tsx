@@ -17,10 +17,13 @@ import Image from "next/image";
 
 
 interface QRReaderProps {
+    isQrReaderVisible: boolean,
     handleOnScanSuccess: (attestation: Attestation) => void,
+    handleOpenQrReader: () => void;
+    handleCloseQrReader: () => void;
 }
 
-const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
+const QrReader_original = ({isQrReaderVisible, handleOnScanSuccess, handleOpenQrReader, handleCloseQrReader}: QRReaderProps) => {
   // QR States
   const scanner = useRef<QrScanner>();
   const videoEl = useRef<HTMLVideoElement>(null);
@@ -30,8 +33,8 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
   const [error, setError] = useState<any>(null);
 
   // Result
-  const [isQrReaderVisible, setIsQrReaderVisible] = useState<boolean>(false);
-  const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
+  // const [isQrReaderVisible, setIsQrReaderVisible] = useState<boolean>(false);
+  // const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
 
 
   useEffect(() => {
@@ -41,12 +44,18 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
 
   const requestCameraPermission = async () => {
       try {
-        //   const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          // QUI MANCAVA LA SIMMETRIA DEL VIDEO
-        //   if (videoEl.current) {
-        //       videoEl.current.srcObject = stream;
-        //       videoEl.current.play();
-        //   }
+
+          // // THE PROBLEM IS THAT 'camera' is not viewed
+          // navigator.permissions.query({ name: 'camera' }).then((permissionStatus) => {
+          //     console.log(permissionStatus.state); // "granted", "denied", or "prompt"
+          // }).catch((err) => {
+          //     console.error("Permission query for 'camera' is not supported in this browser.");
+          // });
+
+          // if (videoEl.current) {
+          //     videoEl.current.srcObject = stream;
+          //     videoEl.current.play();
+          // }
           // setQrOn(true);
           sessionStorage.setItem('cameraPermissionGranted', 'true');
           setPermissions(true);
@@ -55,6 +64,7 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
           setError(err);
           console.error('Error accessing media devices.', err);
           // setQrOn(false);
+          sessionStorage.setItem('cameraPermissionGranted', 'false');
           setPermissions(false);
       }
   };
@@ -75,10 +85,10 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
         handleOnScanSuccess(attestation);
         console.log(attestation)
 
-        setScannedAttestation(attestation);
-        if (attestation !== undefined) {
-            //   onScannedAttestation();
-        }
+        // setScannedAttestation(attestation);
+        // if (attestation !== undefined) {
+        //     //   onScannedAttestation();
+        // }
 
         // if (!videoEl?.current) {
         //     scanner?.current?.stop();
@@ -92,52 +102,12 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
     //   console.log(err);
   };
 
-//   useEffect(() => {
-//       console.log("start permission")
-//       requestCameraPermission();
-//       console.log("end permission")
-//   }, []);
 
   useEffect(() => {
       console.log("setQrOn");
       console.log(qrOn);
   }, [qrOn]);
 
-//   useEffect(() => {
-//       console.log("start create qr")
-//       if (videoEl?.current && !scanner.current) {
-//             console.log("dentro init");
-//           // 👉 Instantiate the QR Scanner
-//           scanner.current = new QrScanner(videoEl?.current, onScanSuccess, {
-//               onDecodeError: onScanFail,
-//               // 📷 This is the camera facing mode. In mobile devices, "environment" means back camera and "user" means front camera.
-//               preferredCamera: "environment",
-//               // 🖼 This will help us position our "QrFrame.svg" so that user can only scan when qr code is put in between our QrFrame.svg.
-//               highlightScanRegion: true,
-//               // 🔥 This will produce a yellow (default color) outline around the qr code that we scan, showing a proof that our qr-scanner is scanning that qr code.
-//               highlightCodeOutline: true,
-//               // 📦 A custom div which will pair with "highlightScanRegion" option above 👆. This gives us full control over our scan region.
-//               overlay: qrBoxEl?.current || undefined,
-//           });
-
-//           // 🚀 Start QR Scanner
-//           scanner?.current
-//             ?.start()
-//             .then(() => setQrOn(true))
-//             .catch((err) => {
-//               if (err) setQrOn(false);
-//             });
-//       }
-//       console.log("end create qr")
-
-//       // 🧹 Clean up on unmount.
-//       // 🚨 This removes the QR Scanner from rendering and using camera when it is closed or removed from the UI.
-//       return () => {
-//           if (!videoEl?.current) {
-//               scanner?.current?.stop();
-//           }
-//       };
-//   }, []);
 
   // ❌ If "camera" is not allowed in browser permissions, show an alert.
   useEffect(() => {
@@ -226,18 +196,18 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
   }, [isQrReaderVisible])
 
 
-    const handleOpenQrReader = () => {
-        setIsQrReaderVisible(true);
-    };
+    // const handleOpenQrReader = () => {
+    //     setIsQrReaderVisible(true);
+    // };
 
-    const handleCloseQrReader = () => {
-        setIsQrReaderVisible(false);
-    };
+    // const handleCloseQrReader = () => {
+    //     setIsQrReaderVisible(false);
+    // };
 
 
   return (
     <div>
-        {permissions ? (
+        {/* {permissions ? ( */}
             <div>
                 {isQrReaderVisible ? (
                     <div>
@@ -263,9 +233,9 @@ const QrReader_original = ({handleOnScanSuccess}: QRReaderProps) => {
                     <Button type="button" onClick={handleOpenQrReader}>Open QR Reader</Button>
                 )}
             </div>
-        ) : (
-            <Button type="button" onClick={onRequestCameraPermission}>Concede permissions for camera</Button>
-        )}
+        {/* ) : (
+            <Button type="button" onClick={onRequestCameraPermission}>Grant permissions for camera</Button>
+        )} */}
     </div>
   );
 };

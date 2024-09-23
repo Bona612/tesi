@@ -105,38 +105,46 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     const nft = data.token;
     console.log(data);
 
-    const handleBuyNFT = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleBuyNFT = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setTransactionCompleted(false);
-        // buyNFT(toast, data.token, isConnected, address, walletProvider);
+        console.log("pre timeout");
+        await buyNFT(toast, nft, isConnected, address, walletProvider);
+        console.log("post timeout");
         setTransactionCompleted(true);
         resetState();
         closeDialog();
     };
 
-    // PROBABILMENTE QUI NON PASSARE LISTNFT, MA SEMPLICEMENTE CHIAMARE UN'ALTRA FUNZIONE CHE NON FARà ALTRO CHE CHIAMARE LISTNFT
-    const handleListNFT = (listingPrice: number) => {
+    const handleListNFT = async (listingPrice: number) => {
         setTransactionCompleted(false);
-        // listNFT(toast, data.token, listingPrice, isConnected, address, walletProvider);
+        console.log("pre timeout");
+        await listNFT(toast, nft, listingPrice, isConnected, address, walletProvider);
+        console.log("post timeout");
         setTransactionCompleted(true);
         resetState();
         closeDialog();
     };
 
-    const handleCancelListNFT = () => {
+    const handleCancelListNFT = async () => {
         setTransactionCompleted(false);
-        // cancelListNFT(toast, data.token, isConnected, address, walletProvider);
+        console.log("pre timeout");
+        await cancelListNFT(toast, nft, isConnected, address, walletProvider);
+        console.log("post timeout");
         setTransactionCompleted(true);
         resetState();
         closeDialog();
     };
 
-    const handleRedeemNFT = (attestation: Attestation) => {
+    const handleRedeemNFT = async (attestation: Attestation) => {
         setTransactionCompleted(false);
-        // redeemNFT(toast, data.token, attestation, isConnected, address, walletProvider);
+        console.log("pre timeout");
+        await redeemNFT(toast, nft, attestation, isConnected, address, walletProvider);
+        console.log("post timeout");
         setTransactionCompleted(true);
         resetState();
         closeDialog();
     };
+
 
     // const handleOnScanSuccess = (attestation: Attestation) => {
     //     setAttestation(attestation);
@@ -191,7 +199,7 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                     nft.owner.id === ownerAddress ? (
                         nft.toRedeem ? (
                             <CardFooter className="flex justify-between">
-                                <AlertDialogRedeem handleRedeemNFT={handleRedeemNFT} />
+                                <AlertDialogRedeem isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleRedeemNFT={handleRedeemNFT} />
                             </CardFooter>
                         ) : (
                             <CardFooter className="flex justify-between">

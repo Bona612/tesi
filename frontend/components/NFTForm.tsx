@@ -560,6 +560,7 @@ export default function NFTForm() {
     const { tags, setTags } = useFilters();
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isOpenAttestation, setIsOpenAttestation] = useState<boolean>(false)
 
     const openDialog = () => {
         if (transactionCompleted) {
@@ -571,11 +572,28 @@ export default function NFTForm() {
             setIsOpen(false)
         }
     }
-
-
     const setOpen = (isOpen: boolean) => {
         if (transactionCompleted) {
             setIsOpen(isOpen)
+        }
+    }
+    const resetState = () => {
+        setIsOpen(false);
+        setTransactionCompleted(true);
+    }
+    const openDialogAttestation = () => {
+        if (transactionCompleted) {
+            setIsOpenAttestation(true)
+        }
+    }
+    const closeDialogAttestation = () => {
+        if (transactionCompleted) {
+            setIsOpenAttestation(false)
+        }
+    }
+    const setOpenAttestation = (isOpen: boolean) => {
+        if (transactionCompleted) {
+            setIsOpenAttestation(isOpen)
         }
     }
 
@@ -591,43 +609,6 @@ export default function NFTForm() {
             attestation: undefined,
         },
     })
-    
-    // vedere se usare questo
-    // useEffect(() => {
-    //     async function onTransactionCompleted(image, metadata, deleteCid) {
-    //         if (transactionCompleted) {
-    //             if (transactionResult) {
-    //                 const imageUploaded = await uploadImageToIPFS(image);
-    //                 console.log("imageUploaded " + imageUploaded);
-    //                 const metadataUploaded = await uploadMetadataToIPFS(metadata);
-    //                 console.log("metadataUploaded " + metadataUploaded);
-
-    //                 toast({
-    //                     title: "Successfull!.",
-    //                     description: "All good.",
-    //                 })
-    //             }
-    //             else {
-    //                 const imageDeleted = await deleteImageAPI({cid: deleteCid});
-    //                 console.log("imageDeleted " + imageDeleted);
-
-    //                 toast({
-    //                     title: "Uh oh! Something went wrong.",
-    //                     description: "There was a problem with your request.",
-    //                 })
-    //             }
-    //         }
-    //         else {
-    //             toast({
-    //                 title: "Transaction in execution.",
-    //                 description: "Execution.",
-    //             })
-    //         }
-    //     }
-        
-    //     onTransactionCompleted(image, metadata, deleteCid);
-        
-    // }, [transactionCompleted])
 
     // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -640,8 +621,9 @@ export default function NFTForm() {
         const result = await createToken(toast, values, isConnected, address, walletProvider);
         console.log("result: ", result);
 
-        setTransactionResult(result)
-        setTransactionCompleted(true)
+        setTransactionResult(result);
+        setTransactionCompleted(true);
+        resetState();
         closeDialog();
     }
 
@@ -798,8 +780,7 @@ export default function NFTForm() {
                                                 {field.value &&
                                                     <AttestationShower attestation={field.value} />
                                                 }
-                                                <AlertDialogRedeem handleOnScanSuccess={handleOnScanSuccess} /> 
-                                                {/* <RedeemOption handleOnScanSuccess={handleOnScanSuccess} /> */}
+                                                <AlertDialogRedeem isOpen={isOpenAttestation} openDialog={openDialogAttestation} setIsOpen={setOpenAttestation} closeDialog={closeDialogAttestation} isLoading={!transactionCompleted} handleOnScanSuccess={handleOnScanSuccess} />
                                             </div>
                                         </FormControl>
                                         <FormDescription>
@@ -816,8 +797,6 @@ export default function NFTForm() {
                     <Button type="button" onClick={handleReset} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mt-4">
                         Reset
                     </Button>
-                    {/* <Button type="submit" form="nft-form" className="font-bold py-2 px-4 rounded mt-4">Submit</Button> */}
-                    {/* <AlertDialogForm /> */}
                     <CreateDialog isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} />
                 </CardFooter>
             </Card>

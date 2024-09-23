@@ -106,35 +106,42 @@ export default function BaseNFTBox({ nft }: NFTProps) {
         console.log("Address:", address);
     }, [address]);
 
-    // QUI PROBABILMENTE FAR APPARIRE UN ALERT DIALOG O SIMILE PER  LA CONFERMA
-    const handleBuyNFT = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    
+    const handleBuyNFT = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setTransactionCompleted(false);
-        // buyNFT(toast, nft, isConnected, address, walletProvider);
+        console.log("pre timeout");
+        await buyNFT(toast, nft, isConnected, address, walletProvider);
+        console.log("post timeout");
         setTransactionCompleted(true);
         resetState();
         closeDialog();
     };
 
-    // PROBABILMENTE QUI NON PASSARE LISTNFT, MA SEMPLICEMENTE CHIAMARE UN'ALTRA FUNZIONE CHE NON FARà ALTRO CHE CHIAMARE LISTNFT
-    const handleListNFT = (listingPrice: number) => {
+    const handleListNFT = async (listingPrice: number) => {
         setTransactionCompleted(false);
-        // listNFT(toast, nft, listingPrice, isConnected, address, walletProvider);
+        console.log("pre timeout");
+        await listNFT(toast, nft, listingPrice, isConnected, address, walletProvider);
+        console.log("post timeout");
         setTransactionCompleted(true);
         resetState();
         closeDialog();
     };
 
-    const handleCancelListNFT = () => {
+    const handleCancelListNFT = async () => {
         setTransactionCompleted(false);
-        // cancelListNFT(toast, nft, isConnected, address, walletProvider);
+        console.log("pre timeout");
+        await cancelListNFT(toast, nft, isConnected, address, walletProvider);
+        console.log("post timeout");
         setTransactionCompleted(true);
         resetState();
         closeDialog();
     };
 
-    const handleRedeemNFT = (attestation: Attestation) => {
+    const handleRedeemNFT = async (attestation: Attestation) => {
         setTransactionCompleted(false);
-        // redeemNFT(toast, nft, attestation, isConnected, address, walletProvider);
+        console.log("pre timeout");
+        await redeemNFT(toast, nft, attestation, isConnected, address, walletProvider);
+        console.log("post timeout");
         setTransactionCompleted(true);
         resetState();
         closeDialog();
@@ -188,7 +195,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                     nft.owner.id === ownerAddress ? (
                         nft.toRedeem ? (
                             <CardFooter className="flex justify-between">
-                                <AlertDialogRedeem handleRedeemNFT={handleRedeemNFT} />
+                                <AlertDialogRedeem isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleRedeemNFT={handleRedeemNFT} />
                             </CardFooter>
                         ) : (
                             <CardFooter className="flex justify-between">
@@ -201,31 +208,3 @@ export default function BaseNFTBox({ nft }: NFTProps) {
         </div>
     )
 }
-
-
-
-// {nft.isListed && address &&
-//     <CardFooter className="flex justify-between">
-//         <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} />
-//         <DialogBuy handleOnClick={handleBuyNFT} disabled={nft.owner.id === address} price={weiToEth(nft.listingPrice)} />
-//         <Button onClick={handleBuyNFT} variant="outline" disabled={nft.owner.id === address}>Buy</Button>
-//         <Button onClick={handleBuyNFT} disabled={nft.owner.id === address}>Buy</Button>
-//     </CardFooter>
-// }
-
-
-
-// return (
-//   <main className="w-full min-h-screen m-auto flex flex-col justify-center items-center">
-//     <input type="file" id="file" ref={inputFile} onChange={handleChange} />
-//     <button disabled={uploading} onClick={uploadFile}>
-//       {uploading ? "Uploading..." : "Upload"}
-//     </button>
-//     {cid && (
-//       <img
-//         src={`https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${cid}`}
-//         alt="Image from IPFS"
-//       />
-//     )}
-//   </main>
-// );

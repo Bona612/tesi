@@ -22,18 +22,18 @@ interface AlertDialogRedeemProps {
   // attestation?: Attestation | undefined,
   handleOnScanSuccess?: (attestation: Attestation) => void,
   handleRedeemNFT?: (attestation: Attestation) => void,
-  isOpen?: boolean;
-  openDialog?: () => void;
-  setIsOpen?: (isOpen: boolean) => void;
-  closeDialog?: () => void;
-  isLoading?: boolean,
+  isOpen: boolean;
+  openDialog: () => void;
+  setIsOpen: (isOpen: boolean) => void;
+  closeDialog: () => void;
+  isLoading: boolean,
 }
 
 
-export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertDialogRedeemProps) {
+export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen, openDialog, setIsOpen, closeDialog, isLoading}: AlertDialogRedeemProps) {
   const [isQrReaderVisible, setIsQrReaderVisible] = useState<boolean>(false);
   const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
 
   const handleOpenQrReader = () => {
@@ -53,11 +53,12 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
     if (handleOnScanSuccess) {
       handleOnScanSuccess(scannedAttestation as Attestation)
     }
-    resetScannedAttestation()
+    setScannedAttestation(undefined);
+    closeDialog();
   }
-  // DA CAPIRE SE SERVIRà AGGIUNGERE UNA FUNZIONE DI CHIUSURA ALERT DIALOG
+  
   const handleOnClick = () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     if (isQrReaderVisible) {
       handleCloseQrReader();
     }
@@ -65,8 +66,10 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
     if (handleRedeemNFT) {
       handleRedeemNFT(scannedAttestation as Attestation);
     }
-    resetScannedAttestation()
+    // setIsLoading(false);
+    setScannedAttestation(undefined)
   };
+
   const handleNewAttestation = (attestation: Attestation) => {
     setScannedAttestation(attestation)
   }
@@ -75,12 +78,15 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
       handleCloseQrReader();
     }
     setScannedAttestation(undefined)
+    closeDialog();
   }
 
+  // AGGIUNGERE IL DISABLED SUL QR CODE BUTTON (dovrebbe essere fixato)
+  // AGGIUNGERE ANCHE IL ASYNC/AWAIT SU TUTTE LE FUNZIONI CHE USANO CHIAMATE ALLA BLOCKCHAIN
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen}>
       <AlertDialogTrigger asChild>
-        <Button className="font-bold py-2 px-4 rounded mt-4">Redeem</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4" onClick={openDialog}>Redeem</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -94,14 +100,14 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
           {scannedAttestation &&
             <AttestationShower attestation={scannedAttestation as Anchor} />
           }
-          <QrReader isQrReaderVisible={isQrReaderVisible} handleOnScanSuccess={handleNewAttestation} handleOpenQrReader={handleOpenQrReader} handleCloseQrReader={handleCloseQrReader} />
+          <QrReader isQrReaderVisible={isQrReaderVisible} handleOnScanSuccess={handleNewAttestation} handleOpenQrReader={handleOpenQrReader} handleCloseQrReader={handleCloseQrReader} isLoading={isLoading} />
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel 
           className={cn(
             "w-3/4 sm:w-full mx-auto"
           )}
-          onClick={resetScannedAttestation}>Cancel</AlertDialogCancel>
+          onClick={resetScannedAttestation} disabled={isLoading}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             className={cn(
               "w-3/4 sm:w-full mx-auto"
@@ -133,8 +139,7 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
               </Button>
             )}
           </AlertDialogAction>
-        </AlertDialogFooter>
-        
+        </AlertDialogFooter>  
       </AlertDialogContent>
     </AlertDialog>
     

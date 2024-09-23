@@ -107,100 +107,103 @@ export async function listNFT(toast: (arg0: { title: string; description: string
     console.log("address: ", address)
 
     try {
-        // const [owner, maintainer, oracle, alice, bob, mallory, hacker, carl, gasProvider ] = await ethers.getSigners();
-        // const oracle = "";
-        // Ensure the user is connected
-        if (!isConnected) throw new Error('User disconnected');
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        console.log("timeout fatto");
+
+        // // const [owner, maintainer, oracle, alice, bob, mallory, hacker, carl, gasProvider ] = await ethers.getSigners();
+        // // const oracle = "";
+        // // Ensure the user is connected
+        // if (!isConnected) throw new Error('User disconnected');
         
-        // Set up the ethers provider
-        const ethersProvider = new ethers.BrowserProvider(walletProvider as ethers.Eip1193Provider);
-        console.log("provider");
-        console.log(ethersProvider);
+        // // Set up the ethers provider
+        // const ethersProvider = new ethers.BrowserProvider(walletProvider as ethers.Eip1193Provider);
+        // console.log("provider");
+        // console.log(ethersProvider);
 
-        // // Get the block number
-        // const blockNumber = await ethersProvider.getBlockNumber();
-        // console.log("Latest block number:", blockNumber);
+        // // // Get the block number
+        // // const blockNumber = await ethersProvider.getBlockNumber();
+        // // console.log("Latest block number:", blockNumber);
         
-        // Get the signer from the provider
-        const signer = await ethersProvider.getSigner();
-        console.log("signer");
-        console.log(signer);
+        // // Get the signer from the provider
+        // const signer = await ethersProvider.getSigner();
+        // console.log("signer");
+        // console.log(signer);
 
-        // // Get the current nonce (transaction count)
-        // const currentNonce = await ethersProvider.getTransactionCount(await signer.getAddress());
-        // console.log("Latest transaction:", currentNonce);
+        // // // Get the current nonce (transaction count)
+        // // const currentNonce = await ethersProvider.getTransactionCount(await signer.getAddress());
+        // // console.log("Latest transaction:", currentNonce);
         
-        // The Contract object
-        const nftmcecontract1 = new ethers.Contract(NFTMarketplace_address.address, NFTMarketplace.abi);
+        // // The Contract object
+        // const nftmcecontract1 = new ethers.Contract(NFTMarketplace_address.address, NFTMarketplace.abi);
         
-        const nftmcecontract: NFTM = new ethers.Contract(NFTMarketplace_address.address, NFTMarketplace.abi, signer) as unknown as NFTM;
-        // Use the factory to create the contract instance
-        // const ercContract: ERC6956Full = ERC6956Full__factory.connect(ERC6956Full_address.address, signer);
-        console.log("nftmcecontract");
-        console.log(nftmcecontract);
+        // const nftmcecontract: NFTM = new ethers.Contract(NFTMarketplace_address.address, NFTMarketplace.abi, signer) as unknown as NFTM;
+        // // Use the factory to create the contract instance
+        // // const ercContract: ERC6956Full = ERC6956Full__factory.connect(ERC6956Full_address.address, signer);
+        // console.log("nftmcecontract");
+        // console.log(nftmcecontract);
 
-        // Check if the address is valid
-        if (!ethers.isAddress(await signer.getAddress())) {
-            throw new Error('Invalid address');
-        }
+        // // Check if the address is valid
+        // if (!ethers.isAddress(await signer.getAddress())) {
+        //     throw new Error('Invalid address');
+        // }
 
-        const nftmcecontractWithSigner = nftmcecontract.connect(signer);
-        // const nonce = 2
-        // // Prepare your transaction parameters
-        // const txParams = {
-        //     maxFeePerGas: 703230725 * 2
-        //     // other parameters as needed
-        // };
+        // const nftmcecontractWithSigner = nftmcecontract.connect(signer);
+        // // const nonce = 2
+        // // // Prepare your transaction parameters
+        // // const txParams = {
+        // //     maxFeePerGas: 703230725 * 2
+        // //     // other parameters as needed
+        // // };
 
-        console.log("control okay")
+        // console.log("control okay")
 
-        // QUI DA CAMBIARE LA FUNZIONE DOPO AVERLA TESTATA, NON SARà PIù transferanchor MA createAnchor
-        let receipt_mint: ethers.ContractTransactionReceipt | null = null;
-        // const NULLADDR = ethers.ZeroAddress;
+        // // QUI DA CAMBIARE LA FUNZIONE DOPO AVERLA TESTATA, NON SARà PIù transferanchor MA createAnchor
+        // let receipt_mint: ethers.ContractTransactionReceipt | null = null;
+        // // const NULLADDR = ethers.ZeroAddress;
         
-        console.log("approve");
+        // console.log("approve");
         
-        /// QUESTA PARTE è DA VEDERE, SERVE FARE QUESTA OPERAZIONE O UNA VOLTA PER TUTTE, OPPURE OGNI VOLTA PER OGNI TOKEN
-        // Assuming you have a contract instance for the NFT (IERC721) and the marketplace
-        const ercContract: IERC6956Full = new ethers.Contract(ERC6956Full_address.address, ERC6956Full.abi, signer) as unknown as IERC6956Full;
-        // Check if the NFT is already approved for the marketplace
-        const approvedAddress = await ercContract.getApproved(nft.id);
-        console.log(`Approved address for token ${nft.id}:`, approvedAddress);
+        // /// QUESTA PARTE è DA VEDERE, SERVE FARE QUESTA OPERAZIONE O UNA VOLTA PER TUTTE, OPPURE OGNI VOLTA PER OGNI TOKEN
+        // // Assuming you have a contract instance for the NFT (IERC721) and the marketplace
+        // const ercContract: IERC6956Full = new ethers.Contract(ERC6956Full_address.address, ERC6956Full.abi, signer) as unknown as IERC6956Full;
+        // // Check if the NFT is already approved for the marketplace
+        // const approvedAddress = await ercContract.getApproved(nft.id);
+        // console.log(`Approved address for token ${nft.id}:`, approvedAddress);
 
-        // If not approved, approve the marketplace to transfer the NFT
-        if (approvedAddress !== NFTMarketplace_address.address) {
-            console.log("Approving the marketplace to transfer the NFT...");
-            // Approve the marketplace to transfer the NFT
-            await ercContract.approve(NFTMarketplace_address.address, nft.id);
-        } else {
-            console.log("Marketplace is already approved for this NFT.");
-        }
+        // // If not approved, approve the marketplace to transfer the NFT
+        // if (approvedAddress !== NFTMarketplace_address.address) {
+        //     console.log("Approving the marketplace to transfer the NFT...");
+        //     // Approve the marketplace to transfer the NFT
+        //     await ercContract.approve(NFTMarketplace_address.address, nft.id);
+        // } else {
+        //     console.log("Marketplace is already approved for this NFT.");
+        // }
         
 
-        console.log(ERC6956Full_address.address, nft.id, ethToWei(listingPrice));
-        // QUI da cambiare in .address
-        const tx_mint = await nftmcecontractWithSigner.listItem(ERC6956Full_address.address, nft.id, ethToWei(0.0001)); // , txParams);
-        receipt_mint = await tx_mint.wait();
-        console.log('Transaction confirmed:', receipt_mint);
+        // console.log(ERC6956Full_address.address, nft.id, ethToWei(listingPrice));
+        // // QUI da cambiare in .address
+        // const tx_mint = await nftmcecontractWithSigner.listItem(ERC6956Full_address.address, nft.id, ethToWei(0.0001)); // , txParams);
+        // receipt_mint = await tx_mint.wait();
+        // console.log('Transaction confirmed:', receipt_mint);
 
-        const result = receipt_mint as ethers.ContractTransactionReceipt;
-        if (result.status) {
-            toast({
-                title: "Successfull!.",
-                description: "All good.",
-            })
+        // const result = receipt_mint as ethers.ContractTransactionReceipt;
+        // if (result.status) {
+        //     toast({
+        //         title: "Successfull!.",
+        //         description: "All good.",
+        //     })
 
-            console.log("mostrato");
-        }
-        else {
-            toast({
-                title: "Uh oh! Something went wrong.",
-                description: "There was a problem with your request.",
-            })
-            console.log("mostrato");
-        }
+        //     console.log("mostrato");
+        // }
+        // else {
+        //     toast({
+        //         title: "Uh oh! Something went wrong.",
+        //         description: "There was a problem with your request.",
+        //     })
+        //     console.log("mostrato");
+        // }
 
-        return receipt_mint;
+        return null;
     } catch (error) {
         console.error('Error:', error);
         return null;
@@ -303,90 +306,92 @@ export async function redeemNFT(toast: (arg0: { title: string; description: stri
     console.log("address: ", address)
 
     try {
-        // const [owner, maintainer, oracle, alice, bob, mallory, hacker, carl, gasProvider ] = await ethers.getSigners();
-        // const oracle = "";
-        // Ensure the user is connected
-        if (!isConnected) throw new Error('User disconnected');
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+
+        // // const [owner, maintainer, oracle, alice, bob, mallory, hacker, carl, gasProvider ] = await ethers.getSigners();
+        // // const oracle = "";
+        // // Ensure the user is connected
+        // if (!isConnected) throw new Error('User disconnected');
         
-        // Set up the ethers provider
-        const ethersProvider = new ethers.BrowserProvider(walletProvider as ethers.Eip1193Provider);
-        console.log("provider");
-        console.log(ethersProvider);
+        // // Set up the ethers provider
+        // const ethersProvider = new ethers.BrowserProvider(walletProvider as ethers.Eip1193Provider);
+        // console.log("provider");
+        // console.log(ethersProvider);
 
-        // // Get the block number
-        // const blockNumber = await ethersProvider.getBlockNumber();
-        // console.log("Latest block number:", blockNumber);
+        // // // Get the block number
+        // // const blockNumber = await ethersProvider.getBlockNumber();
+        // // console.log("Latest block number:", blockNumber);
         
-        // Get the signer from the provider
-        const signer = await ethersProvider.getSigner();
-        console.log("signer");
-        console.log(signer);
+        // // Get the signer from the provider
+        // const signer = await ethersProvider.getSigner();
+        // console.log("signer");
+        // console.log(signer);
 
-        // // Get the current nonce (transaction count)
-        // const currentNonce = await ethersProvider.getTransactionCount(await signer.getAddress());
-        // console.log("Latest transaction:", currentNonce);
+        // // // Get the current nonce (transaction count)
+        // // const currentNonce = await ethersProvider.getTransactionCount(await signer.getAddress());
+        // // console.log("Latest transaction:", currentNonce);
         
-        // The Contract object
-        const nftmcecontract1 = new ethers.Contract(NFTMarketplace_address.address, NFTMarketplace.abi);
+        // // The Contract object
+        // const nftmcecontract1 = new ethers.Contract(NFTMarketplace_address.address, NFTMarketplace.abi);
         
-        const nftmcecontract: NFTM = new ethers.Contract(NFTMarketplace_address.address, NFTMarketplace.abi, signer) as unknown as NFTM;
-        // Use the factory to create the contract instance
-        // const ercContract: ERC6956Full = ERC6956Full__factory.connect(ERC6956Full_address.address, signer);
-        console.log("nftmcecontract");
-        console.log(nftmcecontract);
+        // const nftmcecontract: NFTM = new ethers.Contract(NFTMarketplace_address.address, NFTMarketplace.abi, signer) as unknown as NFTM;
+        // // Use the factory to create the contract instance
+        // // const ercContract: ERC6956Full = ERC6956Full__factory.connect(ERC6956Full_address.address, signer);
+        // console.log("nftmcecontract");
+        // console.log(nftmcecontract);
 
-        // Check if the address is valid
-        if (!ethers.isAddress(await signer.getAddress())) {
-            throw new Error('Invalid address');
-        }
+        // // Check if the address is valid
+        // if (!ethers.isAddress(await signer.getAddress())) {
+        //     throw new Error('Invalid address');
+        // }
 
-        const nftmcecontractWithSigner = nftmcecontract.connect(signer);
-        // const nonce = 2
-        // // Prepare your transaction parameters
-        // const txParams = {
-        //     maxFeePerGas: 703230725 * 2
-        //     // other parameters as needed
-        // };
+        // const nftmcecontractWithSigner = nftmcecontract.connect(signer);
+        // // const nonce = 2
+        // // // Prepare your transaction parameters
+        // // const txParams = {
+        // //     maxFeePerGas: 703230725 * 2
+        // //     // other parameters as needed
+        // // };
 
-        console.log("control okay")
+        // console.log("control okay")
 
-        // QUI DA CAMBIARE LA FUNZIONE DOPO AVERLA TESTATA, NON SARà PIù transferanchor MA createAnchor
-        let receipt_mint: ethers.ContractTransactionReceipt | null = null;
-        // const NULLADDR = ethers.ZeroAddress;
+        // // QUI DA CAMBIARE LA FUNZIONE DOPO AVERLA TESTATA, NON SARà PIù transferanchor MA createAnchor
+        // let receipt_mint: ethers.ContractTransactionReceipt | null = null;
+        // // const NULLADDR = ethers.ZeroAddress;
         
-        console.log(ERC6956Full_address.address, nft.id);
+        // console.log(ERC6956Full_address.address, nft.id);
 
-        // QUI SI DOVRà RICHIAMARE LA TRASFORMAZIONE PER attestation E data (che è la prova)
-        const responseSA = await signAttestationAPI({attestation, signer})
-        console.log("response: ", responseSA)
-        const signedAttestation = responseSA.response;
+        // // QUI SI DOVRà RICHIAMARE LA TRASFORMAZIONE PER attestation E data (che è la prova)
+        // const responseSA = await signAttestationAPI({attestation, signer})
+        // console.log("response: ", responseSA)
+        // const signedAttestation = responseSA.response;
 
-        const responseMF = await merkleTreeAPI({anchor: attestation.anchor})
-        console.log("response: ", responseMF)
-        const data = responseMF.response;
+        // const responseMF = await merkleTreeAPI({anchor: attestation.anchor})
+        // console.log("response: ", responseMF)
+        // const data = responseMF.response;
 
-        const tx_mint = await nftmcecontractWithSigner["redeemItem(address,uint256,bytes,bytes)"](ERC6956Full_address.address, nft.id, signedAttestation, data); // , txParams);
-        receipt_mint = await tx_mint.wait();
-        console.log('Transaction confirmed:', receipt_mint);
+        // const tx_mint = await nftmcecontractWithSigner["redeemItem(address,uint256,bytes,bytes)"](ERC6956Full_address.address, nft.id, signedAttestation, data); // , txParams);
+        // receipt_mint = await tx_mint.wait();
+        // console.log('Transaction confirmed:', receipt_mint);
 
-        const result = receipt_mint as ethers.ContractTransactionReceipt;
-        if (result.status) {
-            toast({
-                title: "Successfull!.",
-                description: "All good.",
-            })
+        // const result = receipt_mint as ethers.ContractTransactionReceipt;
+        // if (result.status) {
+        //     toast({
+        //         title: "Successfull!.",
+        //         description: "All good.",
+        //     })
 
-            console.log("mostrato");
-        }
-        else {
-            toast({
-                title: "Uh oh! Something went wrong.",
-                description: "There was a problem with your request.",
-            })
-            console.log("mostrato");
-        }
+        //     console.log("mostrato");
+        // }
+        // else {
+        //     toast({
+        //         title: "Uh oh! Something went wrong.",
+        //         description: "There was a problem with your request.",
+        //     })
+        //     console.log("mostrato");
+        // }
 
-        return receipt_mint;
+        return null;
     } catch (error) {
         console.error('Error:', error);
         return null;

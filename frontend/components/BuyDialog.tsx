@@ -26,7 +26,7 @@ interface DialogBuyProps {
 }
 
 
-export function DialogBuy({handleOnClick, isLoading, openDialog, setIsOpen, closeDialog ,isOpen, disabled, price}: DialogBuyProps) {
+export function DialogBuy({handleOnClick, isLoading, openDialog, setIsOpen, closeDialog, isOpen, disabled, price}: DialogBuyProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -55,7 +55,7 @@ export function DialogBuy({handleOnClick, isLoading, openDialog, setIsOpen, clos
         </div>
         <DialogFooter>
             <DialogClose asChild>
-                <Button type="button" variant="secondary" onClick={closeDialog}>
+                <Button type="button" variant="secondary" onClick={closeDialog} disabled={isLoading}>
                     Cancel
                 </Button>
             </DialogClose>

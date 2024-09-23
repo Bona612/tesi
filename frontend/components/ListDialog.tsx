@@ -104,7 +104,7 @@ export function DialogList({handleOnClick, isLoading, openDialog, setIsOpen, clo
           </div>
         <DialogFooter>
             <DialogClose asChild>
-                <Button type="button" variant="secondary" onClick={closeDialog}>
+                <Button type="button" variant="secondary" onClick={closeDialog} disabled={isLoading}>
                     Cancel
                 </Button>
             </DialogClose>

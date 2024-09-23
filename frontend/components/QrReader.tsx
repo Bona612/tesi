@@ -21,9 +21,10 @@ interface QRReaderProps {
     handleOnScanSuccess: (attestation: Attestation) => void,
     handleOpenQrReader: () => void;
     handleCloseQrReader: () => void;
+    isLoading: boolean;
 }
 
-const QrReader_original = ({isQrReaderVisible, handleOnScanSuccess, handleOpenQrReader, handleCloseQrReader}: QRReaderProps) => {
+const QrReader = ({isQrReaderVisible, handleOnScanSuccess, handleOpenQrReader, handleCloseQrReader, isLoading}: QRReaderProps) => {
   // QR States
   const scanner = useRef<QrScanner>();
   const videoEl = useRef<HTMLVideoElement>(null);
@@ -211,7 +212,7 @@ const QrReader_original = ({isQrReaderVisible, handleOnScanSuccess, handleOpenQr
             <div>
                 {isQrReaderVisible ? (
                     <div>
-                        <Button type="button" onClick={handleCloseQrReader}>Close QR Reader</Button>
+                        <Button type="button" onClick={handleCloseQrReader} disabled={isLoading}>Close QR Reader</Button>
                         <div className="qr-reader">
                             {/* <button onClick={onClose}>Close</button> */}
                             <video ref={videoEl} className="rounded-lg"></video>
@@ -230,7 +231,7 @@ const QrReader_original = ({isQrReaderVisible, handleOnScanSuccess, handleOpenQr
                         </div>
                     </div>
                 ) : (
-                    <Button type="button" onClick={handleOpenQrReader}>Open QR Reader</Button>
+                    <Button type="button" onClick={handleOpenQrReader} disabled={isLoading}>Open QR Reader</Button>
                 )}
             </div>
         {/* ) : (
@@ -240,4 +241,4 @@ const QrReader_original = ({isQrReaderVisible, handleOnScanSuccess, handleOpenQr
   );
 };
 
-export default QrReader_original;
+export default QrReader;

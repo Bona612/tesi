@@ -55,7 +55,7 @@ export function CreateDialog({isOpen, openDialog, setIsOpen, closeDialog, isLoad
         </div>
         <DialogFooter>
             <DialogClose asChild>
-                <Button type="button" variant="secondary" onClick={closeDialog}>
+                <Button type="button" variant="secondary" onClick={closeDialog} disabled={isLoading}>
                     Cancel
                 </Button>
             </DialogClose>

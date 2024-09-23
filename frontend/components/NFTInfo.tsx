@@ -184,14 +184,10 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                 {nft.isListed ? (
                     ownerAddress && nft.owner.id !== ownerAddress ? (
                         <CardFooter className="flex justify-between">
-                            {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
                             <DialogBuy handleOnClick={handleBuyNFT} isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} disabled={false} price={weiToEth(nft.listingPrice)} />
-                            {/* <Button onClick={handleBuyNFT} variant="outline" disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button>
-                            <Button onClick={handleBuyNFT} disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button> */}
                         </CardFooter>
                     ) : (
                         <CardFooter className="flex justify-between">
-                            {/* <DialogCancelList isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} /> */}
                             <DialogCancelList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
                         </CardFooter>
                     )
@@ -208,29 +204,6 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                         )
                     ) : <></>
                 )}
-                {/* {nft.isListed ? (
-                    ownerAddress && nft.owner.id !== ownerAddress ? (
-                        <CardFooter className="flex justify-between">
-                            <DialogBuy handleOnClick={handleBuyNFT} isLoading={!transactionCompleted} disabled={nft.owner.id === ownerAddress} price={weiToEth(nft.listingPrice)} />
-                        </CardFooter>
-                    ) : (
-                        <CardFooter className="flex justify-between">
-                            <DialogCancelList isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
-                        </CardFooter>
-                    )
-                ) : (
-                    nft.owner.id === ownerAddress ? (
-                        nft.toRedeem ? (
-                            <CardFooter className="flex justify-between">
-                                <AlertDialogRedeem handleRedeemNFT={handleRedeemNFT} />
-                            </CardFooter>
-                        ) : (
-                            <CardFooter className="flex justify-between">
-                                <DialogList isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
-                            </CardFooter>
-                        )
-                    ) : <></>
-                )} */}
             </Card>
         </div>
     );

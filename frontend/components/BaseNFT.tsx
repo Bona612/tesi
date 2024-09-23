@@ -106,7 +106,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
         console.log("Address:", address);
     }, [address]);
 
-    
+
     const handleBuyNFT = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setTransactionCompleted(false);
         console.log("pre timeout");
@@ -180,14 +180,10 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                 {nft.isListed ? (
                     ownerAddress && nft.owner.id !== ownerAddress ? (
                         <CardFooter className="flex justify-between">
-                            {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
                             <DialogBuy handleOnClick={handleBuyNFT} isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} disabled={false} price={weiToEth(nft.listingPrice)} />
-                            {/* <Button onClick={handleBuyNFT} variant="outline" disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button>
-                            <Button onClick={handleBuyNFT} disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button> */}
                         </CardFooter>
                     ) : (
                         <CardFooter className="flex justify-between">
-                            {/* <DialogCancelList isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} /> */}
                             <DialogCancelList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
                         </CardFooter>
                     )

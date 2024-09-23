@@ -536,11 +536,6 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         }
 
         return receipt_mint;
-        // await expect(ercContract.connect(signer)["transferAnchor(bytes)"](att))
-        // .to.emit(ercContract, "Transfer") // Standard ERC721 event
-        // .withArgs(NULLADDR, signer.getAddress, 1);
-
-        // setCIDbyToken(uint256 tokenId, string memory cid)
     } 
     catch (error) {
         console.error('Error:', error);
@@ -657,12 +652,12 @@ export default function NFTForm() {
         }
     };
 
-    // const [prevAttestation, setPrevAttestation] = useState<Attestation | undefined>(undefined);
     const handleOnScanSuccess = (attestation: Attestation) => {
-        // if (more) {
-        //     setPrevAttestation(form.getValues("attestation") as Attestation);
-        // }
-        form.setValue("attestation", attestation);
+        console.log("dentro confirm: ", attestation);
+        if (attestation !== undefined) {
+            console.log("attestation diversa da undefined");
+            form.setValue("attestation", attestation);
+        }
     }
     // const handleCancel = (attestation: Attestation) => {
     //     form.setValue("attestation", prevAttestation);

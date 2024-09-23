@@ -49,34 +49,25 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
     context.setString('tokenId', event.params.tokenId.toString());
     IpfsData.createWithContext(cid, context);
     
-    
     token.metadata = cid;
 
     token.isListed = false;
     token.toRedeem = false;
     token.listingPrice = BigInt.fromI32(0);
-    
-    transaction.from = event.params.from.toHexString();
-    transaction.to = event.params.to.toHexString();
-    transaction.token = event.params.tokenId.toHexString();
-
-    transaction.timestamp = event.block.timestamp;
-    transaction.save();
-
-    const txs = token.transactions.load();
-    txs.push(transaction);
   }
+
+  transaction.from = event.params.from.toHexString();
+  transaction.to = event.params.to.toHexString();
+  transaction.token = event.params.tokenId.toHexString();
+
+  transaction.timestamp = event.block.timestamp;
+  transaction.save();
 
   // Load or create the new Owner entity
   let newOwner = Owner.load(event.params.to.toHexString());
   if (!newOwner) {
     newOwner = new Owner(event.params.to.toHexString());
   }
-  let tokens = newOwner.nfts.load()
-  tokens.push(token);
-  const txsReceived = newOwner.transactionsReceived.load();
-  txsReceived.push(transaction);
-
   newOwner.save();
   log.info('New Owner: {}', [newOwner.id]);
 
@@ -87,8 +78,6 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
   if (!prevOwner) {
     prevOwner = new Owner(event.params.from.toHexString());
   }
-  const txs = newOwner.transactions.load();
-  txs.push(transaction);
   prevOwner.save();
 
   token.owner = event.params.to.toHexString();

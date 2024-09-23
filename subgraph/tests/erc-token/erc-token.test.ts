@@ -12,7 +12,7 @@ import {
 import { handleAnchorTransfer, handleItemListed, handleItemBought, handleItemCanceled, handleItemRedeemed } from "../../src/erc-token";
 import { IpfsData } from "../../generated/templates";
 import { handleIpfsData } from '../../src/ipfs-data';
-import { Owner, TokenMetadata } from "../../generated/schema";
+import { Owner, Token, TokenMetadata } from "../../generated/schema";
 
 
 // Mock event creation helpers
@@ -67,6 +67,10 @@ describe("handleNewGravatar()", () => {
     assert.fieldEquals("Token", tokenId.toString(), "owner", to.toHexString());
     assert.fieldEquals("Token", tokenId.toString(), "metadata", cid);
 
+    const token = Token.load(tokenId.toString());
+    log.info("transactions: {}, {}, {}, {}", [token!.transactions.load().length.toString(), token!.transactions.load()[0].id, token!.transactions.load()[0].from, token!.transactions.load()[0].to]);
+    // assert.fieldEquals("Token", tokenId.toString(), "transactions");
+
     assert.dataSourceCount('IpfsData', 1)
 
     // Now we have to mock the dataSource metadata and specifically dataSource.stringParam()
@@ -108,6 +112,7 @@ describe("handleNewGravatar()", () => {
     assert.stringEquals(newOwner!.nfts.load()[0].id, tokenId.toString());
     assert.stringEquals(prevOwner!.transactions.load()[0].id, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1");
     assert.stringEquals(newOwner!.transactionsReceived.load()[0].id, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1");
+
 
     logStore();
     logDataSources('IpfsData');

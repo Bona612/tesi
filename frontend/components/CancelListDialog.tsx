@@ -11,20 +11,25 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Loader2 } from "lucide-react"
 
 
 interface DialogCancelListProps {
     handleOnClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
-    disabled?: boolean
+    isOpen: boolean;
+    openDialog: () => void;
+    setIsOpen: (isOpen: boolean) => void;
+    closeDialog: () => void;
+    isLoading: boolean,
 }
 
 
-export function DialogCancelList({handleOnClick, disabled = false}: DialogCancelListProps) {
+export function DialogCancelList({handleOnClick, isOpen, openDialog, setIsOpen, closeDialog, isLoading}: DialogCancelListProps) {
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {/* <Button onClick={handleOnClick} variant="outline" disabled={disabled}>Buy {price} ETH</Button> */}
-        <Button className="font-bold py-2 px-4 rounded mt-4">Cancel listing</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4" onClick={openDialog}>Cancel listing</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -47,11 +52,21 @@ export function DialogCancelList({handleOnClick, disabled = false}: DialogCancel
         </div>
         <DialogFooter>
             <DialogClose asChild>
-                <Button type="button" variant="secondary">
+                <Button type="button" variant="secondary" onClick={closeDialog}>
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="button" onClick={handleOnClick}>Cancel listing</Button>
+            {/* <Button type="button" onClick={handleOnClick}>Cancel listing</Button> */}
+            <Button type="button" onClick={handleOnClick} disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "Cancel listing"
+              )}
+            </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

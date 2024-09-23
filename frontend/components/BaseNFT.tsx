@@ -56,6 +56,7 @@ import { DialogCancelList } from "./CancelListDialog";
 import { AlertDialogRedeem } from "./AlertDialogRedeem";
 import { buyNFT, cancelListNFT, listNFT, redeemNFT } from "@/utils/contracts";
 import { useWallet } from "@/context/WalletContext";
+import { useToast } from "@/components/ui/use-toast";
 
 
 
@@ -71,7 +72,33 @@ export default function BaseNFTBox({ nft }: NFTProps) {
     const { walletProvider } = useWeb3ModalProvider()
     const { address } = useWallet();
 
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [transactionCompleted, setTransactionCompleted] = useState<boolean>(true);
     // const [attestation, setAttestation] = useState<Attestation | undefined>(undefined);
+
+    const { toast } = useToast();
+
+    const openDialog = () => {
+        if (transactionCompleted) {
+            setIsOpen(true)
+        }
+    }
+    const closeDialog = () => {
+        if (transactionCompleted) {
+            setIsOpen(false)
+        }
+    }
+
+    const setOpen = (isOpen: boolean) => {
+        if (transactionCompleted) {
+            setIsOpen(isOpen)
+        }
+    }
+
+    const resetState = () => {
+        setIsOpen(false);
+        setTransactionCompleted(true);
+    }
 
     console.log(address);
 
@@ -81,20 +108,36 @@ export default function BaseNFTBox({ nft }: NFTProps) {
 
     // QUI PROBABILMENTE FAR APPARIRE UN ALERT DIALOG O SIMILE PER  LA CONFERMA
     const handleBuyNFT = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        buyNFT(nft, isConnected, address, walletProvider);
+        setTransactionCompleted(false);
+        // buyNFT(toast, nft, isConnected, address, walletProvider);
+        setTransactionCompleted(true);
+        resetState();
+        closeDialog();
     };
 
     // PROBABILMENTE QUI NON PASSARE LISTNFT, MA SEMPLICEMENTE CHIAMARE UN'ALTRA FUNZIONE CHE NON FARà ALTRO CHE CHIAMARE LISTNFT
     const handleListNFT = (listingPrice: number) => {
-        listNFT(nft, listingPrice, isConnected, address, walletProvider);
+        setTransactionCompleted(false);
+        // listNFT(toast, nft, listingPrice, isConnected, address, walletProvider);
+        setTransactionCompleted(true);
+        resetState();
+        closeDialog();
     };
 
     const handleCancelListNFT = () => {
-        cancelListNFT(nft, isConnected, address, walletProvider);
+        setTransactionCompleted(false);
+        // cancelListNFT(toast, nft, isConnected, address, walletProvider);
+        setTransactionCompleted(true);
+        resetState();
+        closeDialog();
     };
 
     const handleRedeemNFT = (attestation: Attestation) => {
-        redeemNFT(nft, attestation, isConnected, address, walletProvider);
+        setTransactionCompleted(false);
+        // redeemNFT(toast, nft, attestation, isConnected, address, walletProvider);
+        setTransactionCompleted(true);
+        resetState();
+        closeDialog();
     };
 
     // const handleOnScanSuccess = (attestation: Attestation) => {
@@ -131,13 +174,14 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                     ownerAddress && nft.owner.id !== ownerAddress ? (
                         <CardFooter className="flex justify-between">
                             {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
-                            <DialogBuy handleOnClick={handleBuyNFT} disabled={nft.owner.id === ownerAddress} price={weiToEth(nft.listingPrice)} />
+                            <DialogBuy handleOnClick={handleBuyNFT} isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} disabled={false} price={weiToEth(nft.listingPrice)} />
                             {/* <Button onClick={handleBuyNFT} variant="outline" disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button>
                             <Button onClick={handleBuyNFT} disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button> */}
                         </CardFooter>
                     ) : (
                         <CardFooter className="flex justify-between">
-                            <DialogCancelList handleOnClick={handleCancelListNFT} />
+                            {/* <DialogCancelList isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} /> */}
+                            <DialogCancelList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
                         </CardFooter>
                     )
                 ) : (
@@ -148,7 +192,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                             </CardFooter>
                         ) : (
                             <CardFooter className="flex justify-between">
-                                <DialogList handleOnClick={handleListNFT} />
+                                <DialogList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
                             </CardFooter>
                         )
                     ) : <></>

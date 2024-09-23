@@ -11,22 +11,28 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Loader2 } from "lucide-react"
 
 
 interface DialogBuyProps {
     handleOnClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
-    disabled?: boolean,
+    isOpen: boolean;
+    openDialog: () => void;
+    setIsOpen: (isOpen: boolean) => void;
+    closeDialog: () => void;
+    isLoading: boolean,
+    disabled: boolean,
     price: number
 }
 
 
-export function DialogBuy({handleOnClick, disabled = false, price}: DialogBuyProps) {
+export function DialogBuy({handleOnClick, isLoading, openDialog, setIsOpen, closeDialog ,isOpen, disabled, price}: DialogBuyProps) {
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {/* <Button onClick={handleOnClick} variant="outline" disabled={disabled}>Buy {price} ETH</Button> */}
-        <Button className="font-bold py-2 px-4 rounded mt-4">Buy {price} ETH</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4" onClick={openDialog}>Buy {price} ETH</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -49,11 +55,21 @@ export function DialogBuy({handleOnClick, disabled = false, price}: DialogBuyPro
         </div>
         <DialogFooter>
             <DialogClose asChild>
-                <Button type="button" variant="secondary">
+                <Button type="button" variant="secondary" onClick={closeDialog}>
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="button" onClick={handleOnClick}>Buy</Button>
+            {/* <Button type="button" onClick={handleOnClick}>Buy</Button> */}
+            <Button type="button" onClick={handleOnClick} disabled={isLoading || disabled}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                `Buy ${price} ETH`
+              )}
+            </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

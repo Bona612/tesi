@@ -1,3 +1,6 @@
+"use client";
+
+
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -9,22 +12,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Loader2 } from "lucide-react"
+import { Dispatch, SetStateAction, useState } from "react";
   
 
 type CreateDialogProps = {
-    // text: string;
-    // handleOnClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
-    // disabled?: boolean,
+    isOpen: boolean;
+    openDialog: () => void;
+    setIsOpen: (isOpen: boolean) => void;
+    closeDialog: () => void;
+    isLoading: boolean,
 }
 
   
-export function CreateDialog({}: CreateDialogProps) {
+export function CreateDialog({isOpen, openDialog, setIsOpen, closeDialog, isLoading}: CreateDialogProps) {
+  // const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {/* <Button onClick={handleOnClick} variant="outline" disabled={disabled}>Buy {price} ETH</Button> */}
-        <Button className="font-bold py-2 px-4 rounded mt-4">Create NFT</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4" onClick={openDialog}>Create NFT</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -47,35 +55,23 @@ export function CreateDialog({}: CreateDialogProps) {
         </div>
         <DialogFooter>
             <DialogClose asChild>
-                <Button type="button" variant="secondary">
+                <Button type="button" variant="secondary" onClick={closeDialog}>
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="submit" form="nft-form">Create</Button>
+            {/* <Button type="submit" form="nft-form">Create</Button> */}
+            <Button type="submit" form="nft-form" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "Create"
+              )}
+            </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   )
-  // return (
-  //   <AlertDialog>
-  //     <AlertDialogTrigger asChild>
-  //       <Button className="font-bold py-2 px-4 rounded mt-4">{text}</Button>
-  //     </AlertDialogTrigger>
-  //     <AlertDialogContent>
-  //       <AlertDialogHeader>
-  //         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-  //         <AlertDialogDescription>
-  //           This action cannot be undone. This will permanently delete your
-  //           account and remove your data from our servers.
-  //         </AlertDialogDescription>
-  //       </AlertDialogHeader>
-  //       <AlertDialogFooter>
-  //         <AlertDialogCancel>Cancel</AlertDialogCancel>
-  //         <AlertDialogAction asChild>
-  //           <Button onClick={handleOnClick} type="button">Confirm</Button>
-  //         </AlertDialogAction>
-  //       </AlertDialogFooter>
-  //     </AlertDialogContent>
-  //   </AlertDialog>
-  // )
 }

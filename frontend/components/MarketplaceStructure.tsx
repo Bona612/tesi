@@ -52,13 +52,13 @@ export default function MarketplaceStructure() {
   
   // const skip: number = 0
   // const [first, setFirst] = useState<number>(3);
-  const [first, setFirst] = useState<number>(0);
-  const [skip, setSkip] = useState<number>(0);
+  // const [first, setFirst] = useState<number>(0);
+  // const [skip, setSkip] = useState<number>(0);
   // const [tagList, setTagList] = useState<Tag[] | null>([]);
   // const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [isPending, startTransition] = useTransition();
 
-  const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { searchText, setSearchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
 
@@ -160,10 +160,17 @@ export default function MarketplaceStructure() {
     // Update the 'page' parameter
     params.set('page', page.toString());
 
+    // Update the 'searchText' parameter (only if searchText is not empty)
+    if (searchText !== "") {
+      params.set('searchText', searchText);
+    } else {
+      params.delete('searchText');
+    }
+
     // Replace the URL with the updated search params
     const newUrl = params.toString() ? `?${params.toString()}` : pathname;
     router.push(newUrl);
-  }, [tags, orderBy, orderDirection, page]);
+  }, [searchText, tags, orderBy, orderDirection, page]);
 
   // Initialize state based on URL parameters
   useEffect(() => {
@@ -180,10 +187,12 @@ export default function MarketplaceStructure() {
     console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
     const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
     const pageParam = searchParams.get('page') || page;
+    const searchTextParam = searchParams.get('searchText') || searchText;
     setTags(tagsArray as Tag[]);
     setOrderBy(findOrderBy(orderByParam));
     setOrderDirection(orderDirectionMap[orderDirectionParam]);
     setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    setSearchText(searchTextParam);
     console.log("orderDirectionParam: ", orderDirectionParam);
     console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
     console.log("fem sta prova2: ", orderDirectionParam);
@@ -202,10 +211,12 @@ export default function MarketplaceStructure() {
     console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
     const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
     const pageParam = searchParams.get('page') || page;
+    const searchTextParam = searchParams.get('searchText') || searchText;
     setTags(tagsArray as Tag[]);
     setOrderBy(findOrderBy(orderByParam));
     setOrderDirection(orderDirectionMap[orderDirectionParam]);
     setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    setSearchText(searchTextParam);
     console.log("orderDirectionParam: ", orderDirectionParam);
     console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
     console.log("fem sta prova2: ", orderDirectionParam);
@@ -345,30 +356,15 @@ export default function MarketplaceStructure() {
           <p>The current screen size is: {screenSize}</p>
           <p>first is: {first}</p>
         </div> */}
-        <NFTsHeader />
+        
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            {address &&
-              <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onFetchMore={handleFetchMore} />
-            }
+              <div>
+                <NFTsHeader />
+                <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onFetchMore={handleFetchMore} />
+              </div>
           </Suspense>
         </ErrorBoundary>
     </div>
   );
 }
-
-
-// const { loading, error, data, fetchMore, refetch, networkStatus } = useQuery(GET_NFTS, {
-  //   variables: variables,
-  //   notifyOnNetworkStatusChange: true,
-  //   pollInterval: pollIntervalms,
-  //   fetchPolicy: 'network-only', // Used for first execution
-  //   nextFetchPolicy: 'cache-first', // Used for subsequent executions
-  // });
-  // const { data } = useSuspenseQuery(GET_NFTS, {
-  //   variables: variables,
-  //   notifyOnNetworkStatusChange: true,
-  //   pollInterval: pollIntervalms,
-  //   fetchPolicy: 'network-only', // Used for first execution
-  //   nextFetchPolicy: 'cache-first', // Used for subsequent executions
-  // });

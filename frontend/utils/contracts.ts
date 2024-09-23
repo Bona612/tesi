@@ -13,7 +13,7 @@ import { ERC6956Full as IERC6956Full } from "../typechain";
 
 
 /// DA RIVEDERE E MIGLIORARE
-export async function buyNFT(nft: NFT, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
+export async function buyNFT(toast: (arg0: { title: string; description: string; }) => void, nft: NFT, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
     console.log("isConnected: ", isConnected)
     console.log("address: ", address)
 
@@ -75,6 +75,22 @@ export async function buyNFT(nft: NFT, isConnected: boolean, address: string | u
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
+        const result = receipt_mint as ethers.ContractTransactionReceipt;
+        if (result.status) {
+            toast({
+                title: "Successfull!.",
+                description: "All good.",
+            })
+
+            console.log("mostrato");
+        }
+        else {
+            toast({
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
+            console.log("mostrato");
+        }
 
         return receipt_mint;
     } catch (error) {
@@ -86,7 +102,7 @@ export async function buyNFT(nft: NFT, isConnected: boolean, address: string | u
 
 
 /// DA RIVEDERE E MIGLIORARE
-export async function listNFT(nft: NFT, listingPrice: number, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
+export async function listNFT(toast: (arg0: { title: string; description: string; }) => void, nft: NFT, listingPrice: number, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
     console.log("isConnected: ", isConnected)
     console.log("address: ", address)
 
@@ -167,6 +183,22 @@ export async function listNFT(nft: NFT, listingPrice: number, isConnected: boole
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
+        const result = receipt_mint as ethers.ContractTransactionReceipt;
+        if (result.status) {
+            toast({
+                title: "Successfull!.",
+                description: "All good.",
+            })
+
+            console.log("mostrato");
+        }
+        else {
+            toast({
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
+            console.log("mostrato");
+        }
 
         return receipt_mint;
     } catch (error) {
@@ -179,7 +211,7 @@ export async function listNFT(nft: NFT, listingPrice: number, isConnected: boole
 
 
 /// DA RIVEDERE E MIGLIORARE
-export async function cancelListNFT(nft: NFT, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
+export async function cancelListNFT(toast: (arg0: { title: string; description: string; }) => void, nft: NFT, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
     console.log("isConnected: ", isConnected)
     console.log("address: ", address)
 
@@ -241,6 +273,22 @@ export async function cancelListNFT(nft: NFT, isConnected: boolean, address: str
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
+        const result = receipt_mint as ethers.ContractTransactionReceipt;
+        if (result.status) {
+            toast({
+                title: "Successfull!.",
+                description: "All good.",
+            })
+
+            console.log("mostrato");
+        }
+        else {
+            toast({
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
+            console.log("mostrato");
+        }
 
         return receipt_mint;
     } catch (error) {
@@ -250,7 +298,7 @@ export async function cancelListNFT(nft: NFT, isConnected: boolean, address: str
 }
 
 /// DA RIVEDERE E MIGLIORARE
-export async function redeemNFT(nft: NFT, attestation: Attestation, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
+export async function redeemNFT(toast: (arg0: { title: string; description: string; }) => void, nft: NFT, attestation: Attestation, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) {
     console.log("isConnected: ", isConnected)
     console.log("address: ", address)
 
@@ -321,6 +369,22 @@ export async function redeemNFT(nft: NFT, attestation: Attestation, isConnected:
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 
+        const result = receipt_mint as ethers.ContractTransactionReceipt;
+        if (result.status) {
+            toast({
+                title: "Successfull!.",
+                description: "All good.",
+            })
+
+            console.log("mostrato");
+        }
+        else {
+            toast({
+                title: "Uh oh! Something went wrong.",
+                description: "There was a problem with your request.",
+            })
+            console.log("mostrato");
+        }
 
         return receipt_mint;
     } catch (error) {

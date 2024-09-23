@@ -79,7 +79,7 @@ export default function Redeem({ totalData, queryRef, onFetchMore }: Marketplace
             <div>
                 <NFTList data={pass} />
             </div>
-            {num_data &&
+            {num_data > 0 &&
                 <div>
                     <NFTsPagination n_pages={n_pages} onChange={onChange} onFetchMore={onFetchMore} />
                 </div>

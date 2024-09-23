@@ -18,26 +18,32 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Eip1193Provider } from "ethers"
 import { NFT } from "@/types"
+import { Loader2 } from "lucide-react"
 
 
 interface DialogBuyProps {
     handleOnClick: (listingPrice: number) => void,
     // PROBABILMENTE QUI NON PASSARE LISTNFT, MA SEMPLICEMENTE CHIAMARE UN'ALTRA FUNZIONE CHE NON FARà ALTRO CHE CHIAMARE LISTNFT
     // listNFT: (nft: NFT, listingPrice: number, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) => void,
-    disabled?: boolean
+    isOpen: boolean;
+    openDialog: () => void;
+    setIsOpen: (isOpen: boolean) => void;
+    closeDialog: () => void;
+    isLoading: boolean,
 }
 
 
 const formSchema = z.object({
-  listingPrice: z.string().transform((val) => parseFloat(val)).refine((val) => {
-    return val > 0 && Number.isFinite(val) && val.toString().split('.')[1]?.length <= 8;
+  listingPrice: z.any().transform((val) => parseFloat(val)).refine((val) => {
+    // console.log("length: ", val.toString().split('.')[1]?.length)
+    return val > 0 && Number.isFinite(val) && val.toString().split('.')[1]?.length <= 4;
   }, {
-    message: "The number must be a positive float greater than 0 with no more than 8 decimal places.",
+    message: "The number must be a positive float greater than 0 with no more than 4 decimal places.",
   }),
 })
 
 
-export function DialogList({handleOnClick, disabled = false}: DialogBuyProps) {
+export function DialogList({handleOnClick, isLoading, openDialog, setIsOpen, closeDialog ,isOpen}: DialogBuyProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,10 +60,10 @@ export function DialogList({handleOnClick, disabled = false}: DialogBuyProps) {
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {/* <Button className="font-bold py-2 px-4 rounded mt-4" variant="outline" disabled={disabled}>List</Button> */}
-        <Button className="font-bold py-2 px-4 rounded mt-4">List NFT</Button>
+        <Button className="font-bold py-2 px-4 rounded mt-4" onClick={openDialog}>List NFT</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -67,7 +73,7 @@ export function DialogList({handleOnClick, disabled = false}: DialogBuyProps) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex items-center justify-center">
-            <Card className="w-[350px]">
+            <Card className="w-full">
                 <CardHeader>
                     <CardTitle>NFT Listing</CardTitle>
                     <CardDescription>List your NFT.</CardDescription>
@@ -96,13 +102,23 @@ export function DialogList({handleOnClick, disabled = false}: DialogBuyProps) {
                 </CardContent>
             </Card>
           </div>
-        <DialogFooter  className="flex justify-between">
+        <DialogFooter>
             <DialogClose asChild>
-                <Button type="button" variant="secondary">
+                <Button type="button" variant="secondary" onClick={closeDialog}>
                     Cancel
                 </Button>
             </DialogClose>
-            <Button type="submit" form="nft-listing-form" className="font-bold py-2 px-4 rounded mt-4">List</Button>
+            {/* <Button type="submit" form="nft-listing-form" className="font-bold py-2 px-4 rounded mt-4">List</Button> */}
+            <Button type="submit" form="nft-listing-form" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "List"
+              )}
+            </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

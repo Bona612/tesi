@@ -15,18 +15,26 @@ import { useState } from "react"
 import { AttestationShower } from "./AttestationShower"
 import QrReader from "./QrReader"
 import { cn } from "@/lib/utils"
+import { Loader2 } from "lucide-react";
 
 
 interface AlertDialogRedeemProps {
   // attestation?: Attestation | undefined,
   handleOnScanSuccess?: (attestation: Attestation) => void,
   handleRedeemNFT?: (attestation: Attestation) => void,
+  isOpen?: boolean;
+  openDialog?: () => void;
+  setIsOpen?: (isOpen: boolean) => void;
+  closeDialog?: () => void;
+  isLoading?: boolean,
 }
 
 
 export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertDialogRedeemProps) {
   const [isQrReaderVisible, setIsQrReaderVisible] = useState<boolean>(false);
   const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleOpenQrReader = () => {
       setIsQrReaderVisible(true);
@@ -47,7 +55,9 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
     }
     resetScannedAttestation()
   }
+  // DA CAPIRE SE SERVIRà AGGIUNGERE UNA FUNZIONE DI CHIUSURA ALERT DIALOG
   const handleOnClick = () => {
+    setIsLoading(true);
     if (isQrReaderVisible) {
       handleCloseQrReader();
     }
@@ -98,9 +108,29 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT}: AlertD
             )}
             asChild>
             {handleRedeemNFT ? (
-              <Button type="button" onClick={handleOnClick}>Redeem</Button>
+              // <Button type="button" onClick={handleOnClick}>Redeem</Button>
+              <Button onClick={handleOnClick} disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  "Redeem"
+                )}
+              </Button>
             ) : (
-              <Button type="button" onClick={handleConfirmAttestation}>Confirm attestation</Button>
+              // <Button type="button" onClick={handleConfirmAttestation}>Confirm attestation</Button>
+              <Button onClick={handleConfirmAttestation} disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  "Confirm attestation"
+                )}
+              </Button>
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -57,6 +57,7 @@ import { balanced } from "ipfs-unixfs-importer/layout"
 import { CreateDialog } from "./CreateDialog";
 import { AttestationShower } from "./AttestationShower";
 import { valueToObjectRepresentation } from "@apollo/client/utilities";
+import { truncate } from "fs";
 
 
 
@@ -553,22 +554,32 @@ export default function NFTForm() {
     const { walletProvider } = useWeb3ModalProvider()
 
     const [transactionResult, setTransactionResult] = useState<ethers.ContractTransactionReceipt | null>(null);
-    const [transactionCompleted, setTransactionCompleted] = useState<boolean>(false);
+    const [transactionCompleted, setTransactionCompleted] = useState<boolean>(true);
 
     const { toast } = useToast();
     const { tags, setTags } = useFilters();
 
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+
+    const openDialog = () => {
+        if (transactionCompleted) {
+            setIsOpen(true)
+        }
+    }
+    const closeDialog = () => {
+        if (transactionCompleted) {
+            setIsOpen(false)
+        }
+    }
+
+
+    const setOpen = (isOpen: boolean) => {
+        if (transactionCompleted) {
+            setIsOpen(isOpen)
+        }
+    }
 
     // const { register, handleSubmit, watch, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
-    //     resolver: zodResolver(formSchema),
-    //     defaultValues: {
-    //         title: "",
-    //         imageURL: "",
-    //         tags: [],
-    //         description: "",
-    //         // attestation: undefined,
-    //     },
-    // })
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -629,49 +640,16 @@ export default function NFTForm() {
         const result = await createToken(toast, values, isConnected, address, walletProvider);
         console.log("result: ", result);
 
-        // setTransactionResult(result)
-        // setTransactionCompleted(true)
+        setTransactionResult(result)
+        setTransactionCompleted(true)
+        closeDialog();
     }
 
-    // const onError = (errors) => {
-    //     console.log("Errors:", errors); // Debugging log
-    // };
-    
-
-    // const updateTags = (tag: Tag) => {
-    //     const newTags = tags.includes(tag)
-    //         ? tags.filter((t) => t !== tag)
-    //         : [...tags, tag];
-        
-    //     return newTags;
-    // }
-
-    // const handleOnClick = (tag: Tag) => {
-    //     console.log("handleOnClick event")
-    //     setTags(updateTags(tag));
-    //     handleFormOnClick(tag);
-    // };
-
-    // // 3. Handle tag removal.
-    // function handleFormOnClick(tag: Tag) {
-    //     console.log("handleFormOnClick")
-    //     const currentTags = form.getValues("tags");
-    //     const tagIndex = currentTags.findIndex(t => t === tag);
-        
-    //     if (tagIndex > -1) {
-    //         console.log("TAG presente")
-    //         // Remove the tag if it exists
-    //         currentTags.splice(tagIndex, 1);
-    //     } else {
-    //         console.log("TAG non presente")
-    //         // Add the tag if it does not exist
-    //         currentTags.push(tag);
-    //     }
-
-    //     console.log(currentTags)
-    //     // Update the form's tags field
-    //     form.setValue("tags", [...currentTags]);
-    // }
+    const onError = (errors: any) => {
+        // setTransactionCompleted(false);
+        closeDialog();
+        console.log("Errors:", errors);
+    };
 
 
     useEffect(() => {
@@ -729,7 +707,7 @@ export default function NFTForm() {
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
-                        <form id="nft-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <form id="nft-form" onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-8">
                             <FormField
                                 control={form.control}
                                 name="title"
@@ -840,7 +818,7 @@ export default function NFTForm() {
                     </Button>
                     {/* <Button type="submit" form="nft-form" className="font-bold py-2 px-4 rounded mt-4">Submit</Button> */}
                     {/* <AlertDialogForm /> */}
-                    <CreateDialog />
+                    <CreateDialog isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} />
                 </CardFooter>
             </Card>
         </div>

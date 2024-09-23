@@ -11,12 +11,13 @@ interface SearchBarProps {
 
 
 const SearchBar: React.FC<SearchBarProps> = ({ placeholder, onChange }) => {
-  const { searchText, setSearchText } = useFilters();
+  const { searchText, setSearchText, setPage } = useFilters();
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const inputValue = event.target.value;
     console.log(inputValue);
     setSearchText(event.target.value);
+    setPage(1);
   }
 
 

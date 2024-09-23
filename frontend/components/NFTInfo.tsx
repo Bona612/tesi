@@ -39,6 +39,7 @@ import { DialogCancelList } from './CancelListDialog';
 import { buyNFT, cancelListNFT, listNFT, redeemNFT } from '@/utils/contracts';
 import { AlertDialogRedeem } from './AlertDialogRedeem';
 import { useWallet } from '@/context/WalletContext';
+import { useToast } from "@/components/ui/use-toast";
 
 
 
@@ -67,37 +68,34 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     const { walletProvider } = useWeb3ModalProvider()
     const { address } = useWallet();
 
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [transactionCompleted, setTransactionCompleted] = useState<boolean>(true);
     // const [attestation, setAttestation] = useState<Attestation | undefined>(undefined);
 
+    const { toast } = useToast();
 
-    //     async function getAll() {
-    //         // va fatto il get del token da pinata IPFS
-    //         const tokenURI: string = await getTokenURI(tokenId, isConnected, address, walletProvider);
-    //         const token: NFT = await getTokenMetadata(tokenURI);
 
-    //         // const nftMetadata: Metadata = await getNFTMetadata(token.metadataURI);
-    //         const nftMetadata: Metadata = token.metadataURI;
+    const openDialog = () => {
+        if (transactionCompleted) {
+            setIsOpen(true)
+        }
+    }
+    const closeDialog = () => {
+        if (transactionCompleted) {
+            setIsOpen(false)
+        }
+    }
 
-    //         setNft(token);
-    //         setNftMetadata(nftMetadata);
+    const setOpen = (isOpen: boolean) => {
+        if (transactionCompleted) {
+            setIsOpen(isOpen)
+        }
+    }
 
-    //         return nftMetadata;
-    //     }
-
-    //     if (isConnected) {
-    //         getAll();
-    //     }
-    //     else {
-    //         setNft({
-    //             id: "2",
-    //             tokenId: 2,
-    //             anchor: "2",
-    //             metadataURI: {title: "titolo", description: "descrizione", imageURI: "https://dummyimage.com/300.png/09f/fff"} as Metadata,
-    //             tags: ["Tag 2"]
-    //         });
-
-    //     }
-    // }, []);
+    const resetState = () => {
+        setIsOpen(false);
+        setTransactionCompleted(true);
+    }
 
     // if (!queryRef) {
     //     return (<div>undefined</div>);
@@ -108,30 +106,46 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     console.log(data);
 
     const handleBuyNFT = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        buyNFT(data.token, isConnected, address, walletProvider);
+        setTransactionCompleted(false);
+        // buyNFT(toast, data.token, isConnected, address, walletProvider);
+        setTransactionCompleted(true);
+        resetState();
+        closeDialog();
     };
 
     // PROBABILMENTE QUI NON PASSARE LISTNFT, MA SEMPLICEMENTE CHIAMARE UN'ALTRA FUNZIONE CHE NON FARà ALTRO CHE CHIAMARE LISTNFT
     const handleListNFT = (listingPrice: number) => {
-        listNFT(data.token, listingPrice, isConnected, address, walletProvider);
+        setTransactionCompleted(false);
+        // listNFT(toast, data.token, listingPrice, isConnected, address, walletProvider);
+        setTransactionCompleted(true);
+        resetState();
+        closeDialog();
     };
 
     const handleCancelListNFT = () => {
-        cancelListNFT(data.token, isConnected, address, walletProvider);
+        setTransactionCompleted(false);
+        // cancelListNFT(toast, data.token, isConnected, address, walletProvider);
+        setTransactionCompleted(true);
+        resetState();
+        closeDialog();
     };
 
     const handleRedeemNFT = (attestation: Attestation) => {
-        redeemNFT(data.token, attestation, isConnected, address, walletProvider);
+        setTransactionCompleted(false);
+        // redeemNFT(toast, data.token, attestation, isConnected, address, walletProvider);
+        setTransactionCompleted(true);
+        resetState();
+        closeDialog();
     };
 
     // const handleOnScanSuccess = (attestation: Attestation) => {
     //     setAttestation(attestation);
     // }
 
-    if (!address) {
-        return (<div>Loading...</div>);
-    }
-    const ownerAddress = address.toLowerCase();
+    // if (!address) {
+    //     return (<div>Loading...</div>);
+    // }
+    const ownerAddress = address ? address.toLowerCase() : "";
 
     // if (error) {
     //     return (<div>undefined</div>);
@@ -163,13 +177,14 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                     ownerAddress && nft.owner.id !== ownerAddress ? (
                         <CardFooter className="flex justify-between">
                             {/* <AlertDialogConfirmation text={"Buy"} handleOnClick={handleBuyNFT} /> */}
-                            <DialogBuy handleOnClick={handleBuyNFT} disabled={nft.owner.id === ownerAddress} price={weiToEth(nft.listingPrice)} />
+                            <DialogBuy handleOnClick={handleBuyNFT} isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} disabled={false} price={weiToEth(nft.listingPrice)} />
                             {/* <Button onClick={handleBuyNFT} variant="outline" disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button>
                             <Button onClick={handleBuyNFT} disabled={nft.owner.id === address}>Buy {weiToEth(nft.listingPrice)} ETH</Button> */}
                         </CardFooter>
                     ) : (
                         <CardFooter className="flex justify-between">
-                            <DialogCancelList handleOnClick={handleCancelListNFT} />
+                            {/* <DialogCancelList isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} /> */}
+                            <DialogCancelList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
                         </CardFooter>
                     )
                 ) : (
@@ -180,19 +195,19 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                             </CardFooter>
                         ) : (
                             <CardFooter className="flex justify-between">
-                                <DialogList handleOnClick={handleListNFT} />
+                                <DialogList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
                             </CardFooter>
                         )
                     ) : <></>
                 )}
                 {/* {nft.isListed ? (
-                    ownerAddress && nft.owner.id === ownerAddress ? (
+                    ownerAddress && nft.owner.id !== ownerAddress ? (
                         <CardFooter className="flex justify-between">
-                            <DialogBuy handleOnClick={handleBuyNFT} disabled={nft.owner.id === ownerAddress} price={weiToEth(nft.listingPrice)} />
+                            <DialogBuy handleOnClick={handleBuyNFT} isLoading={!transactionCompleted} disabled={nft.owner.id === ownerAddress} price={weiToEth(nft.listingPrice)} />
                         </CardFooter>
                     ) : (
                         <CardFooter className="flex justify-between">
-                            <DialogCancelList handleOnClick={handleCancelListNFT} />
+                            <DialogCancelList isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
                         </CardFooter>
                     )
                 ) : (
@@ -203,7 +218,7 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
                             </CardFooter>
                         ) : (
                             <CardFooter className="flex justify-between">
-                                <DialogList handleOnClick={handleListNFT} />
+                                <DialogList isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
                             </CardFooter>
                         )
                     ) : <></>

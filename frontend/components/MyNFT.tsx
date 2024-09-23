@@ -75,7 +75,7 @@ export default function MyNFT({ totalData, queryRef, onFetchMore }: MarketplaceP
             <div>
                 <NFTList data={pass} />
             </div>
-            {num_data &&
+            {num_data > 0 &&
               <div>
                   <NFTsPagination n_pages={n_pages} onChange={onChange} onFetchMore={onFetchMore} />
               </div>

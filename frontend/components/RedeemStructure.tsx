@@ -33,7 +33,7 @@ export default function RedeemStructure() {
 
   const [isPending, startTransition] = useTransition();
 
-  const { searchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
+  const { searchText, setSearchText, tags, setTags, orderBy, setOrderBy, orderDirection, setOrderDirection, page, setPage } = useFilters();
   const { nftPerRow } = useNFTperRow();
 
   // const id: string = address?.toString() || "";
@@ -73,10 +73,17 @@ export default function RedeemStructure() {
     // Update the 'page' parameter
     params.set('page', page.toString());
 
+    // Update the 'searchText' parameter (only if searchText is not empty)
+    if (searchText !== "") {
+      params.set('searchText', searchText);
+    } else {
+      params.delete('searchText');
+    }
+
     // Replace the URL with the updated search params
     const newUrl = params.toString() ? `?${params.toString()}` : pathname;
     router.push(newUrl);
-  }, [tags, orderBy, orderDirection, page]);
+  }, [searchText, tags, orderBy, orderDirection, page]);
 
   // Initialize state based on URL parameters
   useEffect(() => {
@@ -93,10 +100,12 @@ export default function RedeemStructure() {
     console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
     const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
     const pageParam = searchParams.get('page') || page;
+    const searchTextParam = searchParams.get('searchText') || searchText;
     setTags(tagsArray as Tag[]);
     setOrderBy(findOrderBy(orderByParam));
     setOrderDirection(orderDirectionMap[orderDirectionParam]);
     setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    setSearchText(searchTextParam);
     console.log("orderDirectionParam: ", orderDirectionParam);
     console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
     console.log("fem sta prova2: ", orderDirectionParam);
@@ -115,10 +124,12 @@ export default function RedeemStructure() {
     console.log(orderDirectionMap[OrderDirectionEnum[orderDirection]]);
     const orderDirectionParam = searchParams.get('orderDirection') || OrderDirectionEnum[orderDirection];
     const pageParam = searchParams.get('page') || page;
+    const searchTextParam = searchParams.get('searchText') || searchText;
     setTags(tagsArray as Tag[]);
     setOrderBy(findOrderBy(orderByParam));
     setOrderDirection(orderDirectionMap[orderDirectionParam]);
     setPage(isNaN(Number(pageParam)) ? 1 : Number(pageParam));
+    setSearchText(searchTextParam);
     console.log("orderDirectionParam: ", orderDirectionParam);
     console.log("fem sta prova: ", orderDirectionMap[orderDirectionParam]);
     console.log("fem sta prova2: ", orderDirectionParam);
@@ -325,12 +336,14 @@ export default function RedeemStructure() {
 
   return (
     <div>
-        <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            {address &&
-              <Redeem totalData={customQueryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
-            }
+            {/* {address &&
+              <div> */}
+                <NFTsHeader />
+                <Redeem totalData={customQueryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
+              {/* </div>
+            } */}
           </Suspense>
         </ErrorBoundary>
     </div>

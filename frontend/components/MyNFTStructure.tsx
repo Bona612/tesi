@@ -266,27 +266,16 @@ export default function ResponsiveGrid() {
 
   return (
     <div>
-        <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            <MyNFT totalData={customQueryRef as QueryRef<OwnerNFTtokens, ownerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, ownerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
+            {/* {address &&
+            <div> */}
+              <NFTsHeader />
+              <MyNFT totalData={customQueryRef as QueryRef<OwnerNFTtokens, ownerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, ownerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
+            {/* </div>
+            } */}
           </Suspense>
         </ErrorBoundary>
     </div>
   );
 }
-
-// const { loading, error, data, fetchMore, refetch, networkStatus } = useQuery(GET_NFTS, {
-  //   variables: variables,
-  //   notifyOnNetworkStatusChange: true,
-  //   pollInterval: pollIntervalms,
-  //   fetchPolicy: 'network-only', // Used for first execution
-  //   nextFetchPolicy: 'cache-first', // Used for subsequent executions
-  // });
-  // const { data } = useSuspenseQuery(GET_NFTS, {
-  //   variables: variables,
-  //   notifyOnNetworkStatusChange: true,
-  //   pollInterval: pollIntervalms,
-  //   fetchPolicy: 'network-only', // Used for first execution
-  //   nextFetchPolicy: 'cache-first', // Used for subsequent executions
-  // });

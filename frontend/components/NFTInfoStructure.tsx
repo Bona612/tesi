@@ -22,6 +22,7 @@ import { useMediaQuery, useMediaQueries } from '@/hooks/useMediaQuery';
 import { FloatingButton } from './FloatingButton';
 import NFTInfo from './NFTInfo';
 import BackButton from './BackButton';
+import { useWallet } from '@/context/WalletContext';
 
 // import { useMediaQuery } from 'react-responsive'
 
@@ -49,12 +50,12 @@ export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
   
   // const skip: number = 0
   // const [first, setFirst] = useState<number>(3);
-  const [first, setFirst] = useState<number>(0);
-  const [skip, setSkip] = useState<number>(0);
+  // const [first, setFirst] = useState<number>(0);
+  // const [skip, setSkip] = useState<number>(0);
   // const [tagList, setTagList] = useState<Tag[] | null>([]);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-  const [isPending, startTransition] = useTransition();
-
+  // const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  // const [isPending, startTransition] = useTransition();
+  const { address } = useWallet();
 
   const variables = {id: tokenId} as NFTtokenVariables;
 
@@ -120,10 +121,14 @@ export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
 
   return (
     <div className="pt-2 pl-2 pr-2">
-        <BackButton />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
-            <Suspense fallback={<div>Suspense</div>}>
-                <NFTInfo queryRef={queryRef} tokenId={tokenId} />
+            <Suspense fallback={<SkeletonCard></SkeletonCard>}>
+              {/* {address &&
+                <div> */}
+                  <BackButton />
+                  <NFTInfo queryRef={queryRef} tokenId={tokenId} />
+                {/* </div>
+              } */}
             </Suspense>
         </ErrorBoundary>
     </div>

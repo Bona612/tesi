@@ -115,7 +115,7 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen,
             asChild>
             {handleRedeemNFT ? (
               // <Button type="button" onClick={handleOnClick}>Redeem</Button>
-              <Button onClick={handleOnClick} disabled={isLoading}>
+              <Button onClick={handleOnClick} disabled={isLoading || !scannedAttestation}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -127,7 +127,7 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen,
               </Button>
             ) : (
               // <Button type="button" onClick={handleConfirmAttestation}>Confirm attestation</Button>
-              <Button onClick={handleConfirmAttestation} disabled={isLoading}>
+              <Button onClick={handleConfirmAttestation} disabled={isLoading || !scannedAttestation}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

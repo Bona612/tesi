@@ -12,11 +12,8 @@ import {
 from "../generated/NFTMarketplace/NFTMarketplace"
 import { Token, Owner, Transaction } from '../generated/schema';
 import { IpfsData } from '../generated/templates';
-import { handleIpfsData } from './ipfs-data';
 
 
-
-const ipfsHash = "QmT83suxMSkV3CqBkEK7nYbJw4MYfnSxxF8JjeqPC4XZqh";
 
 function extractCID(uri: string): string {
   // Split the URI by '/' and get the last part

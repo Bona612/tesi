@@ -49,7 +49,7 @@ dataSources:
         - event: ItemListed(indexed address,indexed uint256,indexed address,uint256)
           handler: handleItemListed
         - event: ItemCanceled(indexed address,indexed uint256,indexed address)
-          handler: handleItemCancelled
+          handler: handleItemCanceled
         - event: ItemBought(indexed address,indexed uint256,indexed address,uint256)
           handler: handleItemBought
         - event: ItemRedeemed(indexed address,indexed uint256,indexed address)

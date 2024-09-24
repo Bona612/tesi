@@ -58,7 +58,7 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
 
   transaction.from = event.params.from.toHexString();
   transaction.to = event.params.to.toHexString();
-  transaction.token = event.params.tokenId.toHexString();
+  transaction.token = event.params.tokenId.toString();
 
   transaction.timestamp = event.block.timestamp;
   transaction.save();

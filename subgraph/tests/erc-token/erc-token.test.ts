@@ -38,9 +38,91 @@ function createAnchorTransferEvent(from: Address, to: Address, tokenId: BigInt, 
 
   return newAnchorTransferEvent;
 }
+function createItemListedEvent(nftAddress: Address, tokenId: BigInt, seller: Address, price: BigInt): ItemListedEvent {
+  let mockEvent = newMockEvent();
+  let newItemListedEvent = new ItemListedEvent(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  newItemListedEvent.parameters = new Array();
+  newItemListedEvent.parameters.push(new ethereum.EventParam("nftAddress", ethereum.Value.fromAddress(nftAddress)));
+  newItemListedEvent.parameters.push(new ethereum.EventParam("tokenId", ethereum.Value.fromUnsignedBigInt(tokenId)));
+  newItemListedEvent.parameters.push(new ethereum.EventParam("seller", ethereum.Value.fromAddress(seller)));
+  newItemListedEvent.parameters.push(new ethereum.EventParam("price", ethereum.Value.fromUnsignedBigInt(price)));
+
+  return newItemListedEvent;
+}
+function createItemCanceledEvent(nftAddress: Address, tokenId: BigInt, seller: Address): ItemCanceledEvent {
+  let mockEvent = newMockEvent();
+  let newItemCanceledEvent = new ItemCanceledEvent(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  newItemCanceledEvent.parameters = new Array();
+  newItemCanceledEvent.parameters.push(new ethereum.EventParam("nftAddress", ethereum.Value.fromAddress(nftAddress)));
+  newItemCanceledEvent.parameters.push(new ethereum.EventParam("tokenId", ethereum.Value.fromUnsignedBigInt(tokenId)));
+  newItemCanceledEvent.parameters.push(new ethereum.EventParam("seller", ethereum.Value.fromAddress(seller)));
+
+  return newItemCanceledEvent;
+}
+function createItemBoughtEvent(nftAddress: Address, tokenId: BigInt, buyer: Address, price: BigInt): ItemBoughtEvent {
+  let mockEvent = newMockEvent();
+  let newItemBoughtEvent = new ItemBoughtEvent(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  newItemBoughtEvent.parameters = new Array();
+  newItemBoughtEvent.parameters.push(new ethereum.EventParam("nftAddress", ethereum.Value.fromAddress(nftAddress)));
+  newItemBoughtEvent.parameters.push(new ethereum.EventParam("tokenId", ethereum.Value.fromUnsignedBigInt(tokenId)));
+  newItemBoughtEvent.parameters.push(new ethereum.EventParam("buyer", ethereum.Value.fromAddress(buyer)));
+  newItemBoughtEvent.parameters.push(new ethereum.EventParam("price", ethereum.Value.fromUnsignedBigInt(price)));
+
+  return newItemBoughtEvent;
+}
+function createItemRedeemedEvent(nftAddress: Address, tokenId: BigInt, buyer: Address): ItemRedeemedEvent {
+  let mockEvent = newMockEvent();
+  let newItemRedeemedEvent = new ItemRedeemedEvent(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  newItemRedeemedEvent.parameters = new Array();
+  newItemRedeemedEvent.parameters.push(new ethereum.EventParam("nftAddress", ethereum.Value.fromAddress(nftAddress)));
+  newItemRedeemedEvent.parameters.push(new ethereum.EventParam("tokenId", ethereum.Value.fromUnsignedBigInt(tokenId)));
+  newItemRedeemedEvent.parameters.push(new ethereum.EventParam("buyer", ethereum.Value.fromAddress(buyer)));
+
+  return newItemRedeemedEvent;
+}
 
 
-describe("handleNewGravatar()", () => { 
+describe("Test mapping", () => { 
    
   beforeEach(() => {
     clearStore() // <-- clear the store before each test in the file
@@ -68,7 +150,17 @@ describe("handleNewGravatar()", () => {
     assert.fieldEquals("Token", tokenId.toString(), "metadata", cid);
 
     const token = Token.load(tokenId.toString());
-    log.info("transactions: {}, {}, {}, {}", [token!.transactions.load().length.toString(), token!.transactions.load()[0].id, token!.transactions.load()[0].from, token!.transactions.load()[0].to]);
+    log.info("transactions: {}", [token!.transactions.load().length.toString()]);
+    if (token!.transactions.load().length > 0) {
+      log.info("transaction id: {}", [token!.transactions.load()[0].id]);
+      assert.fieldEquals("Transaction", token!.transactions.load()[0].id, "id", event.transaction.hash.toHex() + "-" + event.logIndex.toString());
+      log.info("transaction from: {}", [token!.transactions.load()[0].from]);
+      assert.fieldEquals("Owner", token!.transactions.load()[0].from, "id", from.toHexString());
+      log.info("transaction to: {}", [token!.transactions.load()[0].to]);
+      assert.fieldEquals("Owner", token!.transactions.load()[0].to, "id", to.toHexString());
+      log.info("transaction tokenID: {}", [token!.transactions.load()[0].token]);
+      assert.fieldEquals("Token", token!.transactions.load()[0].token, "id", tokenId.toString());
+    }
     // assert.fieldEquals("Token", tokenId.toString(), "transactions");
 
     assert.dataSourceCount('IpfsData', 1)
@@ -120,32 +212,109 @@ describe("handleNewGravatar()", () => {
     store.remove("Token", BigInt.fromI32(1).toString());
   });
 
-  // test('ethereum/contract dataSource creation example', () => {
-  //   let cid1 = "QmT83suxMSkV3CqBkEK7nYbJw4MYfnSxxF8JjeqPC4XZqh";
-  //   let cid2 = "QmT83suxMSkV3CqBkEK7nYbJw4MYfnSxxF8JjeqPC4XZqi";
-  //   logDataSources('IpfsData')
-  //   // Assert there are no dataSources created from GraphTokenLockWallet template
-  //   assert.dataSourceCount('IpfsData', 0)
-  
-  //   // Create a new GraphTokenLockWallet datasource with address 0xA16081F360e3847006dB660bae1c6d1b2e17eC2A
-  //   IpfsData.create(cid1)
-  
-  //   // Assert the dataSource has been created
-  //   assert.dataSourceCount('IpfsData', 1)
-  
-  //   // Add a second dataSource with context
-  //   let context = new DataSourceContext()
-  //   context.set('contextVal', Value.fromI32(325))
-  
-  //   IpfsData.createWithContext(cid2, context)
-  
-  //   // Assert there are now 2 dataSources
-  //   assert.dataSourceCount('IpfsData', 2)
-  
-  //   // Assert that a dataSource with address "0xA16081F360e3847006dB660bae1c6d1b2e17eC2B" was created
-  //   // Keep in mind that `Address` type is transformed to lower case when decoded, so you have to pass the address as all lower case when asserting if it exists
-  //   assert.dataSourceExists('IpfsData', cid2)
-  
-  //   logDataSources('IpfsData')
-  // })
+  test("handleItemListed should list a Token in the marketplace", () => {
+    let from = Address.fromString("0x0000000000000000000000000000000000000001");
+    let to = Address.fromString("0x0000000000000000000000000000000000000002");
+    let anchor = Bytes.fromHexString("0x0000000000000000000000000000000000000003");
+    let tokenId = BigInt.fromI32(2);
+    let cid = "QmT83suxMSkV3CqBkEK7nYbJw4MYfnSxxF8JjeqPC4XZqh";
+
+    let createEvent = createAnchorTransferEvent(from, to, tokenId, anchor, cid);
+    handleAnchorTransfer(createEvent);
+
+    let nftAddress = Address.fromString("0xf33e2937F2f2dE9bA30C8341aF93c839C7FbC58D");
+    let seller = to;
+    let price = BigInt.fromI32(1);
+    
+    let listItemEvent = createItemListedEvent(nftAddress, tokenId, seller, price);
+    handleItemListed(listItemEvent);
+    
+    const token = Token.load(tokenId.toString());
+    log.info("isListed: {}", [token!.isListed.toString()]);
+    assert.fieldEquals("Token", token!.id, "isListed", true.toString());
+    log.info("price: {}", [token!.listingPrice.toString()]);
+    assert.fieldEquals("Token", token!.id, "listingPrice", price.toString());
+  });
+
+  test("handleItemCanceled should cancel list of a Token in the marketplace", () => {
+    let from = Address.fromString("0x0000000000000000000000000000000000000001");
+    let to = Address.fromString("0x0000000000000000000000000000000000000002");
+    let anchor = Bytes.fromHexString("0x0000000000000000000000000000000000000003");
+    let tokenId = BigInt.fromI32(2);
+    let cid = "QmT83suxMSkV3CqBkEK7nYbJw4MYfnSxxF8JjeqPC4XZqh";
+
+    let createEvent = createAnchorTransferEvent(from, to, tokenId, anchor, cid);
+    handleAnchorTransfer(createEvent);
+
+    let nftAddress = Address.fromString("0xf33e2937F2f2dE9bA30C8341aF93c839C7FbC58D");
+    let seller = to;
+    let price = BigInt.fromI32(1);
+    
+    let listItemEvent = createItemListedEvent(nftAddress, tokenId, seller, price);
+    handleItemListed(listItemEvent);
+    
+    const token = Token.load(tokenId.toString());
+    log.info("isListed: {}", [token!.isListed.toString()]);
+    assert.fieldEquals("Token", token!.id, "isListed", true.toString());
+    log.info("price: {}", [token!.listingPrice.toString()]);
+    assert.fieldEquals("Token", token!.id, "listingPrice", price.toString());
+
+    let cancelItemEvent = createItemCanceledEvent(nftAddress, tokenId, seller);
+    handleItemCanceled(cancelItemEvent);
+
+    const tokenCancelled = Token.load(tokenId.toString());
+    log.info("isListed: {}", [tokenCancelled!.isListed.toString()]);
+    assert.fieldEquals("Token", tokenCancelled!.id, "isListed", false.toString());
+  });
+
+  test("handleItemBought should list a Token in the marketplace", () => {
+    let from = Address.fromString("0x0000000000000000000000000000000000000001");
+    let to = Address.fromString("0x0000000000000000000000000000000000000002");
+    let anchor = Bytes.fromHexString("0x0000000000000000000000000000000000000003");
+    let tokenId = BigInt.fromI32(2);
+    let cid = "QmT83suxMSkV3CqBkEK7nYbJw4MYfnSxxF8JjeqPC4XZqh";
+
+    let createEvent = createAnchorTransferEvent(from, to, tokenId, anchor, cid);
+    handleAnchorTransfer(createEvent);
+
+    let nftAddress = Address.fromString("0xf33e2937F2f2dE9bA30C8341aF93c839C7FbC58D");
+    let seller = to;
+    let price = BigInt.fromI32(1);
+    
+    let listItemEvent = createItemListedEvent(nftAddress, tokenId, seller, price);
+    handleItemListed(listItemEvent);
+    
+    const token = Token.load(tokenId.toString());
+    log.info("isListed: {}", [token!.isListed.toString()]);
+    assert.fieldEquals("Token", token!.id, "isListed", true.toString());
+    log.info("price: {}", [token!.listingPrice.toString()]);
+    assert.fieldEquals("Token", token!.id, "listingPrice", price.toString());
+
+    let buyer = Address.fromString("0x0000000000000000000000000000000000000004");
+
+    let buyItemEvent = createItemBoughtEvent(nftAddress, tokenId, buyer, price);
+    handleItemBought(buyItemEvent);
+    
+    const tokenBuyed = Token.load(tokenId.toString());
+    log.info("isListed: {}", [tokenBuyed!.isListed.toString()]);
+    assert.fieldEquals("Token", tokenBuyed!.id, "isListed", false.toString());
+    log.info("price: {}", [tokenBuyed!.listingPrice.toString()]);
+    assert.fieldEquals("Token", tokenBuyed!.id, "listingPrice", BigInt.fromI32(0).toString());
+    log.info("to redeem: {}", [tokenBuyed!.toRedeem.toString()]);
+    assert.fieldEquals("Token", tokenBuyed!.id, "toRedeem", true.toString());
+
+    let redeemItemEvent = createItemRedeemedEvent(nftAddress, tokenId, buyer);
+    handleItemRedeemed(redeemItemEvent);
+    
+    const tokenRedeemed = Token.load(tokenId.toString());
+    log.info("to redeem: {}", [tokenRedeemed!.toRedeem.toString()]);
+    assert.fieldEquals("Token", tokenRedeemed!.id, "toRedeem", false.toString());
+
+    let transferEvent = createAnchorTransferEvent(seller, buyer, tokenId, anchor, cid);
+    handleAnchorTransfer(transferEvent);
+
+    const tokenTransferred = Token.load(tokenId.toString());
+    log.info("new owner: {}", [tokenTransferred!.owner]);
+    assert.fieldEquals("Token", tokenId.toString(), "owner", buyer.toHexString());
+  });
 })

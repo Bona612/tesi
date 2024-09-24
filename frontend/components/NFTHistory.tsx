@@ -1,32 +1,67 @@
 'use client'
 
 
-import * as React from "react"
-
+import * as React from "react";
 import { Tag, Transaction } from "@/types/index";
 import { ScrollArea } from "./ui/scroll-area";
+import { Separator } from "@/components/ui/separator"
 
 
-interface NFTHistoryProps {
-  transactions: Transaction[],
+// Helper function to format the timestamp
+// function formatTimestamp(timestamp: bigint) {
+//   const date = new Date(Number(timestamp) * 1000); // Assuming timestamp is in seconds
+//   return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+// }
+function formatTimestamp(timestamp: bigint) {
+  const date = new Date(Number(timestamp) * 1000); // Assuming timestamp is in seconds
+  return date.toLocaleString("en-US", {
+    timeZone: "UTC", // Normalizing to UTC to avoid inconsistencies
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 }
 
+interface NFTHistoryProps {
+  transactions?: Transaction[];
+}
 
-export default function NFTHistory({ transactions }: NFTHistoryProps) {
-    // const { address, chainId, isConnected } = useWeb3ModalAccount()
-    // const { walletProvider } = useWeb3ModalProvider()
+export default function NFTHistory({ transactions = [] }: NFTHistoryProps) {
+  // const [isMounted, setIsMounted] = React.useState(false);
 
+  // // Wait until the component is mounted
+  // React.useEffect(() => {
+  //   setIsMounted(true);
+  // }, []);
 
-    return (
-        <ScrollArea className="h-72 w-48 rounded-md border">
-          <div className="p-4">
-            {/* <h4 className="mb-4 text-sm font-medium leading-none">Tags</h4> */}
-            {transactions.map((transaction) => (
-              <div key={transaction.id} className="text-sm">
-                {transaction.id}
+  return (
+    <div>
+      <h4 className="mb-4 text-sm font-medium leading-none"><strong>Transaction History</strong></h4>
+      <ScrollArea className="h-auto w-full rounded-md border p-2 sm:p-4">
+        <div className="overflow-x-auto">
+          {transactions.length > 0 ? (
+              <div className="flex flex-col space-y-4">
+                {transactions.map((transaction, index) => (
+                  <div key={`${transaction.id}`} className="text-sm whitespace-nowrap overflow-x-auto">
+                    <>
+                      <strong>Transaction ID: </strong> {transaction.id}<br />
+                      <strong>From: </strong> {transaction.from.id}<br />
+                      <strong>To: </strong> {transaction.to.id}<br />
+                      <strong>Token: </strong> {transaction.token.id}<br />
+                      {/* <strong>Date: </strong> {formatTimestamp(transaction.timestamp)}<br /> */}
+                    </>
+                    {(index < (transactions.length - 1)) && <Separator key={`${transaction.id}`} className="my-2" />}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </ScrollArea>
-    )
+          ) : (
+            <div className="text-sm text-gray-500">No transactions found</div>
+          )}
+        </div>
+      </ScrollArea>
+    </div>
+  );
 }

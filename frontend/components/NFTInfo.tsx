@@ -59,10 +59,18 @@ type TokenPageProps = {
 };
 
 
-const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
+const NFTInfo: React.FC<TokenPageProps> = ({ queryRef }) => {
     // const [nft, setNft] = useState<NFT>({} as NFT);
     // const [nftMetadata, setNftMetadata] = useState<Metadata>({} as Metadata);
 
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        // Ensure client-side rendering
+        setIsClient(true);
+    }, []);
+
+    
 
     const { chainId, isConnected } = useWeb3ModalAccount()
     const { walletProvider } = useWeb3ModalProvider()
@@ -102,8 +110,8 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     // }
 
     const { data, error } = useReadQuery(queryRef);
-    const nft = data.token;
-    console.log(data);
+    const nft = data?.token;
+    console.log(nft);
 
     const handleBuyNFT = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setTransactionCompleted(false);
@@ -159,53 +167,65 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef, tokenId }) => {
     //     return (<div>undefined</div>);
     // }
 
+    // if (!isClient) {
+    //     return null; // Ensure no rendering during SSR
+    // }
+
     return (
-        <div className="flex items-center justify-center pt-2 pb-2">
-            <Card className="w-full sm:w-1/2">
-                <CardHeader>
-                    <CardTitle>{nft.metadata.title}</CardTitle>
-                    <CardDescription>{nft.metadata.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div>
-                        <div className="w-full mt-2">
-                            <AspectRatio ratio={1 / 1}>
-                                <Image src={nft.metadata.imageURI} alt="Selected preview" fill className="rounded-md object-contain w-full h-full" />
-                            </AspectRatio>
+        <>
+        {nft ? (
+            <div className="flex items-center justify-center pt-2 pb-2">
+                <Card className="w-full sm:w-1/2">
+                    <CardHeader>
+                        <CardTitle>{nft?.metadata?.title}</CardTitle>
+                        <CardDescription>{nft?.metadata?.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="w-full">
+                            <div className="w-full mt-2">
+                                <AspectRatio ratio={1 / 1}>
+                                    <Image src={nft?.metadata?.imageURI} alt="Selected preview" fill className="rounded-md object-contain w-full h-full" />
+                                </AspectRatio>
+                            </div>
+                            <div className="w-full p-2">
+                                <TagList tags={nft?.metadata?.tags} readonly={true}></TagList>
+                            </div>
+                            <div className="w-full pt-4 p-2">
+                                <NFTHistory transactions={nft?.transactions} />
+                            </div>
                         </div>
-                        <div className="w-full p-2">
-                            <TagList tags={nft.metadata.tags} readonly={true}></TagList>
-                        </div>
-                        <div className="w-full p-2">
-                            <NFTHistory transactions={nft.transactions} />
-                        </div>
-                    </div>
-                </CardContent>
-                {nft.isListed ? (
-                    ownerAddress && nft.owner.id !== ownerAddress ? (
-                        <CardFooter className="flex justify-between">
-                            <DialogBuy handleOnClick={handleBuyNFT} isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} disabled={false} price={weiToEth(nft.listingPrice)} />
-                        </CardFooter>
-                    ) : (
-                        <CardFooter className="flex justify-between">
-                            <DialogCancelList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
-                        </CardFooter>
-                    )
-                ) : (
-                    nft.owner.id === ownerAddress ? (
-                        nft.toRedeem ? (
-                            <CardFooter className="flex justify-between">
-                                <AlertDialogRedeem isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleRedeemNFT={handleRedeemNFT} />
-                            </CardFooter>
+                    </CardContent>
+                    {isClient && typeof window !== 'undefined' && (
+                        nft?.isListed ? (
+                            ownerAddress && nft?.owner?.id !== ownerAddress ? (
+                                <CardFooter className="flex justify-between">
+                                    <DialogBuy handleOnClick={handleBuyNFT} isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} disabled={false} price={weiToEth(nft.listingPrice)} />
+                                </CardFooter>
+                            ) : (
+                                <CardFooter className="flex justify-between">
+                                    <DialogCancelList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
+                                </CardFooter>
+                            )
                         ) : (
-                            <CardFooter className="flex justify-between">
-                                <DialogList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
-                            </CardFooter>
+                            nft?.owner?.id === ownerAddress ? (
+                                nft?.toRedeem ? (
+                                    <CardFooter className="flex justify-between">
+                                        <AlertDialogRedeem isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleRedeemNFT={handleRedeemNFT} />
+                                    </CardFooter>
+                                ) : (
+                                    <CardFooter className="flex justify-between">
+                                        <DialogList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
+                                    </CardFooter>
+                                )
+                            ) : <div></div>
                         )
-                    ) : <></>
-                )}
-            </Card>
-        </div>
+                    )}  
+                </Card>
+            </div>
+        ) : (
+            <div>Loading...</div> // Optional: display a loading state if nft isn't available
+        )} 
+        </>
     );
 }
 

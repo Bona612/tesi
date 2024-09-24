@@ -43,7 +43,7 @@ const formSchema = z.object({
 })
 
 
-export function DialogList({handleOnClick, isLoading, openDialog, setIsOpen, closeDialog ,isOpen}: DialogBuyProps) {
+export function DialogList({handleOnClick, isLoading, openDialog, setIsOpen, closeDialog , isOpen}: DialogBuyProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

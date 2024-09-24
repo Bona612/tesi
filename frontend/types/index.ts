@@ -74,10 +74,10 @@ export type Metadata = {
 
 export type Transaction = {
   id: string,
-  from: string,
-  to: string,
+  from: Owner,
+  to: Owner,
   token: NFT,
-  timestamp: number,
+  timestamp: bigint,
 }
 
 export type token_NFT = {

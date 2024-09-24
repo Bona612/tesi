@@ -23,6 +23,16 @@ export const GET_NFT: TypedDocumentNode<token_NFT, NFTtokenVariables> = gql`
       toRedeem
       transactions {
         id
+        from {
+          id
+        }
+        to {
+          id
+        }
+        token {
+          id
+        }
+        timestamp
       }
     }
   }
@@ -49,6 +59,16 @@ export const GET_NFT_FROM_OWNER: TypedDocumentNode<OwnerNFTtokens, NFTtokenFromO
         toRedeem
         transactions {
           id
+          from {
+            id
+          }
+          to {
+            id
+          }
+          token {
+            id
+          }
+          timestamp
         }
       }
     }

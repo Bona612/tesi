@@ -126,7 +126,7 @@ export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
               {/* {address &&
                 <div> */}
                   <BackButton />
-                  <NFTInfo queryRef={queryRef} tokenId={tokenId} />
+                  <NFTInfo queryRef={queryRef} />
                 {/* </div>
               } */}
             </Suspense>

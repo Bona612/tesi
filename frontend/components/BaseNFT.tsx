@@ -156,6 +156,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
     // }
     const ownerAddress = address ? address.toLowerCase() : "";
 
+    // FORSE QUI BISOGNERà FARE LO STESSO LAVORO FATTO IN NFTInfo
     return (
         <div className="w-full p-4">
             <Card className="w-full">
@@ -198,7 +199,7 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                                 <DialogList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
                             </CardFooter>
                         )
-                    ) : <></>
+                    ) : <div></div>
                 )}
             </Card>
         </div>

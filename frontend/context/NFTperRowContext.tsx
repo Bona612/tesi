@@ -25,10 +25,10 @@ export const NFTperRowProvider: React.FC<{ children: ReactNode }> = ({ children 
   useEffect(() => {
     switch (screenSize) {
       case 'extralarge':
-        setNftPerRow(5); // Extra large screens show 5 NFTs per row
+        setNftPerRow(4); // Extra large screens show 5 NFTs per row
         break;
       case 'large':
-        setNftPerRow(4); // Large screens show 4 NFTs per row
+        setNftPerRow(3); // Large screens show 4 NFTs per row
         break;
       case 'medium':
         setNftPerRow(2); // Medium screens show 3 NFTs per row

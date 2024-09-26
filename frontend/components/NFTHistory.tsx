@@ -45,7 +45,7 @@ export default function NFTHistory({ transactions = [] }: NFTHistoryProps) {
           {transactions.length > 0 ? (
               <div className="flex flex-col space-y-4">
                 {transactions.map((transaction, index) => (
-                  <div key={`${transaction.id}`} className="text-sm whitespace-nowrap overflow-x-auto">
+                  <div key={`${transaction.id}`} className="text-sm whitespace-nowrap overflow-x-auto hide-scrollbar">
                     <>
                       <strong>Transaction ID: </strong> {transaction.id}<br />
                       <strong>From: </strong> {transaction.from.id}<br />

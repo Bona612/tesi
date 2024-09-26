@@ -121,16 +121,12 @@ export default function NFTInfoStructure({ tokenId }: NFTInfoStructureProps) {
 
   return (
     <div className="pt-2 pl-2 pr-2">
-        <ErrorBoundary fallback={<div>Error loading data</div>}>
-            <Suspense fallback={<SkeletonCard></SkeletonCard>}>
-              {/* {address &&
-                <div> */}
-                  <BackButton />
-                  <NFTInfo queryRef={queryRef} />
-                {/* </div>
-              } */}
-            </Suspense>
-        </ErrorBoundary>
+      <BackButton />
+      <ErrorBoundary fallback={<div>Error loading data</div>}>
+          <Suspense fallback={<SkeletonCard></SkeletonCard>}>
+            <NFTInfo queryRef={queryRef} />
+          </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }

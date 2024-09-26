@@ -352,19 +352,12 @@ export default function MarketplaceStructure() {
 
   return (
     <div>
-        {/* <div>
-          <p>The current screen size is: {screenSize}</p>
-          <p>first is: {first}</p>
-        </div> */}
-        
-        <ErrorBoundary fallback={<div>Error loading data</div>}>
-          <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-              <div>
-                <NFTsHeader />
-                <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onFetchMore={handleFetchMore} />
-              </div>
-          </Suspense>
-        </ErrorBoundary>
+      <NFTsHeader />
+      <ErrorBoundary fallback={<div>Error loading data</div>}>
+        <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
+          <Marketplace totalData={customQueryRef} queryRef={queryRef} isPending={isPending} onFetchMore={handleFetchMore} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }

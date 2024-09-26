@@ -266,16 +266,12 @@ export default function ResponsiveGrid() {
 
   return (
     <div>
-        <ErrorBoundary fallback={<div>Error loading data</div>}>
-          <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            {/* {address &&
-            <div> */}
-              <NFTsHeader />
-              <MyNFT totalData={customQueryRef as QueryRef<OwnerNFTtokens, ownerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, ownerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
-            {/* </div>
-            } */}
-          </Suspense>
-        </ErrorBoundary>
+      <NFTsHeader />
+      <ErrorBoundary fallback={<div>Error loading data</div>}>
+        <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
+          <MyNFT totalData={customQueryRef as QueryRef<OwnerNFTtokens, ownerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, ownerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }

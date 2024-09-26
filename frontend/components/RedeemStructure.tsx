@@ -336,14 +336,10 @@ export default function RedeemStructure() {
 
   return (
     <div>
+        <NFTsHeader />
         <ErrorBoundary fallback={<div>Error loading data</div>}>
           <Suspense fallback={<SuspenseGrid></SuspenseGrid>}>
-            {/* {address &&
-              <div> */}
-                <NFTsHeader />
-                <Redeem totalData={customQueryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
-              {/* </div>
-            } */}
+            <Redeem totalData={customQueryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} queryRef={queryRef as QueryRef<OwnerNFTtokens, tokenOwnerVariables>} isPending={isPending} onFetchMore={handleFetchMore} />
           </Suspense>
         </ErrorBoundary>
     </div>

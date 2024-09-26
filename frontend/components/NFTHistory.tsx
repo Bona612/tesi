@@ -51,9 +51,9 @@ export default function NFTHistory({ transactions = [] }: NFTHistoryProps) {
                       <strong>From: </strong> {transaction.from.id}<br />
                       <strong>To: </strong> {transaction.to.id}<br />
                       <strong>Token: </strong> {transaction.token.id}<br />
-                      {/* <strong>Date: </strong> {formatTimestamp(transaction.timestamp)}<br /> */}
+                      <strong>Date: </strong> {formatTimestamp(transaction.timestamp)}<br />
                     </>
-                    {(index < (transactions.length - 1)) && <Separator key={`${transaction.id}`} className="my-2" />}
+                    {/* {(index < (transactions.length - 1)) && <Separator key={`${transaction.id}`} className="my-2" />} */}
                   </div>
                 ))}
               </div>

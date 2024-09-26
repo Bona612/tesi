@@ -77,3 +77,7 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
 }
+
+[data-radix-scroll-area-viewport] {
+  display: block !important;
+}

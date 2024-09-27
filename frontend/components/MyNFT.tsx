@@ -60,7 +60,6 @@ export default function MyNFT({ totalData, queryRef, onFetchMore }: MarketplaceP
   console.log(pass);
 
   const { data: countData, error: errorCount } = useReadQuery(totalData);
-  // const data_length = countData?.owner?.nfts.length;
   const num_data = countData?.owner?.nfts.length
   const n_pages = Math.ceil(num_data / nftPerRow) || 1;
   console.log("numero pagine calcolate: ", n_pages);

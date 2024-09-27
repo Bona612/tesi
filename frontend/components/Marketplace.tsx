@@ -57,7 +57,6 @@ export default function Marketplace({ totalData, queryRef, onFetchMore }: Market
   const { data: countData, error: errorCount } = useReadQuery(totalData);
   const num_data = countData?.tokens?.length;
   const n_pages = Math.ceil(num_data / nftPerRow) || 1;
-  console.log("num data: ", num_data);
   console.log("numero pagine calcolate: ", n_pages);
 
 

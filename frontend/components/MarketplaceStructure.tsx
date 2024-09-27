@@ -62,17 +62,17 @@ export default function MarketplaceStructure() {
   const { nftPerRow } = useNFTperRow();
 
 
-  const updateTags = (tag: Tag) => {
-      const newTags = tags.includes(tag)
-          ? tags.filter((t) => t !== tag)
-          : [...tags, tag];
+  // const updateTags = (tag: Tag) => {
+  //     const newTags = tags.includes(tag)
+  //         ? tags.filter((t) => t !== tag)
+  //         : [...tags, tag];
       
-      return newTags;
-  }
+  //     return newTags;
+  // }
 
-  const handleOnClick = (tag: Tag) => {
-      setTags(updateTags(tag));
-  };
+  // const handleOnClick = (tag: Tag) => {
+  //     setTags(updateTags(tag));
+  // };
 
   const wtm: Where_Token_Metadata = { title_contains_nocase: searchText, tags_contains: tags };
   const where_marketplace: Where_Marketplace = { isListed: true, metadata_: wtm };

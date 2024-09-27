@@ -29,17 +29,17 @@ const NFTsHeader: React.FC<SearchBarProps> = ({}: SearchBarProps) => {
     const { tags, setTags, orderBy, orderDirection } = useFilters();
 
 
-    const updateTags = (tag: Tag) => {
-        const newTags = tags.includes(tag)
-            ? tags.filter((t) => t !== tag)
-            : [...tags, tag];
+    // const updateTags = (tag: Tag) => {
+    //     const newTags = tags.includes(tag)
+    //         ? tags.filter((t) => t !== tag)
+    //         : [...tags, tag];
         
-        return newTags;
-    }
+    //     return newTags;
+    // }
 
-    const handleOnClick = (tag: Tag) => {
-        setTags(updateTags(tag));
-    };
+    // const handleOnClick = (tag: Tag) => {
+    //     setTags(updateTags(tag));
+    // };
     
     // const onClick = () => {
     //     console.log("dentro");
@@ -48,7 +48,7 @@ const NFTsHeader: React.FC<SearchBarProps> = ({}: SearchBarProps) => {
 
     return (
         <div>
-            {isDesktop !== undefined && (
+            {/* {isDesktop !== undefined && ( */}
                 <div>
                     <div className="flex m-4">
                         <SearchBar placeholder="Search..." />
@@ -58,7 +58,7 @@ const NFTsHeader: React.FC<SearchBarProps> = ({}: SearchBarProps) => {
                         {tags && <TagListWithContext ></TagListWithContext>}
                     </div>
                 </div>
-            )}
+            {/* )} */}
         </div>
     );
 };

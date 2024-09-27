@@ -179,7 +179,8 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                 </CardContent>
                 </Link>
                 {nft.isListed ? (
-                    ownerAddress && nft.owner.id !== ownerAddress ? (
+                    ownerAddress ? (
+                        nft.owner.id !== ownerAddress ? (
                         <CardFooter className="flex justify-between">
                             <DialogBuy handleOnClick={handleBuyNFT} isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} disabled={false} price={weiToEth(nft.listingPrice)} />
                         </CardFooter>
@@ -187,6 +188,8 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                         <CardFooter className="flex justify-between">
                             <DialogCancelList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
                         </CardFooter>
+                    )) : (
+                        <div></div>
                     )
                 ) : (
                     nft.owner.id === ownerAddress ? (

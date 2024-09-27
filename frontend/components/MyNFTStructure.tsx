@@ -28,7 +28,7 @@ import { useNFTperRow } from '@/context/NFTperRowContext';
 import { useWallet } from '@/context/WalletContext';
 
 
-export default function ResponsiveGrid() {
+export default function MyNFTStructure() {
   // const { address, chainId, isConnected } = useWeb3ModalAccount()
   // const { walletProvider } = useWeb3ModalProvider()
   const { address } = useWallet();
@@ -160,16 +160,18 @@ export default function ResponsiveGrid() {
     // // nextFetchPolicy: 'cache-first', // Used for subsequent executions
   });
 
-  useEffect(() => {
-    console.log("ADDRESS CHANGED CUSTOM !!!");
-    if (address) {
-      console.log("REFETCH CUSTOM !!!");
-      refetchOwnerRedeemNfts(); // Re-query when the address changes
-    }
-  }, [address]);
+  // useEffect(() => {
+  //   console.log("ADDRESS CHANGED CUSTOM !!!");
+  //   if (address) {
+  //     console.log("REFETCH CUSTOM !!!");
+  //     refetchOwnerRedeemNfts(); // Re-query when the address changes
+  //   }
+  // }, [address]);
   useEffect(() => {
     console.log("ADDRESS CHANGED !!!");
     if (address) {
+      console.log("REFETCH CUSTOM !!!");
+      refetchOwnerRedeemNfts(); // Re-query when the address changes
       console.log("REFETCH !!!");
       refetch(); // Re-query when the address changes
     }

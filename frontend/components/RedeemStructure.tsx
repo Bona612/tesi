@@ -232,20 +232,23 @@ export default function RedeemStructure() {
     // nextFetchPolicy: 'cache-first', // Used for subsequent executions
   });
 
-  useEffect(() => {
-    console.log("ADDRESS CHANGED CUSTOM !!!");
-    if (address) {
-      console.log("REFETCH CUSTOM !!!");
-      refetchOwnerRedeemNfts(); // Re-query when the address changes
-    }
-  }, [address]);
+  // useEffect(() => {
+  //   console.log("ADDRESS CHANGED CUSTOM !!!");
+  //   if (address) {
+  //     console.log("REFETCH CUSTOM !!!");
+  //     refetchOwnerRedeemNfts(); // Re-query when the address changes
+  //   }
+  // }, [address]);
   useEffect(() => {
     console.log("ADDRESS CHANGED !!!");
     if (address) {
+      console.log("REFETCH CUSTOM !!!");
+      refetchOwnerRedeemNfts(); // Re-query when the address changes
       console.log("REFETCH !!!");
       refetch(); // Re-query when the address changes
     }
   }, [address]);
+  // }, [address, refetch]);
 
   // function handleRefetch() {
   //   console.log("REFETCH")

@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     catch (error) {
       console.log(error);
       return NextResponse.json(
-        { 'error': "Internal Server Error " + process.env.ORACLE_PRIVATE_KEY },
+        { 'error': "Internal Server Error " },
         { 'status': 500 }
       );
     }

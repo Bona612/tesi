@@ -41,17 +41,13 @@ const config: HardhatUserConfig = {
       // accounts: {
       //   mnemonic: process.env.SEED_PHRASE,
       // },
-      // chainId: ,
       chainId: 1337,
       from: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
-      // allowUnlimitedContractSize: true,
     },
     localhost: {
       url: 'http://127.0.0.1:8545',  // `${process.env.LOCALHOST_RPC_URL}`
       // accounts: non dobbiamo fornirli, lo fa Hardhat dietro le quinte
       chainId: 1337, // Anche se è considerata una rete a sè stante, ha lo stesso chainId della rete di default hardhat
-      // blockConfirmations: 1,
-      // allowUnlimitedContractSize: true,
       from: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
       accounts: ["0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"]
     },
@@ -59,7 +55,6 @@ const config: HardhatUserConfig = {
       url: `${INFURA_BASE_URL}${INFURA_API_KEY}`,
       accounts: [SEPOLIA_PRIVATE_KEY],
       chainId: 11155111, // Visto dal sito Chainlist.org
-      // blockConfirmations: 6, // Possiamo impostare direttamente da qui il numero di conferme da attendere per ogni rete con cui lavoriamo
     },
   },
   gasReporter: {

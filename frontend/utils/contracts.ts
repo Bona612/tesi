@@ -58,10 +58,10 @@ export async function buyNFT(toast: (arg0: { title: string; description: string;
         const nftmcecontractWithSigner = nftmcecontract.connect(signer);
         // const nonce = 2
         // // Prepare your transaction parameters
-        // const txParams = {
-        //     maxFeePerGas: 703230725 * 2,
-        //     value: nft.listingPrice
-        // };
+        const txParams = {
+            // maxFeePerGas: 703230725 * 2,
+            value: nft.listingPrice
+        };
 
         console.log("control okay")
 
@@ -71,7 +71,7 @@ export async function buyNFT(toast: (arg0: { title: string; description: string;
         
         console.log("senza data")
         // QUI da cambiare in .address
-        const tx_mint = await nftmcecontractWithSigner.buyItem(ERC6956Full_address.address, nft.id); // , txParams);
+        const tx_mint = await nftmcecontractWithSigner.buyItem(ERC6956Full_address.address, nft.id, txParams);
         receipt_mint = await tx_mint.wait();
         console.log('Transaction confirmed:', receipt_mint);
 

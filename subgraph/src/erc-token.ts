@@ -99,6 +99,15 @@ export function handleItemBought(event: ItemBoughtEvent): void {
     token.isListed = false;
     token.listingPrice = BigInt.fromI32(0);
     token.toRedeem = true;
+
+    // Load or create the new Owner entity
+    let newOwner = Owner.load(event.params.buyer.toHexString());
+    if (!newOwner) {
+      newOwner = new Owner(event.params.buyer.toHexString());
+    }
+    newOwner.save();
+    log.info('New Owner: {}', [newOwner.id]);
+    
     token.owner = event.params.buyer.toHexString();
     token.save()
   }

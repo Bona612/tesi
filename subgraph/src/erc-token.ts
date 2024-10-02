@@ -99,6 +99,7 @@ export function handleItemBought(event: ItemBoughtEvent): void {
     token.isListed = false;
     token.listingPrice = BigInt.fromI32(0);
     token.toRedeem = true;
+    token.owner = event.params.buyer.toHexString();
     token.save()
   }
 }

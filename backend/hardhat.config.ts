@@ -71,8 +71,9 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: `${process.env.ETHERSCAN_API_KEY}`,
   },
-  // ignition: {
-  // }
+  ignition: {
+    requiredConfirmations: 6,
+  }
 };
 
 export default config;

@@ -361,7 +361,7 @@ export async function redeemNFT(toast: (arg0: { title: string; description: stri
         console.log(ERC6956Full_address.address, nft.id);
 
         // QUI SI DOVRà RICHIAMARE LA TRASFORMAZIONE PER attestation E data (che è la prova)
-        const responseSA = await signAttestationAPI({attestation, signer})
+        const responseSA = await signAttestationAPI({attestation})
         console.log("response: ", responseSA)
         const signedAttestation = responseSA.response;
 

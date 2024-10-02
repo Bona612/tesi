@@ -17,13 +17,12 @@ export const maxDuration = 5
 
 
 interface RequestBody {
-  attestation: Attestation;
-  signer: ethers.JsonRpcSigner;
+  attestation: Attestation
 }
 
 
 /// THIS IS GOOD!!! IT WORKS
-async function signAttestation(attestation: Attestation, signer: ethers.JsonRpcSigner): Promise<string> {
+async function signAttestation(attestation: Attestation): Promise<string> {
   const oraclePrivateKey: string = process.env.ORACLE_PRIVATE_KEY || "";
   console.log(oraclePrivateKey);
 
@@ -63,9 +62,9 @@ export async function POST(request: NextRequest) {
       const body = await request.json();
 
       // Access the data
-      const { attestation, signer } = body as RequestBody;
+      const { attestation } = body as RequestBody;
 
-      const signedAttestation: string = await signAttestation(attestation, signer)
+      const signedAttestation: string = await signAttestation(attestation)
       console.log("signedAttestation: ", signedAttestation);
 
       return NextResponse.json({ 'response': signedAttestation , 'status': 200 });
@@ -73,7 +72,7 @@ export async function POST(request: NextRequest) {
     catch (error) {
       console.log(error);
       return NextResponse.json(
-        { 'error': "Internal Server Error" },
+        { 'error': "Internal Server Error " + process.env.ORACLE_PRIVATE_KEY },
         { 'status': 500 }
       );
     }

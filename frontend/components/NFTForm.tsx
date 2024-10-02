@@ -191,7 +191,7 @@ const predeterminingMetadataCID = async (metadata: Metadata) => {
     }
 };
 
-const signAttestationAPI = async (data: {attestation: Attestation, signer: ethers.JsonRpcSigner}) => { 
+const signAttestationAPI = async (data: {attestation: Attestation}) => { 
     console.log(data);
     try {
         const response = await fetch('/api/signAttestation', {
@@ -428,7 +428,7 @@ async function createToken(toast: (arg0: { title: string; description: string; }
         console.log("pre signing")
         // const oraclePrivateKey = "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d";
         // const attestationWrapper = jsonToAttestationWrapper(jsonCompatibleObject);
-        const responseSA = await signAttestationAPI({attestation, signer})
+        const responseSA = await signAttestationAPI({attestation})
         console.log("response: ", responseSA)
         const signedAttestation = responseSA.response;
 

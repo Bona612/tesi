@@ -1,7 +1,7 @@
 import { Attestation } from "@/types";
 import { ethers } from "ethers";
 
-export const signAttestationAPI = async (data: {attestation: Attestation, signer: ethers.JsonRpcSigner}) => { 
+export const signAttestationAPI = async (data: {attestation: Attestation}) => { 
     console.log(data);
     try {
         const response = await fetch('/api/signAttestation', {

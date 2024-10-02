@@ -39,7 +39,7 @@ export default function RedeemStructure() {
   // const id: string = address?.toString() || "";
   // const where_tags: Where_Tags = { tags_contains: tags };
   const wtm: Where_Token_Metadata = { title_contains_nocase: searchText, tags_contains: tags };
-  const where_token_redeem: Where_Token_Redeem = {toRedeem: false,  metadata_: wtm};
+  const where_token_redeem: Where_Token_Redeem = {toRedeem: true,  metadata_: wtm};
 
 
 

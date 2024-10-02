@@ -176,7 +176,7 @@ export async function listNFT(toast: (arg0: { title: string; description: string
             console.log("Marketplace is already approved for this NFT.");
         }
         
-        while (!approvedAddress) {
+        while (approvedAddress !== NFTMarketplace_address.address) {
             approvedAddress = await ercContract.getApproved(nft.id);
             console.log(`Approved address for token ${nft.id}:`, approvedAddress);
         }        

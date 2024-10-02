@@ -78,6 +78,14 @@ export default function BaseNFTBox({ nft }: NFTProps) {
 
     const { toast } = useToast();
 
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        // Ensure client-side rendering
+        setIsClient(true);
+    }, []);
+
+
     const openDialog = () => {
         if (transactionCompleted) {
             setIsOpen(true)
@@ -178,7 +186,38 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                     </div>
                 </CardContent>
                 </Link>
-                {nft.isListed ? (
+                {isClient && typeof window !== 'undefined' && (
+                    ownerAddress ? (
+                        nft.isListed ? (
+                            nft.owner.id !== ownerAddress ? (
+                                <CardFooter className="flex justify-between">
+                                    <DialogBuy handleOnClick={handleBuyNFT} isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} disabled={false} price={weiToEth(nft.listingPrice)} />
+                                </CardFooter>
+                            ) : (
+                                <CardFooter className="flex justify-between">
+                                    <DialogCancelList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleCancelListNFT} />
+                                </CardFooter>
+                            )
+                        ) : (
+                            nft.owner.id === ownerAddress ? (
+                                nft.toRedeem ? (
+                                    <CardFooter className="flex justify-between">
+                                        <AlertDialogRedeem isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleRedeemNFT={handleRedeemNFT} />
+                                    </CardFooter>
+                                ) : (
+                                    <CardFooter className="flex justify-between">
+                                        <DialogList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
+                                    </CardFooter>
+                                )
+                            ) : (
+                                <div></div>
+                            )
+                        )
+                    ) : (
+                        <div></div>
+                    )
+                )}
+                {/* {nft.isListed ? (
                     ownerAddress ? (
                         nft.owner.id !== ownerAddress ? (
                         <CardFooter className="flex justify-between">
@@ -192,18 +231,23 @@ export default function BaseNFTBox({ nft }: NFTProps) {
                         <div></div>
                     )
                 ) : (
-                    nft.owner.id === ownerAddress ? (
-                        nft.toRedeem ? (
-                            <CardFooter className="flex justify-between">
-                                <AlertDialogRedeem isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleRedeemNFT={handleRedeemNFT} />
-                            </CardFooter>
+                    ownerAddress ? (
+                        nft.owner.id === ownerAddress ? (
+                            nft.toRedeem ? (
+                                <CardFooter className="flex justify-between">
+                                    <AlertDialogRedeem isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleRedeemNFT={handleRedeemNFT} />
+                                </CardFooter>
+                            ) : (
+                                <CardFooter className="flex justify-between">
+                                    <DialogList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
+                                </CardFooter>
+                            )
                         ) : (
-                            <CardFooter className="flex justify-between">
-                                <DialogList isOpen={isOpen} openDialog={openDialog} setIsOpen={setOpen} closeDialog={closeDialog} isLoading={!transactionCompleted} handleOnClick={handleListNFT} />
-                            </CardFooter>
-                        )
-                    ) : <div></div>
-                )}
+                        <div></div>
+                    )) : (
+                        <div></div>
+                    )
+                )} */}
             </Card>
         </div>
     )

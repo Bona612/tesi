@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server';
 import { getMerkleTreeProof } from '@/lib/merkle-tree';
 import { BrowserProvider, Contract, Eip1193Provider, ethers, formatUnits } from 'ethers'
+import { createMerkleTree, generateMerkleProof } from '@/utils/merkleTreeUtilities';
+import { getValidAnchorsForMerkleTreeUtility } from '@/utils/validAnchorsUtilities';
 
 
 export async function GET(request: Request) {
@@ -18,8 +20,11 @@ export async function GET(request: Request) {
     }
 
     console.log("anchor got");
+
+    const merkleTree = createMerkleTree(getValidAnchorsForMerkleTreeUtility());
+    const merkleTreeProof = generateMerkleProof(merkleTree, anchor);
     // Generate or fetch the Merkle tree using the anchor
-    const merkleTreeProof = getMerkleTreeProof(anchor);
+    // const merkleTreeProof = getMerkleTreeProof(anchor);
     console.log("merkleTreeProof");
     console.log(merkleTreeProof);
     const data = ethers.AbiCoder.defaultAbiCoder().encode(
@@ -27,7 +32,8 @@ export async function GET(request: Request) {
       [merkleTreeProof]);
 
     return NextResponse.json({ response: data });
-  } catch (error) {
+  } 
+  catch (error) {
     return NextResponse.json({ error: 'Failed to retrieve Merkle tree' }, { status: 500 });
   }
 }

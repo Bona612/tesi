@@ -164,7 +164,7 @@ export async function listNFT(toast: (arg0: { title: string; description: string
         // Assuming you have a contract instance for the NFT (IERC721) and the marketplace
         const ercContract: IERC6956Full = new ethers.Contract(ERC6956Full_address.address, ERC6956Full.abi, signer) as unknown as IERC6956Full;
         // Check if the NFT is already approved for the marketplace
-        const approvedAddress = await ercContract.getApproved(nft.id);
+        let approvedAddress = await ercContract.getApproved(nft.id);
         console.log(`Approved address for token ${nft.id}:`, approvedAddress);
 
         // If not approved, approve the marketplace to transfer the NFT
@@ -176,6 +176,10 @@ export async function listNFT(toast: (arg0: { title: string; description: string
             console.log("Marketplace is already approved for this NFT.");
         }
         
+        while (!approvedAddress) {
+            approvedAddress = await ercContract.getApproved(nft.id);
+            console.log(`Approved address for token ${nft.id}:`, approvedAddress);
+        }        
 
         console.log(ERC6956Full_address.address, nft.id, ethToWei(listingPrice));
         // QUI da cambiare in .address

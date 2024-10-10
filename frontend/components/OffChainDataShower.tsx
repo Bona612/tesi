@@ -160,8 +160,8 @@ export function OffChainDataShower({anchor, metadataURI, imageURI}: OffChainData
                     <div className="flex flex-col space-y-4">
                         <div key={`${anchor}`} className="text-sm whitespace-nowrap overflow-x-auto hide-scrollbar">
                             <strong>Anchor: </strong> {anchor}<br />
-                            <strong>Metadata URI: </strong><a href={metadataURI} target="_blank" rel="noopener noreferrer"> {metadataURI} </a><br />
-                            <strong>Image URI: </strong><a href={imageURI} target="_blank" rel="noopener noreferrer"> {imageURI} </a><br />
+                            <strong>Metadata URI: </strong><a href={metadataURI} target="_blank" rel="noopener noreferrer" className="no-underline hover:underline"> {metadataURI} </a><br />
+                            <strong>Image URI: </strong><a href={imageURI} target="_blank" rel="noopener noreferrer" className="no-underline hover:underline"> {imageURI} </a><br />
                         </div>
                     </div>
                 </div>

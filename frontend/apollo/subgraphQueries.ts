@@ -8,6 +8,7 @@ export const GET_NFT: TypedDocumentNode<token_NFT, NFTtokenVariables> = gql`
     token(id: $id) {
       id
       anchor
+      metadataURI
       metadata {
         id
         title
@@ -44,6 +45,7 @@ export const GET_NFT_FROM_OWNER: TypedDocumentNode<OwnerNFTtokens, NFTtokenFromO
       nfts(where: $where_token) {
         id
         anchor
+        metadataURI
         metadata {
           id
           title
@@ -80,6 +82,7 @@ export const GET_MARKETPLACE_NFTS: TypedDocumentNode<NFTtokens, NFTtokensVariabl
     tokens(skip: $skip, first: $first, where: $where_marketplace, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       anchor
+      metadataURI
       metadata {
         id
         title
@@ -128,6 +131,7 @@ export const GET_OWNER_NFTS: TypedDocumentNode<OwnerNFTtokens, ownerVariables> =
       nfts(skip: $skip, first: $first, where: $where_metadata, orderBy: $orderBy, orderDirection: $orderDirection) {
         id
         anchor
+        metadataURI
         metadata {
           id
           title
@@ -175,6 +179,7 @@ export const GET_OWNER_REDEEM_NFTS: TypedDocumentNode<OwnerNFTtokens, tokenOwner
       nfts(skip: $skip, first: $first, where: $where_token_redeem, orderBy: $orderBy, orderDirection: $orderDirection) {
         id
         anchor
+        metadataURI
         metadata {
           id
           title

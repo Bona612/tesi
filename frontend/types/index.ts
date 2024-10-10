@@ -86,6 +86,7 @@ export type token_NFT = {
 export type NFT = {
   id: string,
   anchor: string,
+  metadataURI: string,
   metadata: Metadata,
   owner: NFT_Owner,
   isListed: boolean,

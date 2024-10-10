@@ -40,6 +40,7 @@ import { buyNFT, cancelListNFT, listNFT, redeemNFT } from '@/utils/contracts';
 import { AlertDialogRedeem } from './AlertDialogRedeem';
 import { useWallet } from '@/context/WalletContext';
 import { useToast } from "@/components/ui/use-toast";
+import { OffChainDataShower } from './OffChainDataShower';
 
 
 
@@ -189,6 +190,9 @@ const NFTInfo: React.FC<TokenPageProps> = ({ queryRef }) => {
                             </div>
                             <div className="w-full p-2">
                                 <TagList tags={nft?.metadata?.tags} readonly={true}></TagList>
+                            </div>
+                            <div>
+                                <OffChainDataShower anchor={nft?.anchor} metadataURI={nft?.metadataURI} imageURI={nft?.metadata?.imageURI}></OffChainDataShower>
                             </div>
                             <div className="w-full pt-4 p-2">
                                 <NFTHistory transactions={nft?.transactions} />

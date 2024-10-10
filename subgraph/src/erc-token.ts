@@ -46,6 +46,7 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
     context.setString('tokenId', event.params.tokenId.toString());
     IpfsData.createWithContext(cid, context);
     
+    token.metadataURI = event.params.cid;
     token.metadata = cid;
 
     token.isListed = false;

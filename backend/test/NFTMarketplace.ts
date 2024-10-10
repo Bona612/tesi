@@ -239,6 +239,18 @@ describe("Nft Marketplace Tests", function () {
         console.log("marketplace address");
         console.log(market_address);
 
+        await expect(marketContract_alice.listItem(
+            address,
+            TOKEN_ID,
+            PRICE
+        )).to.revertedWithCustomError(marketContract, "NotOwner");
+
+        await expect(marketContract_bob.listItem(
+            address,
+            TOKEN_ID,
+            ethers.parseEther("0")
+        )).to.revertedWithCustomError(marketContract, "PriceMustBeAboveZero");
+
         await expect(marketContract_bob.listItem(
             address,
             TOKEN_ID,
@@ -250,6 +262,12 @@ describe("Nft Marketplace Tests", function () {
             TOKEN_ID,
             PRICE
         )).to.revertedWithCustomError(marketContract, "AlreadyListed");
+
+        await expect(marketContract_bob.updateListing(
+            address,
+            TOKEN_ID,
+            ethers.parseEther("0")
+        )).to.revertedWithCustomError(marketContract, "PriceMustBeAboveZero");
 
         await expect(marketContract_bob.buyItem(
             abnftContract.getAddress(),

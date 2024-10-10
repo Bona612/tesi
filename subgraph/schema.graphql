@@ -19,6 +19,7 @@ type Token implements Node @entity {
   id: ID!
   # address: String!
   anchor: String!
+  metadataURI: String!
   metadata: TokenMetadata
   # tags: [String!]!
   owner: Owner!

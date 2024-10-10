@@ -154,16 +154,18 @@ export function OffChainDataShower({anchor, metadataURI, imageURI}: OffChainData
     // )
     return (
         <div>
-          <h4 className="mb-4 text-sm font-medium leading-none"><strong>Off-chain data:</strong></h4>
-          <ScrollArea className="h-auto w-full rounded-md border p-2 sm:p-4">
-            <div className="overflow-x-auto">
-                <div>
-                    <strong>Anchor: </strong> {anchor}<br />
-                    <strong>Metadata URI: </strong> {metadataURI}<br />
-                    <strong>Image URI: </strong> {imageURI}<br />
+            <h4 className="mb-4 text-sm font-medium leading-none"><strong>Off-chain data:</strong></h4>
+            <ScrollArea className="h-auto w-full rounded-md border p-2 sm:p-4">
+                <div className="overflow-x-auto">
+                    <div className="flex flex-col space-y-4">
+                        <div key={`${anchor}`} className="text-sm whitespace-nowrap overflow-x-auto hide-scrollbar">
+                            <strong>Anchor: </strong> {anchor}<br />
+                            <strong>Metadata URI: </strong><a href={metadataURI} target="_blank" rel="noopener noreferrer"> {metadataURI} </a><br />
+                            <strong>Image URI: </strong><a href={imageURI} target="_blank" rel="noopener noreferrer"> {imageURI} </a><br />
+                        </div>
+                    </div>
                 </div>
-            </div>
-          </ScrollArea>
+            </ScrollArea>
         </div>
     );
 }

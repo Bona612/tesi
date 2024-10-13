@@ -34,7 +34,7 @@ function createAnchorTransferEvent(from: Address, to: Address, tokenId: BigInt, 
 }
 
 
-describe("Test mapping", () => { 
+describe("IPFS-data creation test", () => { 
    
     beforeEach(() => {
       clearStore() // <-- clear the store before each test in the file
@@ -45,7 +45,7 @@ describe("Test mapping", () => {
     })
 
     // Test for handleAnchorTransfer
-    test("handleAnchorTransfer should create a new Token and assign an Owner, also creation of Metadata", () => {
+    test("handleAnchorTransfer should create a new Token and assign an Owner, with the creation of Metadata", () => {
     assert.dataSourceCount('IpfsData', 0)
 
     let from = Address.fromString("0x0000000000000000000000000000000000000001");
@@ -62,18 +62,12 @@ describe("Test mapping", () => {
     assert.fieldEquals("Token", tokenId.toString(), "metadata", cid);
 
     const token = Token.load(tokenId.toString());
-    log.info("transactions: {}", [token!.transactions.load().length.toString()]);
     if (token!.transactions.load().length > 0) {
-      log.info("transaction id: {}", [token!.transactions.load()[0].id]);
       assert.fieldEquals("Transaction", token!.transactions.load()[0].id, "id", event.transaction.hash.toHex() + "-" + event.logIndex.toString());
-      log.info("transaction from: {}", [token!.transactions.load()[0].from]);
       assert.fieldEquals("Owner", token!.transactions.load()[0].from, "id", from.toHexString());
-      log.info("transaction to: {}", [token!.transactions.load()[0].to]);
       assert.fieldEquals("Owner", token!.transactions.load()[0].to, "id", to.toHexString());
-      log.info("transaction tokenID: {}", [token!.transactions.load()[0].token]);
       assert.fieldEquals("Token", token!.transactions.load()[0].token, "id", tokenId.toString());
     }
-    // assert.fieldEquals("Token", tokenId.toString(), "transactions");
 
     assert.dataSourceCount('IpfsData', 1)
 
@@ -99,16 +93,12 @@ describe("Test mapping", () => {
     const newOwner = Owner.load(to.toHexString());
     assert.bigIntEquals(BigInt.fromI32(newOwner!.nfts.load().length), BigInt.fromI32(1))
 
-    log.info("lunghezza: {}: [{}]", [newOwner!.nfts.load().length.toString(), newOwner!.nfts.load()[0].id]);
-    log.info("lunghezza: {}, {}", [newOwner!.transactions.load().length.toString(), newOwner!.transactionsReceived.load().length.toString()]);
     assert.bigIntEquals(BigInt.fromI32(newOwner!.transactionsReceived.load().length), BigInt.fromI32(1))
     assert.bigIntEquals(BigInt.fromI32(newOwner!.transactions.load().length), BigInt.fromI32(0))
 
     const prevOwner = Owner.load(from.toHexString());
     assert.bigIntEquals(BigInt.fromI32(prevOwner!.nfts.load().length), BigInt.fromI32(0))
 
-    // log.info("lunghezza: {}: [{}]", [prevOwner!.nfts.load().length.toString(), prevOwner!.nfts.load()[0].id]);
-    log.info("lunghezza: {}, {}", [prevOwner!.transactions.load().length.toString(), prevOwner!.transactionsReceived.load().length.toString()]);
     assert.bigIntEquals(BigInt.fromI32(prevOwner!.transactions.load().length), BigInt.fromI32(1))
     assert.bigIntEquals(BigInt.fromI32(prevOwner!.transactionsReceived.load().length), BigInt.fromI32(0))
 
@@ -118,8 +108,8 @@ describe("Test mapping", () => {
     assert.stringEquals(newOwner!.transactionsReceived.load()[0].id, "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1");
 
 
-    logStore();
-    logDataSources('IpfsData');
+    // logStore();
+    // logDataSources('IpfsData');
 
     store.remove("Token", BigInt.fromI32(1).toString());
   });

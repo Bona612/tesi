@@ -27,8 +27,6 @@ function extractCID(uri: string): string {
 
 
 export function handleAnchorTransfer(event: AnchorTransferEvent): void {
-  log.info('Handling Anchor Transfer for Token ID: {}', [event.params.tokenId.toString()]);
-
   let tokenId = event.params.tokenId.toString();
   let token = Token.load(tokenId);
   let transactionId = event.transaction.hash.toHex() + "-" + event.logIndex.toString();
@@ -37,10 +35,8 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
   if (!token) {
     token = new Token(tokenId);
     token.anchor = event.params.anchor.toHexString();
-    log.info('Token anchor: {}', [token.anchor]);
     
     let cid = extractCID(event.params.cid);
-    log.info('Extracted CID: {}', [cid]);
 
     const context = new DataSourceContext();
     context.setString('tokenId', event.params.tokenId.toString());
@@ -67,11 +63,8 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
     newOwner = new Owner(event.params.to.toHexString());
   }
   newOwner.save();
-  log.info('New Owner: {}', [newOwner.id]);
 
 
-  // Load or create the previous Owner entity
-  // DOVREBBE ESSERE INUTILE PERCHè IL PRECEDENTE owner DOVREBBE ESSERE GIà PRESENTE
   let prevOwner = Owner.load(event.params.from.toHexString());
   if (!prevOwner) {
     prevOwner = new Owner(event.params.from.toHexString());
@@ -79,7 +72,6 @@ export function handleAnchorTransfer(event: AnchorTransferEvent): void {
   prevOwner.save();
 
   token.owner = event.params.to.toHexString();
-  log.info('New Token Owner: {}', [token.owner]);
   token.save();
 }
 
@@ -107,7 +99,6 @@ export function handleItemBought(event: ItemBoughtEvent): void {
       newOwner = new Owner(event.params.buyer.toHexString());
     }
     newOwner.save();
-    log.info('New Owner: {}', [newOwner.id]);
     
     token.owner = event.params.buyer.toHexString();
     token.save()

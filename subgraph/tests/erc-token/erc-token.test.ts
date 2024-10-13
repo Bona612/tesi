@@ -121,7 +121,7 @@ function createItemRedeemedEvent(nftAddress: Address, tokenId: BigInt, buyer: Ad
 }
 
 
-describe("Test mapping", () => { 
+describe("NFT Marketplace events test", () => { 
    
   beforeEach(() => {
     clearStore() // <-- clear the store before each test in the file
@@ -150,9 +150,7 @@ describe("Test mapping", () => {
     handleItemListed(listItemEvent);
     
     const token = Token.load(tokenId.toString());
-    log.info("isListed: {}", [token!.isListed.toString()]);
     assert.fieldEquals("Token", token!.id, "isListed", true.toString());
-    log.info("price: {}", [token!.listingPrice.toString()]);
     assert.fieldEquals("Token", token!.id, "listingPrice", price.toString());
   });
 
@@ -177,9 +175,7 @@ describe("Test mapping", () => {
     handleItemCanceled(cancelItemEvent);
 
     const tokenCancelled = Token.load(tokenId.toString());
-    log.info("isListed: {}", [tokenCancelled!.isListed.toString()]);
     assert.fieldEquals("Token", tokenCancelled!.id, "isListed", false.toString());
-    log.info("price: {}", [tokenCancelled!.listingPrice.toString()]);
     assert.fieldEquals("Token", tokenCancelled!.id, "listingPrice", BigInt.fromI32(0).toString());
   });
 
@@ -201,9 +197,7 @@ describe("Test mapping", () => {
     handleItemListed(listItemEvent);
     
     const token = Token.load(tokenId.toString());
-    log.info("isListed: {}", [token!.isListed.toString()]);
     assert.fieldEquals("Token", token!.id, "isListed", true.toString());
-    log.info("price: {}", [token!.listingPrice.toString()]);
     assert.fieldEquals("Token", token!.id, "listingPrice", price.toString());
 
     let buyer = Address.fromString("0x0000000000000000000000000000000000000004");
@@ -212,25 +206,20 @@ describe("Test mapping", () => {
     handleItemBought(buyItemEvent);
     
     const tokenBuyed = Token.load(tokenId.toString());
-    log.info("isListed: {}", [tokenBuyed!.isListed.toString()]);
     assert.fieldEquals("Token", tokenBuyed!.id, "isListed", false.toString());
-    log.info("price: {}", [tokenBuyed!.listingPrice.toString()]);
     assert.fieldEquals("Token", tokenBuyed!.id, "listingPrice", BigInt.fromI32(0).toString());
-    log.info("to redeem: {}", [tokenBuyed!.toRedeem.toString()]);
     assert.fieldEquals("Token", tokenBuyed!.id, "toRedeem", true.toString());
 
     let redeemItemEvent = createItemRedeemedEvent(nftAddress, tokenId, buyer);
     handleItemRedeemed(redeemItemEvent);
     
     const tokenRedeemed = Token.load(tokenId.toString());
-    log.info("to redeem: {}", [tokenRedeemed!.toRedeem.toString()]);
     assert.fieldEquals("Token", tokenRedeemed!.id, "toRedeem", false.toString());
 
     let transferEvent = createAnchorTransferEvent(seller, buyer, tokenId, anchor, cid);
     handleAnchorTransfer(transferEvent);
 
     const tokenTransferred = Token.load(tokenId.toString());
-    log.info("new owner: {}", [tokenTransferred!.owner]);
     assert.fieldEquals("Token", tokenId.toString(), "owner", buyer.toHexString());
 
     assert.entityCount("Token", 1);

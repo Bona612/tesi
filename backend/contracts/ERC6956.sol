@@ -215,10 +215,7 @@ contract ERC6956 is
        return authMap;
     }
 
-
-    // DA VERIFICARE
     // function transferFrom(address from, address to, uint256 tokenId) public virtual override(ERC721, IERC721) {
-    //     console.log("overriden");
     //     if (to == address(0)) {
     //         revert ERC721InvalidReceiver(address(0));
     //     }
@@ -237,57 +234,30 @@ contract ERC6956 is
     {
         address from = _ownerOf(tokenId);
 
-        console.log("pre");
         // Perform (optional) operator check
         if (auth != address(0)) {
-            console.log("if");
             _checkAuthorized(from, auth, tokenId);
-            console.log("post");
         }
-        /*if (from != address(0) && !_isAuthorized(_ownerOf(tokenId), auth, tokenId)) {
-            revert("ERC721: caller is not token owner or approved");
-        }*/
-        // if (from != auth && !) {
-        //     revert("ERC721: caller is not token owner or approved");
-        // }
-        // _checkAuthorized(_ownerOf(tokenId), auth, tokenId);
-        
-        // require(batchSize == 1, "ERC6956-E4");
-        // address from = _ownerOf(tokenId);
         bytes32 anchor = anchorByToken[tokenId];
-        console.log("uri token inside update: ");
-        console.log(tokenId);
         string memory uri = tokenURI(tokenId);
-        console.log(uri);
         
         emit AnchorTransfer(from, to, anchor, tokenId, uri);
         // emit AnchorTransfer(from, to, anchor, tokenId);
 
-        // if (_isAuthorized(from, auth, tokenId)) {
-        //     console.log("true");
-        // }
-        // else {
-        //     console.log("false");
-        // }
-
         if (to == address(0)) {
             // we are burning, ensure the mapping is deleted BEFORE the transfer
             // to avoid reentrant-attacks
-            // console.log("corretto");
             _burnedTokensByAnchor[anchor] = tokenId; // Remember tokenId for a potential re-mint
             delete tokenByAnchor[anchor];
             delete anchorByToken[tokenId];
         }   
         else {
-            // console.log("non");
-            console.log(_anchorIsReleased[anchor]);
             require(_anchorIsReleased[anchor], "ERC6956-E5");
         }
 
         delete _anchorIsReleased[anchor]; // make sure anchor is non-released after the transfer again
 
         super._update(to, tokenId, auth);
-        // console.log("after revert");
         return from;
     }
 
@@ -297,14 +267,9 @@ contract ERC6956 is
         Role myRole = Role.INVALID;
         Role alternateRole = Role.INVALID;
         
-        // Migration from solidity @openzeppelin 4.X to 5-X
-        // TODO
         if(_isAuthorized(_ownerOf(tokenId), _msgSender(), tokenId)) {
             myRole = Role.OWNER;
         }
-        /*if(_isApprovedOrOwner(_msgSender(), tokenId)) {
-            myRole = Role.OWNER;
-        }*/
 
         if(isMaintainer(msg.sender)) {
             alternateRole = Role.ISSUER;
@@ -364,25 +329,16 @@ contract ERC6956 is
         assert(tokenByAnchor[anchor] <= 0); // safety for contract-internal errors
         uint256 tokenId = _burnedTokensByAnchor[anchor];
 
-        console.log(tokenId);
         if(tokenId < 1) {
-            //_tokenIdCounter.increment();
-            // Migration from solidity @openzeppelin 4.X to 5-X
             _tokenIdCounter++;
-            //tokenId = _tokenIdCounter.current();
-            // Migration from solidity @openzeppelin 4.X to 5-X
             tokenId = _tokenIdCounter;
-            console.log("tokenId del token creato");
-            console.log(tokenId);
         }
 
         assert(anchorByToken[tokenId] <= 0); // safety for contract-internal errors
         anchorByToken[tokenId] = anchor;
         tokenByAnchor[anchor] = tokenId;
 
-        // ADDED FOR THE IMAGE UPLOAD ON IPFS (USING PINATA)
         setCIDbyToken(tokenId, cid);
-        // setCIDbyToken(tokenId, Strings.toHexString(uint256(cid)));
 
         super._safeMint(to, tokenId);
 
@@ -402,34 +358,14 @@ contract ERC6956 is
         bytes32 anchor;
         address to;
         bytes32 attestationHash;
-        console.log("qui ci arrivo");
         (to, anchor, attestationHash) = decodeAttestationIfValid(attestation, data);
-        console.log("attestation valid");
         _commitAttestation(to, anchor, attestationHash); // commit already here, will be reverted in error case anyway
 
         uint256 fromToken = tokenByAnchor[anchor]; // tokenID, null if not exists
-        // address from = address(0); // owneraddress or 0x00, if not exists
         
         _anchorIsReleased[anchor] = true; // Attestation always temporarily releases the anchor       
-        console.log("tokenID ");
-        console.log(fromToken);
         require(fromToken == 0, "Anchor already exists");
-        console.log("giusto _safeMint()");
         _safeMint(to, anchor, cid);
-
-        // QUI IL PROBLEMA è CHE fromToken non è aggiornato !!!
-        // ALTRIMENTI VA BENE !!!
-        // QUINDI CAPIRE COME SISTEMARE
-
-        // PROBABILMENT LA SOLUZIONE è ELIMINARE, NELL'ORIGINALE NON è PRESENTE QUESTA PARTE
-
-        // console.log("uri token inside createAnchor: ");
-        // console.log(fromToken);
-        // string memory uri = tokenURI(fromToken);
-        // console.log("uri ");
-        // console.log(uri);
-        // emit AnchorTransfer(from, to, anchor, fromToken, uri);
-        // // emit AnchorTransfer(from, to, anchor, fromToken);
     }
 
     function createAnchor(bytes memory attestation, string memory cid) public virtual {
@@ -441,9 +377,7 @@ contract ERC6956 is
         bytes32 anchor;
         address to;
         bytes32 attestationHash;
-        console.log("qui ci arrivo");
         (to, anchor, attestationHash) = decodeAttestationIfValid(attestation, data);
-        console.log("attestation valid");
         _commitAttestation(to, anchor, attestationHash); // commit already here, will be reverted in error case anyway
 
         uint256 fromToken = tokenByAnchor[anchor]; // tokenID, null if not exists
@@ -456,16 +390,7 @@ contract ERC6956 is
             from = _ownerOf(fromToken);
             require(from != to, "ERC6956-E6");
             _safeTransfer(from, to, fromToken, "");
-        } else {
-            // console.log("giusto _safeMint()");
-            // _safeMint(to, anchor);
         }
-
-        // string memory uri = tokenURI(fromToken);
-        // console.log("uri ");
-        // console.log(uri);
-        // emit AnchorTransfer(from, to, anchor, fromToken, uri);
-        // // emit AnchorTransfer(from, to, anchor, fromToken);
     }
 
     function transferAnchor(bytes memory attestation) public virtual {
@@ -490,11 +415,6 @@ contract ERC6956 is
         override(ERC721, ERC721Enumerable)
         returns (bool)
     {
-        bytes4 v = type(IERC6956).interfaceId;
-        console.log("new interface: ");
-        console.logBytes4(v);
-        console.log("new interface: ");
-        console.log(super.supportsInterface(interfaceId));
         return
             interfaceId == type(IERC6956).interfaceId ||
             super.supportsInterface(interfaceId);
@@ -518,28 +438,12 @@ contract ERC6956 is
         bytes memory signature;
         bytes32[] memory proof;
 
-        console.log("attestation");
-        console.logBytes(attestation);
         attestationHash = keccak256(attestation);
-        console.log("attestation Hash");
-        console.logBytes32(attestationHash);
         (to, anchor, attestationTime, validStartTime, validEndTime, signature) = abi.decode(attestation, (address, bytes32, uint256, uint256, uint256, bytes));
-        console.log("to ", to);
-        console.log("anchor");
-        console.logBytes32(anchor);
-        console.log("attestationTime ", attestationTime);
-        console.log("validStartTime ", validStartTime);
-        console.log("validEndTime ", validEndTime);
-        console.log("signature");
-        console.logBytes(signature);
 
         bytes32 messageHash = keccak256(abi.encodePacked(to, anchor, attestationTime, validStartTime, validEndTime, proof));
-        console.log("message Hash");
-        console.logBytes32(messageHash);
         address signer = _extractSigner(messageHash, signature);
 
-        console.log("signer");
-        console.log(signer);
         // Check if from trusted oracle
         require(isTrustedOracle(signer), "ERC6956-E8");
         require(_anchorByUsedAttestation[attestationHash] <= 0, "ERC6956-E9");
@@ -563,13 +467,9 @@ contract ERC6956 is
     /// Anchor-based tokenURIs are needed as an anchor's corresponding tokenId is only known after mint. 
     /// @param tokenId TokenID
     /// @return tokenURI Returns the Uniform Resource Identifier (URI) for `tokenId` token.
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {        // (ERC721) e non URIStorage
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
         bytes32 anchor = anchorByToken[tokenId];
         string memory cid = cidByAnchor[anchor];
-        console.log("cid");
-        console.log(cid);
-        // string memory anchorString = Strings.toHexString(uint256(anchor));
-        // string memory cidString = Strings.toHexString(cid);
         return bytes(_baseURI()).length > 0 ? string(abi.encodePacked(_baseURI(), cid)) : "";
     }
 
@@ -657,8 +557,6 @@ contract ERC6956 is
         "\x19Ethereum Signed Message\n" + len(msg) + msg
         */
         bytes32 ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash));
-        console.log("ethSignedMessageHash");
-        console.logBytes32(ethSignedMessageHash);
 
         bytes32 r;
         bytes32 s;
@@ -670,12 +568,6 @@ contract ERC6956 is
             s := mload(add(sig, 64))
             v := byte(0, mload(add(sig, 96)))
         }
-        console.log("r");
-        console.logBytes32(r);
-        console.log("s");
-        console.logBytes32(s);
-        console.log("v");
-        console.log(v);
 
         // Ensure the v parameter is either 27 or 28
         // TODO is this needed?

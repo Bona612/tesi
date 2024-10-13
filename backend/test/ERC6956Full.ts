@@ -45,22 +45,9 @@ describe("ERC6956: Asset-Bound NFT --- Full", function () {
 
     // Create Merkle Tree
     const merkleTree = StandardMerkleTree.of(merkleTestAnchors, ["bytes32"]);
-    // console.log("anchors")
-    // console.log(merkleTestAnchors)
-    // console.log("root")
-    // console.log(merkleTree.root)
 
     return { abnftContract, merkleTree, owner, maintainer, oracle, alice, bob, mallory, hacker, carl, gasProvider };
   }
-
-  // // Fixture to deploy the abnftContract contract and assign roles.
-  // // Besides owner there's user, minter and burner with appropriate roles.
-  // async function deployAbNftFixture() {
-  //   // Contracts are deployed using the first signer/account by default
-  //   const [owner, maintainer, oracle, alice, bob, mallory, hacker, carl, gasProvider ] = await ethers.getSigners();
-
-  //   return actuallyDeploy(); // 10, AttestedTransferLimitUpdatePolicy.FLEXIBLE
-  // }
 
   async function deployAbNftAndMintTokenToAliceFixture() {
     // Contracts are deployed using the first signer/account by default
@@ -81,39 +68,6 @@ describe("ERC6956: Asset-Bound NFT --- Full", function () {
 
     return { abnftContract, merkleTree, owner, maintainer, oracle, mintAttestationAlice, anchor, alice, bob, mallory, hacker, carl, gasProvider };
   }
-
-  // async function actuallyDeploy() {  // attestationLimitPerAnchor: number, limitUpdatePolicy: AttestedTransferLimitUpdatePolicy
-  //   const [owner, maintainer, oracle, alice, bob, mallory, hacker, carl, gasProvider ] = await hre.ethers.getSigners();
-
-  //   const AbNftContract: ContractFactory = await hre.ethers.getContractFactory("ERC6956Full");
-
-  //   const abnftContract = (await AbNftContract.connect(owner).deploy("Asset-Bound NFT test", "ABNFT")) as ERC6956Full; // limitUpdatePolicy
-  //   await abnftContract.connect(owner).updateMaintainer(maintainer.address, true);
-
-  //   // // set attestation Limit per anchor
-  //   // await abnftContract.connect(maintainer).updateGlobalAttestationLimit(attestationLimitPerAnchor);
-
-  //   // Create Merkle Tree
-  //   const merkleTree = StandardMerkleTree.of(merkleTestAnchors, ["bytes32"]);
-  //   console.log("anchors")
-  //   console.log(merkleTestAnchors)
-  //   console.log("root")
-  //   console.log(merkleTree.root)
-  //   await abnftContract.connect(maintainer).updateValidAnchors(merkleTree.root);
-
-  //   await expect(abnftContract.connect(maintainer).updateOracle(oracle.address, true))
-  //   .to.emit(abnftContract, "OracleUpdate")
-  //   .withArgs(oracle.address, true);
-
-  //   // Uncomment to see the merkle tree.
-  //   // console.log(merkleTree.dump());
-
-  //   return { abnftContract, merkleTree, owner, maintainer, oracle, alice, bob, mallory, hacker, carl, gasProvider };
-  // }
-
-  // async function deployForAttestationLimit(limit: number, policy: AttestedTransferLimitUpdatePolicy) {
-  //   return actuallyDeploy(); // limit, policy
-  // }
   
   describe("Deployment & Settings", function () {
     it("Should implement EIP-165 support the EIP-6956 interface", async function () {
@@ -141,10 +95,7 @@ describe("Valid Anchors (merkle-trees)", function () {
     const anchor = merkleTestAnchors[0][0];
     // Let the oracle create an valid attestation (from the oracle's view)
     const [attestationAlice, dataAlice] = await createAttestationWithData(alice.address, anchor, oracle, merkleTree); // Mint to alice  
-    // console.log("attestation")
-    // console.log(attestationAlice)
-    // console.log("data")
-    // console.log(dataAlice)
+    
     await expect(abnftContract_hacker["createAnchor(bytes,string,bytes)"](attestationAlice, "", dataAlice))
     .to.revertedWith("ERC6956-E26")
   });
@@ -543,16 +494,12 @@ describe("Anchor-Floating", function () {
   //   const merkleAnchors = [['0x5f91a71cff8405364143a67fe7ff7183803bcb9e9a1c0c7ed2605970b319b028'],
   //     ['0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536']];
 
-  //   console.log(merkleAnchors);
     
   //   const tree = StandardMerkleTree.of(merkleAnchors, ['bytes32'], {sortLeaves: true});
-  //   console.log('Merkle Root:', tree.root);
 
   //   const proof = tree.getProof(['0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536']);
-  //   console.log("proof: ", proof);
 
   //   const verified = StandardMerkleTree.verify(tree.root, ['bytes32'], ['0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536'], proof);
-  //   console.log("verify proof: " , verified);
 
   //   // Publish root node of a made up tree, s.t. all proofs we use are from a different tree
   //   await abnftContract.connect(maintainer).updateValidAnchors(tree.root)

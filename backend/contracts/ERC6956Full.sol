@@ -158,15 +158,8 @@ contract ERC6956Full is ERC6956, IERC6956Floatable, IERC6956ValidAnchors { // IE
         require(data.length > 0, "ERC6956-E25");
         bytes32[] memory proof;
         (proof) = abi.decode(data, (bytes32[])); // Decode it with potentially more data following. If there is more data, this may be passed on to safeTransfer
-        console.log("proof");
-        // for (uint i = 0; i < proof.length; i++) {
-        //     console.logBytes32(proof[i]);
-        // }
         
-        // PROBLEMA QUI, L'ANCORA SEMBRA VALIDA IN BASE ALLA PROVA !!!
-        // console.log("pre valid");
         require(anchorValid(anchor, proof), "ERC6956-E26");
-        // console.log("post valid");
 
         super._beforeAttestationUse(anchor, to, data);
     }
@@ -181,53 +174,7 @@ contract ERC6956Full is ERC6956, IERC6956Floatable, IERC6956ValidAnchors { // IE
         emit ValidAnchorsUpdate(merkleRootNode, msg.sender);
     }
 
-
-    // function generateRoot(bytes32[] memory _elements) public pure returns (bytes32) {
-    //     require(_elements.length > 0, "Merkle tree must have at least one leaf");
-
-    //     if (_elements.length == 1) {
-    //         return _elements[0];
-    //     } else {
-    //         bytes32[] memory temp = _elements;
-    //         while (temp.length > 1) {
-    //             uint256 len = temp.length;
-    //             uint256 j = 0;
-    //             for (uint256 i = 0; i < len; i += 2) {
-    //                 if (i + 1 < len) {
-    //                     temp[j] = keccak256(abi.encodePacked(temp[i], temp[i + 1]));
-    //                 } else {
-    //                     temp[j] = temp[i];
-    //                 }
-    //                 j++;
-    //             }
-    //             assembly {
-    //                 mstore(temp, j)
-    //             }
-    //         }
-    //         return temp[0];
-    //     }
-    // }
-
-
     function anchorValid(bytes32 anchor, bytes32[] memory proof) public virtual view returns (bool) {
-        console.log("anchor");
-        console.logBytes32(anchor);
-        console.log("bytes anchor");
-        console.logBytes(abi.encode(anchor));
-        console.log("keccak256(bytes) anchor");
-        console.logBytes32(keccak256(abi.encode(anchor)));
-        console.log("concat anchor");
-        console.logBytes(bytes.concat(keccak256(abi.encode(anchor))));
-        console.log("encoded anchor");
-        console.logBytes32(keccak256(bytes.concat(keccak256(abi.encode(anchor)))));
-        console.log("_validAnchorsMerkleRoot");
-        console.logBytes32(_validAnchorsMerkleRoot);
-
-        console.log(MerkleProof.verify(
-            proof,
-            _validAnchorsMerkleRoot,
-            keccak256(bytes.concat(keccak256(abi.encode(anchor))))));
-
         return MerkleProof.verify(
             proof,
             _validAnchorsMerkleRoot,

@@ -108,7 +108,6 @@ describe("ERC6956: Asset-Bound NFT --- Basics", function () {
 
     const anchor = merkleTestAnchors[0][0];
     const mintAttestationAlice = await createAttestation(alice.address, anchor, oracle); // Mint to alice
-    // console.log(mintAttestationAlice);
 
     await expect(abnftContract_gasProvider["createAnchor(bytes,string)"](mintAttestationAlice, "dummyCID"))
     .to.emit(abnftContract, "Transfer") // Standard ERC721 event
@@ -427,7 +426,6 @@ describe("Metadata tests", function () {
 
     // await abnftContract_maintainer.updateBaseURI("http://test.xyz/collection/");
     const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "https://";
-    console.log(BASE_URI + "dummyCID");
 
     expect(await abnftContract.tokenURI(1))
     .to.be.equal(BASE_URI + "dummyCID");

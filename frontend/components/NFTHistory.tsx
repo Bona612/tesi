@@ -2,16 +2,10 @@
 
 
 import * as React from "react";
-import { Tag, Transaction } from "@/types/index";
+import { Transaction } from "@/types/index";
 import { ScrollArea } from "./ui/scroll-area";
-import { Separator } from "@/components/ui/separator"
 
 
-// Helper function to format the timestamp
-// function formatTimestamp(timestamp: bigint) {
-//   const date = new Date(Number(timestamp) * 1000); // Assuming timestamp is in seconds
-//   return date.toLocaleDateString() + " " + date.toLocaleTimeString();
-// }
 function formatTimestamp(timestamp: bigint) {
   const date = new Date(Number(timestamp) * 1000); // Assuming timestamp is in seconds
   return date.toLocaleString("en-US", {
@@ -30,12 +24,6 @@ interface NFTHistoryProps {
 }
 
 export default function NFTHistory({ transactions = [] }: NFTHistoryProps) {
-  // const [isMounted, setIsMounted] = React.useState(false);
-
-  // // Wait until the component is mounted
-  // React.useEffect(() => {
-  //   setIsMounted(true);
-  // }, []);
 
   return (
     <div>
@@ -53,7 +41,6 @@ export default function NFTHistory({ transactions = [] }: NFTHistoryProps) {
                       <strong>Token: </strong> {transaction.token.id}<br />
                       <strong>Date: </strong> {formatTimestamp(transaction.timestamp)}<br />
                     </>
-                    {/* {(index < (transactions.length - 1)) && <Separator key={`${transaction.id}`} className="my-2" />} */}
                   </div>
                 ))}
               </div>

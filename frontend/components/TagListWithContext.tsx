@@ -10,7 +10,6 @@ type TagListProps = {
 };
 
 
-/// PROBABILMENTE SERVE PER TUTTI I CASI IN CUI I TAG SONO CLICCABILI
 const TagListWithContext: React.FC<TagListProps> = ({ readonly = false }: TagListProps) => {
     const { tags, setTags } = useFilters();
 
@@ -28,11 +27,6 @@ const TagListWithContext: React.FC<TagListProps> = ({ readonly = false }: TagLis
 
 
     return (
-        // <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
-        //   {tagList.map((tag, index) => (
-        //     <Chip key={index} label={tag} color="primary" clickable={false} />
-        //   ))}
-        // </Box>
         <>
           {tags.map((tag, index) => (
             <Tag key={index} tag={tag} handleOnClick={handleOnClick} readonly={readonly} />

@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
-import { Dispatch, SetStateAction, useState } from "react";
   
 
 type CreateDialogProps = {
@@ -26,12 +25,10 @@ type CreateDialogProps = {
 
   
 export function CreateDialog({isOpen, openDialog, setIsOpen, closeDialog, isLoading}: CreateDialogProps) {
-  // const [isLoading, setIsLoading] = useState(false);
-
+  
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        {/* <Button onClick={handleOnClick} variant="outline" disabled={disabled}>Buy {price} ETH</Button> */}
         <Button className="font-bold py-2 px-4 rounded mt-4" onClick={openDialog}>Create NFT</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -42,16 +39,6 @@ export function CreateDialog({isOpen, openDialog, setIsOpen, closeDialog, isLoad
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          {/* <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              id="name"
-              defaultValue="Pedro Duarte"
-              className="col-span-3"
-            />
-          </div> */}
         </div>
         <DialogFooter>
             <DialogClose asChild>
@@ -59,7 +46,6 @@ export function CreateDialog({isOpen, openDialog, setIsOpen, closeDialog, isLoad
                     Cancel
                 </Button>
             </DialogClose>
-            {/* <Button type="submit" form="nft-form">Create</Button> */}
             <Button type="submit" form="nft-form" disabled={isLoading}>
               {isLoading ? (
                 <>

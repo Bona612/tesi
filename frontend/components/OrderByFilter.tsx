@@ -3,8 +3,6 @@
 
 import * as React from "react"
 
-// import { useMediaQuery } from "@/hooks/use-media-query"
-// import { Button } from "@/components/ui/button"
 
 import {
     Select,
@@ -16,7 +14,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useFilters } from "@/context/FilterContext"
-import { OrderBy, orderByOptions } from "@/types"
+import { orderByOptions } from "@/types"
 
 
 type OrderByFilterProps = {

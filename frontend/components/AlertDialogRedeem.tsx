@@ -3,7 +3,6 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -19,7 +18,6 @@ import { Loader2 } from "lucide-react";
 
 
 interface AlertDialogRedeemProps {
-  // attestation?: Attestation | undefined,
   handleOnScanSuccess?: (attestation: Attestation) => void,
   handleRedeemNFT?: (attestation: Attestation) => void,
   isOpen: boolean;
@@ -33,7 +31,6 @@ interface AlertDialogRedeemProps {
 export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen, openDialog, setIsOpen, closeDialog, isLoading}: AlertDialogRedeemProps) {
   const [isQrReaderVisible, setIsQrReaderVisible] = useState<boolean>(false);
   const [scannedAttestation, setScannedAttestation] = useState<Attestation | undefined>(undefined);
-  // const [isLoading, setIsLoading] = useState(false);
 
 
   const handleOpenQrReader = () => {
@@ -58,7 +55,6 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen,
   }
   
   const handleOnClick = () => {
-    // setIsLoading(true);
     if (isQrReaderVisible) {
       handleCloseQrReader();
     }
@@ -66,7 +62,6 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen,
     if (handleRedeemNFT) {
       handleRedeemNFT(scannedAttestation as Attestation);
     }
-    // setIsLoading(false);
     setScannedAttestation(undefined)
   };
 
@@ -81,8 +76,6 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen,
     closeDialog();
   }
 
-  // AGGIUNGERE IL DISABLED SUL QR CODE BUTTON (dovrebbe essere fixato)
-  // AGGIUNGERE ANCHE IL ASYNC/AWAIT SU TUTTE LE FUNZIONI CHE USANO CHIAMATE ALLA BLOCKCHAIN
   return (
     <AlertDialog open={isOpen}>
       <AlertDialogTrigger asChild>
@@ -91,10 +84,6 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen,
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Scan QRcode</AlertDialogTitle>
-          {/* <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription> */}
         </AlertDialogHeader>
         <div className="grid gap-4 py-1 sm:py-4">
           {scannedAttestation &&
@@ -114,7 +103,6 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen,
             )}
             asChild>
             {handleRedeemNFT ? (
-              // <Button type="button" onClick={handleOnClick}>Redeem</Button>
               <Button onClick={handleOnClick} disabled={isLoading || !scannedAttestation}>
                 {isLoading ? (
                   <>
@@ -126,7 +114,6 @@ export function AlertDialogRedeem({handleOnScanSuccess, handleRedeemNFT, isOpen,
                 )}
               </Button>
             ) : (
-              // <Button type="button" onClick={handleConfirmAttestation}>Confirm attestation</Button>
               <Button onClick={handleConfirmAttestation} disabled={isLoading || !scannedAttestation}>
                 {isLoading ? (
                   <>

@@ -1,17 +1,14 @@
 "use client";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useFilters } from "@/context/FilterContext";
-import { OrderBy, OrderDirection, OrderDirectionEnum, Tag } from "@/types";
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { OrderDirectionEnum } from "@/types";
 
 
 
 export function OrderDirectionFilter() {
-    // const [isDescending, setIsDescending] = useState<boolean>(true);
 
     const { orderDirection, setOrderDirection } = useFilters();
 

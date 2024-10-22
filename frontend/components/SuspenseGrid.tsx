@@ -8,15 +8,7 @@ import { SkeletonCard } from './SkeletonCard';
 import { useNFTperRow } from '@/context/NFTperRowContext';
 
 
-  
-// type NFTListProps = {
-//     data: NFTtokens;
-//     ownerAddress?: string;
-// };
 
-
-
-// This is the Client Component because it implements pagination with `usePaginationFragment`.
 const SuspenseGrid = React.memo(() => {
   const { nftPerRow }= useNFTperRow();
 

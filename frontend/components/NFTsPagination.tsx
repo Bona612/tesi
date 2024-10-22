@@ -1,8 +1,5 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import ErrorBoundary from '@/components/ErrorBoundary';
-import NFTsHeader from '@/components/NFTsHeader';
-import { SkeletonCard } from '@/components/SkeletonCard';
 import {
     Pagination,
     PaginationContent,
@@ -12,14 +9,6 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-import { useWeb3ModalProvider, useWeb3ModalAccount } from '@web3modal/ethers/react'
-
-import { Suspense } from 'react';
-import NFTList from '@/components/NFTList';
-
-// Import everything needed to use the `useQuery` hook
-import { ApolloProvider, useQuery, gql, TypedDocumentNode, useSuspenseQuery } from '@apollo/client';
-import client from "@/lib/apollo-client";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useFilters } from '@/context/FilterContext';
 import { useMediaQueries } from '@/hooks/useMediaQuery';
@@ -28,17 +17,12 @@ import { useMediaQueries } from '@/hooks/useMediaQuery';
 
 interface NFTsPaginationProps {
     n_pages: number,
-    // first: number,
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    // setSkip: React.Dispatch<React.SetStateAction<number>>;
     onFetchMore: () => void;
 }
 
 
 export default function NFTsPagination({n_pages, onChange, onFetchMore}: NFTsPaginationProps) {
-    // const { address, chainId, isConnected } = useWeb3ModalAccount()
-    // const { walletProvider } = useWeb3ModalProvider()
-
     const [pagesToShow, setPagesToShow] = useState<number>(0);
     const [text, setText] = useState<boolean>(true);
     const {page, setPage} = useFilters();
@@ -49,10 +33,8 @@ export default function NFTsPagination({n_pages, onChange, onFetchMore}: NFTsPag
 
 
     const screenSize = useMediaQueries()
-    console.log("screen ", screenSize)
 
     useEffect(() => {
-        console.log("Screen size changed to:", screenSize);
         // Update the state variable based on screen size
         if (screenSize === 'small') {
             setPagesToShow(1);
@@ -68,7 +50,6 @@ export default function NFTsPagination({n_pages, onChange, onFetchMore}: NFTsPag
     const handlePrevious = () => {
         if (page > 1) {
             setPage(page - 1);
-            // setSkip((page - 1) * first);
             onFetchMore();
         }
     };
@@ -76,14 +57,12 @@ export default function NFTsPagination({n_pages, onChange, onFetchMore}: NFTsPag
     const handleNext = () => {
         if (page < n_pages) {
             setPage(page + 1);
-            // setSkip((page - 1) * first);
             onFetchMore();
         }
     };
     
     const handlePageChange = (page: number) => {
         setPage(page);
-        // setSkip((page - 1) * first);
         onFetchMore();
     };
 

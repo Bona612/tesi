@@ -10,22 +10,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Eip1193Provider } from "ethers"
-import { NFT } from "@/types"
 import { Loader2 } from "lucide-react"
 
 
 interface DialogBuyProps {
-    handleOnClick: (listingPrice: number) => void,
-    // PROBABILMENTE QUI NON PASSARE LISTNFT, MA SEMPLICEMENTE CHIAMARE UN'ALTRA FUNZIONE CHE NON FARà ALTRO CHE CHIAMARE LISTNFT
-    // listNFT: (nft: NFT, listingPrice: number, isConnected: boolean, address: string | undefined, walletProvider: Eip1193Provider | undefined) => void,
-    isOpen: boolean;
+    handleOnClick: (listingPrice: number) => void,isOpen: boolean;
     openDialog: () => void;
     setIsOpen: (isOpen: boolean) => void;
     closeDialog: () => void;
@@ -35,7 +29,6 @@ interface DialogBuyProps {
 
 const formSchema = z.object({
   listingPrice: z.any().transform((val) => parseFloat(val)).refine((val) => {
-    // console.log("length: ", val.toString().split('.')[1]?.length)
     return val > 0 && Number.isFinite(val) && val.toString().split('.')[1]?.length <= 4;
   }, {
     message: "The number must be a positive float greater than 0 with no more than 4 decimal places.",
@@ -53,16 +46,12 @@ export function DialogList({handleOnClick, isLoading, openDialog, setIsOpen, clo
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-
-    // PROBABILMENTE QUI NON PASSARE LISTNFT, MA SEMPLICEMENTE CHIAMARE UN'ALTRA FUNZIONE CHE NON FARà ALTRO CHE CHIAMARE LISTNFT
     handleOnClick(values.listingPrice);
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        {/* <Button className="font-bold py-2 px-4 rounded mt-4" variant="outline" disabled={disabled}>List</Button> */}
         <Button className="font-bold py-2 px-4 rounded mt-4" onClick={openDialog}>List NFT</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -108,7 +97,6 @@ export function DialogList({handleOnClick, isLoading, openDialog, setIsOpen, clo
                     Cancel
                 </Button>
             </DialogClose>
-            {/* <Button type="submit" form="nft-listing-form" className="font-bold py-2 px-4 rounded mt-4">List</Button> */}
             <Button type="submit" form="nft-listing-form" disabled={isLoading}>
               {isLoading ? (
                 <>

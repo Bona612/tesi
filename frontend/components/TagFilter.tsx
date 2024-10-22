@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useContext, useRef, useEffect, useState, useCallback }  from "react";
-// import { Tag } from "@/components/Tag";
-// import { RecipeContext } from "@/context/recipe-context";
+import React, { useRef }  from "react";
 
 import { useMediaQuery }from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/button"
@@ -18,16 +16,10 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import {
-  Drawer,
-  DrawerContent,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-// import { OPTIMIZED_FONT_PROVIDERS } from "next/dist/shared/lib/constants"
 import { Tag, TAGS } from "@/types";
 import { cn } from "@/lib/utils";
 import { useFilters } from "@/context/FilterContext";
@@ -42,7 +34,6 @@ type TagFilterProps = {
 export function TagFilter({}: TagFilterProps) {
     const [open, setOpen] = React.useState(false)
     const isDesktop = useMediaQuery("(min-width: 768px)")
-    // const [selectedTags, setSelectedTags] = React.useState<Tag | null>(null)
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { tags, setTags } = useFilters();
@@ -74,51 +65,14 @@ export function TagFilter({}: TagFilterProps) {
             </Popover>
         </div>
     )
-    // if (isDesktop) {
-    //     return (
-    //         <div className="px-2 shrink">
-    //             <Popover open={open} onOpenChange={setOpen}>
-    //                 <PopoverTrigger asChild>
-    //                     <Button variant="outline" className="w-full md:w-auto md:min-w-[150px] justify-start">
-    //                         Tag
-    //                     </Button>
-    //                 </PopoverTrigger>
-    //                 <PopoverContent className="w-full md:w-auto md:min-w-[200px] p-0" align="start">
-    //                     <StatusList tags={tags} handleOnClick={handleOnClick} />
-    //                 </PopoverContent>
-    //             </Popover>
-    //         </div>
-    //     )
-    // }
-
-    // return (
-    //     <div className="px-2 shrink">
-    //         <Drawer open={open} onOpenChange={setOpen}>
-    //             <DrawerTrigger asChild>
-    //                 <Button variant="outline" className="w-[150px] justify-start">
-    //                     Tag
-    //                 </Button>
-    //             </DrawerTrigger>
-    //             <DrawerContent>
-    //                 <div className="mt-4 border-t">
-    //                     <StatusList tags={tags} handleOnClick={handleOnClick} />
-    //                 </div>
-    //             </DrawerContent>
-    //         </Drawer>
-    //     </div>
-    // )
 }
 
 function StatusList({
     tags,
-    handleOnClick,
-    // setOpen,
-    // setSelectedTags,
+    handleOnClick
 }: {
     tags: Tag[],
     handleOnClick: (tag: Tag) => void
-    // setOpen: (open: boolean) => void
-    // setSelectedTags: (tags: Tag | null) => void
 }) {
     return (
         <Command>
@@ -132,9 +86,6 @@ function StatusList({
                             value={tag}
                             onSelect={(value) => {
                                 handleOnClick(tag)
-                                // setSelectedTags(
-                                // tags.find((priority) => priority.name === value) || null
-                                // )
                             }}
                         >
                             <Check

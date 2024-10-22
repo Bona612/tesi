@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useContext, useRef, useEffect, useState, useCallback }  from "react";
-// import { Tag } from "@/components/Tag";
-// import { RecipeContext } from "@/context/recipe-context";
 
-import { useMediaQuery }from "@/hooks/useMediaQuery"
 import { Button } from "@/components/ui/button"
 import {
     Check
@@ -26,12 +23,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-// import { OPTIMIZED_FONT_PROVIDERS } from "next/dist/shared/lib/constants"
 import { Tag, TAGS } from "@/types";
 import { cn } from "@/lib/utils";
 import { TagFilter } from "./TagFilter";
@@ -48,7 +39,6 @@ type TagFilterProps = {
 
 
 export function Filters({isDesktop}: TagFilterProps) {
-    // const [open, setOpen] = React.useState(false)
     const { tags, setTags, resetFilters } = useFilters();
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
@@ -61,14 +51,6 @@ export function Filters({isDesktop}: TagFilterProps) {
         return newTags;
     }
 
-    const handleOnClick = (tag: Tag) => {
-        setTags(updateTags(tag));
-    };
-
-
-    useEffect(() => {
-        console.log("isDrawerOpen: ", isDrawerOpen);
-    }, [isDrawerOpen])
 
     function handleDrawerOpen() {
         setIsDrawerOpen(true);
@@ -108,13 +90,11 @@ export function Filters({isDesktop}: TagFilterProps) {
                     <div>
                         <DrawerHeader>
                             <DrawerTitle>Filters</DrawerTitle>
-                            {/* <DrawerDescription>Set your daily activity goal.</DrawerDescription> */}
                         </DrawerHeader>
                         <div className="mt-4 border-t">
                             <div className="py-2">
                                 <TagFilter />
                             </div>
-                            {/* <StatusList tags={tags} handleOnClick={handleOnClick} /> */}
                             <div className="flex">
                                 <OrderByFilter />
                                 <OrderDirectionFilter />
@@ -137,14 +117,10 @@ export function Filters({isDesktop}: TagFilterProps) {
 
 function StatusList({
     tags,
-    handleOnClick,
-    // setOpen,
-    // setSelectedTags,
+    handleOnClick
 }: {
     tags: Tag[],
     handleOnClick: (tag: Tag) => void
-    // setOpen: (open: boolean) => void
-    // setSelectedTags: (tags: Tag | null) => void
 }) {
     return (
         <Command>
@@ -158,9 +134,6 @@ function StatusList({
                             value={tag}
                             onSelect={(value) => {
                                 handleOnClick(tag)
-                                // setSelectedTags(
-                                // tags.find((priority) => priority.name === value) || null
-                                // )
                             }}
                         >
                             <Check

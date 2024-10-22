@@ -1,11 +1,8 @@
 "use client";
 
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Anchor, Attestation } from "@/types";
-import { Button } from "./ui/button";
+import { Anchor } from "@/types";
 import { useEffect, useRef } from "react";
-import { useMediaQueries } from "@/hooks/useMediaQuery";
 
 
 interface AttestationProps {
@@ -17,12 +14,10 @@ function attestationToJSON(attestation: Anchor): string {
         return "";
     }
 
-    // const attestationJSON = JSON.stringify(attestation, null, "\t");
     const attestationJSON = JSON.stringify(attestation);
     const attestationJSON_woutQuote = attestationJSON.replace(/\"/g, '');
     const attestationValues = attestationJSON_woutQuote.replace(/[\{\}]/g, '').replace(/,/g, '\n').replace(/:/g, ': ');
 
-    console.log(attestationValues);
     return attestationValues;
 }
 
@@ -31,7 +26,6 @@ export function AttestationShower({attestation}: AttestationProps) {
     const attestationJSON = attestationToJSON(attestation);
     
     useEffect(() => {
-        console.log("CHIAMATO");
         const textarea = textareaRef.current;
 
         const adjustHeight = () => {
@@ -44,7 +38,6 @@ export function AttestationShower({attestation}: AttestationProps) {
                 const paddingClasses = classNames.filter(cls => cls.startsWith('py-'));
                 const number = paddingClasses[0].split("-")[1]
                 const classPadding = parseFloat(number);
-                console.log(classPadding);
 
                 // Calculate the new height (scrollHeight + total padding)
                 const newHeight = height + (classPadding * 4);
@@ -75,7 +68,6 @@ export function AttestationShower({attestation}: AttestationProps) {
         <>
             {attestation &&
                 <div className="grid w-full">
-                    {/* <Label htmlFor="message">Attestation</Label> */}
                     <Textarea id="message" ref={textareaRef} value={attestationJSON} className="resize-none h-auto" readOnly />
                 </div>
             }

@@ -132,7 +132,7 @@ describe("NFT Marketplace events test", () => {
   })
 
 
-  test("handleItemListed should list a Token in the marketplace", () => {
+  test("handleItemListed SHOULD list a Token", () => {
     let from = Address.fromString("0x0000000000000000000000000000000000000001");
     let to = Address.fromString("0x0000000000000000000000000000000000000002");
     let anchor = Bytes.fromHexString("0x0000000000000000000000000000000000000003");
@@ -154,7 +154,7 @@ describe("NFT Marketplace events test", () => {
     assert.fieldEquals("Token", token!.id, "listingPrice", price.toString());
   });
 
-  test("handleItemCanceled should cancel list of a Token in the marketplace", () => {
+  test("handleItemCanceled SHOULD cancel listing of a Token", () => {
     let from = Address.fromString("0x0000000000000000000000000000000000000001");
     let to = Address.fromString("0x0000000000000000000000000000000000000002");
     let anchor = Bytes.fromHexString("0x0000000000000000000000000000000000000010");
@@ -179,7 +179,38 @@ describe("NFT Marketplace events test", () => {
     assert.fieldEquals("Token", tokenCancelled!.id, "listingPrice", BigInt.fromI32(0).toString());
   });
 
-  test("handleItemBought should buy a Token listed in the marketplace and handleItemRedeemed should redeem a Token buyed", () => {
+  test("handleItemBought SHOULD buy a Token", () => {
+    let from = Address.fromString("0x0000000000000000000000000000000000000001");
+    let to = Address.fromString("0x0000000000000000000000000000000000000002");
+    let anchor = Bytes.fromHexString("0x0000000000000000000000000000000000000003");
+    let tokenId = BigInt.fromI32(2);
+    let cid = "QmT83suxMSkV3CqBkEK7nYbJw4MYfnSxxF8JjeqPC4XZqh";
+
+    let createEvent = createAnchorTransferEvent(from, to, tokenId, anchor, cid);
+    handleAnchorTransfer(createEvent);
+
+    let nftAddress = Address.fromString("0xf33e2937F2f2dE9bA30C8341aF93c839C7FbC58D");
+    let seller = to;
+    let price = BigInt.fromI32(1);
+    
+    let listItemEvent = createItemListedEvent(nftAddress, tokenId, seller, price);
+    handleItemListed(listItemEvent);
+    
+    const token = Token.load(tokenId.toString());
+    assert.fieldEquals("Token", token!.id, "isListed", true.toString());
+    assert.fieldEquals("Token", token!.id, "listingPrice", price.toString());
+
+    let buyer = Address.fromString("0x0000000000000000000000000000000000000004");
+
+    let buyItemEvent = createItemBoughtEvent(nftAddress, tokenId, buyer, price);
+    handleItemBought(buyItemEvent);
+    
+    const tokenBuyed = Token.load(tokenId.toString());
+    assert.fieldEquals("Token", tokenBuyed!.id, "isListed", false.toString());
+    assert.fieldEquals("Token", tokenBuyed!.id, "listingPrice", BigInt.fromI32(0).toString());
+    assert.fieldEquals("Token", tokenBuyed!.id, "toRedeem", true.toString());
+  });
+  test("handleItemRedeemed SHOULD redeem a Token buyed", () => {
     let from = Address.fromString("0x0000000000000000000000000000000000000001");
     let to = Address.fromString("0x0000000000000000000000000000000000000002");
     let anchor = Bytes.fromHexString("0x0000000000000000000000000000000000000003");

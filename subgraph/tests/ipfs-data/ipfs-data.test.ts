@@ -45,7 +45,7 @@ describe("IPFS-data creation test", () => {
     })
 
     // Test for handleAnchorTransfer
-    test("handleAnchorTransfer should create a new Token and assign an Owner, with the creation of Metadata", () => {
+    test("handleAnchorTransfer SHOULD create a new Token", () => {
     assert.dataSourceCount('IpfsData', 0)
 
     let from = Address.fromString("0x0000000000000000000000000000000000000001");

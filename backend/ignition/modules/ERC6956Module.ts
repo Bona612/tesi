@@ -1,17 +1,9 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
-import { AttestedTransferLimitUpdatePolicy } from "../../test/commons"; // NULLADDR
-// import { ethers } from "ethers";
-import { ethers, ignition } from "hardhat";
-
-import { createMerkleTree, getMerkleTreeRoot } from "../../utils/merkleTreeUtilities";
 import dotenv from 'dotenv';
 dotenv.config();
 
 const NAME: string = "Asset-Bound NFT test";
 const SYMBOL: string = "ABNFT";
-const POLICY: AttestedTransferLimitUpdatePolicy = AttestedTransferLimitUpdatePolicy.FLEXIBLE;
-const ONE_GWEI: bigint = 1_000_000_000n;
-const deployerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
 
 const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "";
 
@@ -31,9 +23,6 @@ const ERC6956Module = buildModule("ERC6956Module", (m) => {
     const name = m.getParameter("name", NAME);
     const symbol = m.getParameter("symbol", SYMBOL);
     const baseURI = m.getParameter("baseURI", BASE_URI);
-    // const policy = m.getParameter("policy", POLICY);
-    // const amount = m.getParameter("amount", ONE_GWEI);
-    // const signer = ethers.provider.getSigner(deployerAddress);
 
     /*
         Deploy `Token` by calling `contract()` with the constructor arguments
@@ -50,52 +39,13 @@ const ERC6956Module = buildModule("ERC6956Module", (m) => {
         and scripts, as will be shown later.
     */
 
-    // QUESTA PARTE VA VERIFICATA, SICURAMENTE mantainer and oracle è MEGLIO SE VENGONO SETTATI QUI
-    // MENTRE PER updateValidAnchors LA COSA è DA VERIFICARE
-    // const mantainerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
     m.call(erc6956, "updateMaintainer", [deployer, true]);
 
-    // const oracleAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
     m.call(erc6956, "updateOracle", [deployer, true]);
 
-    console.log("baseURI: ", baseURI);
     m.call(erc6956, "updateBaseURI", [baseURI]);
-
-    // const dummyAnchor = "0x5f91a71cff8405364143a67fe7ff7183803bcb9e9a1c0c7ed2605970b319b028";
-    // const anchor = "";
-    // const merkleTree = createMerkleTree([[dummyAnchor], [anchor]]);
-    // const merkleRoot = getMerkleTreeRoot(merkleTree);
-    // m.call(erc6956, "updateValidAnchors", [merkleRoot]);
-    
 
     return { erc6956 };
 });
 
 export default ERC6956Module;
-
-
-// import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
-// import { ERC6956Full } from "../../typechain"; // Adjust the path based on your project structure
-
-// export default defineModule((builder: ModuleBuilder) => {
-//   const deployer = builder.getSigner("deployer");
-
-//   const limitUpdatePolicy = "0x..."; // Example policy value, this should be passed as a parameter if dynamic
-
-//   const abnftContract = builder.contract("ERC6956Full", {
-//     from: deployer,
-//     args: ["Asset-Bound NFT test", "ABNFT", limitUpdatePolicy],
-//   });
-
-//   builder.execute(deployer, abnftContract, "updateMaintainer", {
-//     args: [deployer.address, true],
-//   });
-
-//   builder.execute(deployer, abnftContract, "updateGlobalAttestationLimit", {
-//     args: [100], // Example limit value, should be parameterized if dynamic
-//   });
-
-//   // Add other setup steps as necessary
-
-//   return { abnftContract };
-// });

@@ -1,6 +1,4 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
-import { AttestedTransferLimitUpdatePolicy } from "../../test/commons"; // NULLADDR
-import { ethers } from "ethers";
 import { createMerkleTree, getMerkleTreeRoot } from "../../utils/merkleTreeUtilities";
 import { getValidAnchorsForMerkleTreeUtility } from "../../utils/validAnchorsUtilities";
 import dotenv from 'dotenv';
@@ -8,10 +6,6 @@ dotenv.config();
 
 const NAME: string = "Asset-Bound NFT test";
 const SYMBOL: string = "ABNFT";
-const POLICY: AttestedTransferLimitUpdatePolicy = AttestedTransferLimitUpdatePolicy.FLEXIBLE;
-const ONE_GWEI: bigint = 1_000_000_000n;
-const deployerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
-console.log(process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI);
 const BASE_URI: string = process.env.NEXT_PUBLIC_GATEWAY_URL__BASE_URI || "";
 
 /*
@@ -49,22 +43,15 @@ const ERC6956FullModule = buildModule("ERC6956FullModule", (m) => {
         and scripts, as will be shown later.
     */
 
-    // QUESTA PARTE VA VERIFICATA, SICURAMENTE mantainer and oracle è MEGLIO SE VENGONO SETTATI QUI
-    // MENTRE PER updateValidAnchors LA COSA è DA VERIFICARE
-    // const mantainerAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
     m.call(erc6956full, "updateMaintainer", [deployer, true]);
 
-    // const oracleAddress = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
     m.call(erc6956full, "updateOracle", [deployer, true]);
 
-    console.log("baseURI: ", baseURI);
     m.call(erc6956full, "updateBaseURI", [baseURI]);
 
-    // const dummyAnchor = "0x5f91a71cff8405364143a67fe7ff7183803bcb9e9a1c0c7ed2605970b319b028";
-    // const anchor = "";
     const merkleTree = createMerkleTree(getValidAnchorsForMerkleTreeUtility());
     const merkleRoot = getMerkleTreeRoot(merkleTree);
-    console.log("merkleRoot: ", merkleRoot);
+    
     m.call(erc6956full, "updateValidAnchors", [merkleRoot]);
     
 

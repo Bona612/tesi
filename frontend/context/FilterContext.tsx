@@ -1,4 +1,4 @@
-import { OrderBy, OrderDirection, OrderDirectionEnum, TAGS, Tag, orderByOptions } from '@/types';
+import { OrderBy, OrderDirection, OrderDirectionEnum, Tag, orderByOptions } from '@/types';
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 

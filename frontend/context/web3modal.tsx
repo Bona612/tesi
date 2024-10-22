@@ -16,7 +16,6 @@ const mainnet = {
 
 const INFURA_BASE_URL = process.env.INFURA_BASE_URL || "";
 const INFURA_API_KEY = process.env.INFURA_API_KEY || "";
-console.log(`${INFURA_BASE_URL}${INFURA_API_KEY}`);
 
 const sepolia = {
   chainId: 11155111,
@@ -30,7 +29,6 @@ const sepolia = {
   },
   explorerUrl: 'https://sepolia.etherscan.io',
   rpcUrl: "https://sepolia.infura.io/v3/97070e614e654251a0578e1f52ccde09"
-  // rpcUrl: `${INFURA_BASE_URL}${INFURA_API_KEY}`
 }
 
 const localhost = {
@@ -57,8 +55,6 @@ const ethersConfig = defaultConfig({
   enableEIP6963: true, // true by default
   enableInjected: true, // true by default
   enableCoinbase: true, // true by default
-  rpcUrl: '...', // used for the Coinbase SDK
-  defaultChainId: 1 // used for the Coinbase SDK
 })
 
 // 5. Create a Web3Modal instance

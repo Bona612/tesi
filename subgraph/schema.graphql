@@ -1,13 +1,5 @@
 # schema.graphql
 
-# type _Schema_
-#   @fulltext(
-#     name: "tokenSearch"
-#     language: en
-#     algorithm: proximityRank
-#     include: [{ entity: "Token", fields: [{ name: "metadata.title" }] }]
-#   )
-
 
 # Define the Node interface required by Relay
 interface Node {
@@ -17,18 +9,13 @@ interface Node {
 # Define the Token entity with Relay's Node interface
 type Token implements Node @entity {
   id: ID!
-  # address: String!
   anchor: String!
   metadataURI: String!
   metadata: TokenMetadata
-  # tags: [String!]!
   owner: Owner!
-  # Field to indicate if the token is currently listed
   isListed: Boolean! # True if the token is listed for sale
   listingPrice: BigInt! # Optional: Listing price, if relevant
   toRedeem: Boolean! 
-  # listedAt: BigInt # Optional: Timestamp when the token was listed
-  # marketplace: String # Optional: Marketplace where it is listed
   transactions: [Transaction!]! @derivedFrom(field: "token")
 }
 
@@ -77,7 +64,6 @@ input Where_Token_Redeem {
 # Define the Owner entity with Relay's Node interface
 type Owner implements Node @entity {
   id: ID!
-  # address: String!  # UGUALE A id QUINDI POTREMMO ELIMINARLO
   nfts: [Token!]! @derivedFrom(field: "owner")
   transactions: [Transaction!]! @derivedFrom(field: "from")
   transactionsReceived: [Transaction!]! @derivedFrom(field: "to")

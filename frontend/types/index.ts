@@ -1,6 +1,5 @@
 import { Tag } from "lucide-react";
 
-// WHY NOT, MAYBE ALSO ICON
 export type Page = {
   title: string;
   smallTitle: string,
@@ -30,10 +29,8 @@ export const PAGES: Page[] = [
 ]
 
 
-// Define the Tag type as a union of string literals
 export type Tag = 'Tag 1' | 'Tag 2' | 'Tag 3' | 'Tag 4';
 
-// Define the immutable list of tags
 export const zod_TAGS = [
   'Tag 1',
   'Tag 2',
@@ -42,7 +39,6 @@ export const zod_TAGS = [
 ] as const;
 export const TAGS = zod_TAGS as readonly Tag[];
 
-// export type OrderBy_by = 'name';
 export type OrderBy = {
   name: string,
   label: string,
@@ -119,11 +115,9 @@ export type OwnerNFTtokens = {
 
 export type NFT_Owner = {
   id: string,
-  // address: string,
 }
 export type Owner = {
   id: string,
-  // address: string,
   nfts: NFT[],
 }
 
@@ -155,7 +149,6 @@ export interface NFTtokensVariables {
   orderDirection: string,
 }
 
-// PROBABILMENTE QUI tags  DOVRà CAMBIARE IN where_tags
 export interface tokenSearchVariables {
   text: string,
   skip: number,
@@ -213,14 +206,11 @@ export interface searchOwnerVariables {
   orderDirection: string,
 }
 
-// QUI HO CONTROLLATO, BASTA USARE owner: address VISTO CHE ID == ADDRESS
 export type Where_Owner_Address = {
   id: string
 }
 
 
-// PROBABILMENTE QUI, NON SERVIRà SOLO owner_, MA ANCHE tags IN QUALCHE MODO
-// PROBABILMENTE SERVIRà FARE SI CHE tags SIA OPZIONALE
 export interface tokenOwnerVariables {
   id: string,
   skip: number,

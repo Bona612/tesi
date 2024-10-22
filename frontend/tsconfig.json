@@ -2,7 +2,7 @@
   "compilerOptions": {
     "types": [
       "node"
-    ], // Include node types
+    ],
     "lib": [
       "dom",
       "dom.iterable",

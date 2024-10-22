@@ -2,16 +2,6 @@ import { Attestation, OrderBy, orderByOptions, OrderDirectionEnum } from '@/type
 import { ethers } from 'ethers';
 
 
-// export function ethToWei(eth: string): bigint {
-//     const wei = ethers.parseEther(eth);
-//     return wei;
-// }
-
-// export function weiToEth(wei: bigint): string {
-//     const eth = ethers.formatEther(wei);
-//     return eth;
-// }
-
 export function ethToWei(eth: number): bigint {
     const wei = ethers.parseEther(eth.toString());
     return wei;
@@ -32,8 +22,6 @@ export const findOrderBy = (name: string): OrderBy => {
 };
 
 export function jsonToAttestation(attestationJSON: string): Attestation {
-    console.log(attestationJSON);
-    console.log(JSON.parse(attestationJSON));
     const attestation: Attestation = JSON.parse(attestationJSON) as Attestation;
     return attestation;
 }

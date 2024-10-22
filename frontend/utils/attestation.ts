@@ -1,8 +1,7 @@
 import { Attestation } from "@/types";
-import { ethers } from "ethers";
+
 
 export const signAttestationAPI = async (data: {attestation: Attestation}) => { 
-    console.log(data);
     try {
         const response = await fetch('/api/signAttestation', {
           method: 'POST',
@@ -13,7 +12,6 @@ export const signAttestationAPI = async (data: {attestation: Attestation}) => {
         });
     
         const result = await response.json();
-        console.log('Response from API:', result);
 
         return result;
     }
@@ -24,7 +22,6 @@ export const signAttestationAPI = async (data: {attestation: Attestation}) => {
 };
 
 export const merkleTreeAPI = async (data: {anchor: string}) => { 
-    console.log(data);
     try {
         const apiUrl = '/api/merkleTree?anchor=' + data.anchor;
         const response = await fetch(apiUrl, {
@@ -32,7 +29,6 @@ export const merkleTreeAPI = async (data: {anchor: string}) => {
         });
     
         const result = await response.json();
-        console.log('Response from API:', result);
 
         return result;
     }

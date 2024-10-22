@@ -1,17 +1,5 @@
 // /** @type {import('next').NextConfig} */
 
-// // Path: next.config.js
-// const nextConfig = {
-//   webpack: config => {
-//     config.externals.push('pino-pretty', 'lokijs', 'encoding')
-
-//     return config
-//   }
-// }
-
-// export default nextConfig;
-
-// import relayConfig from './relay.config.json' with { type: 'json' };
 
 const cspHeader = `
     default-src 'self';
@@ -33,16 +21,12 @@ const nextConfig = {
 
     return config
   },
-  // DA VERIFICARE LA PARTE SOTTO, SOPRATTUTTO LA SINTASSI
+  
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
-          // {
-          //   key: 'Content-Security-Policy',
-          //   value: cspHeader.replace(/\n/g, ''),
-          // },
           {
             key: 'Permission-Policy',
             value: 'camera=(self)', // Allow camera and microphone access only from the same origin

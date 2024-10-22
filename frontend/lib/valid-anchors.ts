@@ -5,7 +5,6 @@ import { getValidAnchorsUtility, getValidAnchorsForMerkleTreeUtility } from "../
 
 const filePath = path.resolve(process.env.DATA_FILE_PATH!);
 
-// const dummyAnchor = "0x5f91a71cff8405364143a67fe7ff7183803bcb9e9a1c0c7ed2605970b319b028";//generateRandomAnchorHex(32);
 
 export function removeValidAnchor(anchor: string) {
   let anchors = getValidAnchors();
@@ -24,22 +23,9 @@ export function addValidAnchor(anchor: string) {
 }
 
 export function getValidAnchors(): string[] {
-  // if (!fs.existsSync(filePath)) return [];
-  // const data = fs.readFileSync(filePath, 'utf-8');
-  // return JSON.parse(data);
   return getValidAnchorsUtility();
 }
 
 export function getValidAnchorsForMerkleTree(): string[][] {
-  // console.log(fs.existsSync(filePath));
-  // if (!fs.existsSync(filePath)) return [];
-  // console.log("qui c'è");
-  // const data = fs.readFileSync(filePath, 'utf-8');
-  // const anchors: string[] = JSON.parse(data);
-  // console.log("file letto");
-  // const anchorsForMerkleTree = anchors.map(anchor => [anchor]);
-  // console.log(anchorsForMerkleTree);
-  // // Convert each string to an array containing that string
-  // return anchorsForMerkleTree;
   return getValidAnchorsForMerkleTreeUtility();
 }

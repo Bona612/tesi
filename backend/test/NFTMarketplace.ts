@@ -1,18 +1,9 @@
 import { assert, expect } from "chai";
-// import { network, deployments, ethers, getNamedAccounts } from "hardhat";
-// import { developmentChains } from "../../hardhat.config";
-import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
-import { Contract } from "ethers";
 import { ethers, ignition } from "hardhat";
-import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-// import { time, loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
-// import { ethers } from "ethers";
-import { createHash } from 'node:crypto';
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
-import { ERC6956Authorization, ERC6956Role, merkleTestAnchors, NULLADDR, createAttestation, AttestedTransferLimitUpdatePolicy, createAttestationWithData } from "./commons";
-import { IERC6956AttestationLimitedInterfaceId, IERC6956InterfaceId, IERC6956FloatableInterfaceId, IERC6956ValidAnchorsInterfaceId } from "./commons";
+import { merkleTestAnchors, NULLADDR, createAttestationWithData } from "./commons";
 import { ERC6956Full, NFTMarketplace } from '../typechain';
-import { ContractFactory } from 'ethers';
 import ERC6956FullModule from "../ignition/modules/ERC6956FullModule";
 import NFTMarketplaceModule from "../ignition/modules/NFTMarketplaceModule";
 
@@ -32,11 +23,6 @@ describe("NFT Marketplace Tests", function () {
         const abnftContract_owner = abnftContract.connect(owner) as ERC6956Full;
         const abnftContract_mantainer = abnftContract.connect(maintainer) as ERC6956Full;
         
-        // const AbNftContract: ContractFactory = await hre.ethers.getContractFactory("ERC6956");
-        // const burnAuthorization = ERC6956Authorization.ALL;
-        // const approveAuthorization = ERC6956Authorization.ALL;
-    
-        // const abnftContract = (await AbNftContract.connect(owner).deploy("Asset-Bound NFT test", "ABNFT")) as ERC6956;
         abnftContract_owner.updateMaintainer(maintainer.address, true);
     
         await expect(abnftContract_mantainer.updateOracle(oracle.address, true))
@@ -166,11 +152,6 @@ describe("NFT Marketplace Tests", function () {
 
         const [new_attestationAlice, new_dataAlice] = await createAttestationWithData(alice.address, anchor, oracle, merkleTree, 1); // Mint to alice
         
-        // await expect(abnftContract_gasProvider["transferAnchor(bytes,bytes)"](new_attestationAlice, new_dataAlice))
-        // .to.emit(abnftContract, "Transfer") // Standard ERC721 event
-        // .withArgs(bob.address, alice.address, 1)
-        // .to.emit(abnftContract, "AnchorTransfer")
-        // .withArgs(bob.address, alice.address, anchor, 1);
         await expect(marketContract_hacker["redeemItem(address,uint256,bytes,bytes)"](
             abnftContract.getAddress(),
             TOKEN_ID,
@@ -193,12 +174,8 @@ describe("NFT Marketplace Tests", function () {
         // Controlliamo che sia cambiato il proprietario dell'NFT
         const newOwner = await abnftContract.ownerOf(TOKEN_ID); // Gli NFT costruiti sullo standard ERC721 hanno sempre la funzione ownerOf
 
-        // // Controlliamo che il venditore (deployer) sia stato pagato
-        // const deployerProceeds = await nftMarketplace.getProceeds(deployer.address);
-
         // Assert
         assert(newOwner.toString() == alice.address);
-        // assert(deployerProceeds.toString() == PRICE.toString());
     }) 
 
 

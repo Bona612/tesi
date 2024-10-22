@@ -1,15 +1,11 @@
-import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers, ignition } from "hardhat";
 import { createHash } from 'node:crypto';
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
-import { float } from "hardhat/internal/core/params/argumentTypes";
 import { ERC6956Authorization, merkleTestAnchors, AttestedTransferLimitUpdatePolicy, NULLADDR, invalidAnchor, createAttestationWithData, createAttestation} from "./commons"; // NULLADDR
 import { IERC6956AttestationLimitedInterfaceId, IERC6956InterfaceId, IERC6956FloatableInterfaceId, IERC6956ValidAnchorsInterfaceId} from "./commons";
 import { ERC6956Full } from '../typechain';
-import { ContractFactory } from 'ethers';
-import { keccak256 } from 'ethers';
-import { MerkleTree } from 'merkletreejs';
 import ERC6956FullModule from "../ignition/modules/ERC6956FullModule";
 
 
@@ -32,11 +28,6 @@ describe("ERC6956: Asset-Bound NFT --- Full", function () {
     const abnftContract_owner = abnftContract.connect(owner) as ERC6956Full;
     const abnftContract_mantainer = abnftContract.connect(maintainer) as ERC6956Full;
     
-    // const AbNftContract: ContractFactory = await hre.ethers.getContractFactory("ERC6956");
-    // const burnAuthorization = ERC6956Authorization.ALL;
-    // const approveAuthorization = ERC6956Authorization.ALL;
-
-    // const abnftContract = (await AbNftContract.connect(owner).deploy("Asset-Bound NFT test", "ABNFT")) as ERC6956;
     abnftContract_owner.updateMaintainer(maintainer.address, true);
 
     await expect(abnftContract_mantainer.updateOracle(oracle.address, true))

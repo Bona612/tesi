@@ -1,11 +1,7 @@
-import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-// import { time, loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import hre from "hardhat";
-import { ethers, ignition} from "hardhat";
-import { ContractFactory } from 'ethers';
-import { createHash } from 'node:crypto';
-import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
+import { ignition} from "hardhat";
 import { ERC6956Authorization, ERC6956Role, merkleTestAnchors, NULLADDR, createAttestation } from "./commons";
 import { IERC6956AttestationLimitedInterfaceId, IERC6956InterfaceId, IERC6956FloatableInterfaceId, IERC6956ValidAnchorsInterfaceId } from "./commons";
 import { ERC6956 } from '../typechain';
@@ -13,38 +9,6 @@ import ERC6956Module from "../ignition/modules/ERC6956Module";
 import dotenv from 'dotenv';
 dotenv.config();
 
-
-// export async function minimalAttestationExample() {
-//   // #################################### PRELIMINARIES
-//   const merkleTestAnchors = [
-//       ['0x' + createHash('sha256').update('TestAnchor123').digest('hex')],
-//       ['0x' + createHash('sha256').update('TestAnchor124').digest('hex')],
-//       ['0x' + createHash('sha256').update('TestAnchor125').digest('hex')],
-//       ['0x' + createHash('sha256').update('TestAnchor126').digest('hex')],
-//       ['0x' + createHash('sha256').update('SaltLeave').digest('hex')] // shall never be used on-chain!
-//       ]
-//   const merkleTree = StandardMerkleTree.of(merkleTestAnchors, ["bytes32"]);
-
-//   // #################################### ACCOUNTS
-//   // Alice shall get the NFT, oracle signs the attestation off-chain 
-//   const [alice, oracle] = await hre.ethers.getSigners();
-
-//   // #################################### CREATE AN ATTESTATION
-//   const to = alice.address;
-//   const anchor = merkleTestAnchors[0][0];
-//   const proof = merkleTree.getProof([anchor]);
-//   const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
-
-//   const validStartTime = 0;
-//   const validEndTime = attestationTime + 15 * 60; // 15 minutes valid from attestation
-
-//   // ethers.solidityPackedKeccak256(["address", "bytes32", "uint256", 'uint256', "uint256", "bytes32[]"], [to, anchor, attestationTime, validStartTime, validEndTime, proof]);
-//   // Hash and sign. In practice, oracle shall only sign when Proof-of-Control is established!
-//   const messageHash = ethers.solidityPackedKeccak256(["address", "bytes32", "uint256", 'uint256', "uint256", "bytes32[]"], [to, anchor, attestationTime, validStartTime, validEndTime, proof]);
-//   const sig = await oracle.signMessage(ethers.getBytes(messageHash));
-//   // Encode
-//   return hre.ethers.AbiCoder.defaultAbiCoder().encode(['address', 'bytes32', 'uint256', 'uint256', 'uint256', 'bytes32[]', 'bytes'], [to, anchor, attestationTime,  validStartTime, validStartTime, proof, sig]);
-// }
 
 describe("ERC6956: Asset-Bound NFT --- Basics", function () {
   // Fixture to deploy the abnftContract contract and assign roles.
@@ -59,11 +23,6 @@ describe("ERC6956: Asset-Bound NFT --- Basics", function () {
     const abnftContract_owner = abnftContract.connect(owner) as ERC6956;
     const abnftContract_mantainer = abnftContract.connect(maintainer) as ERC6956;
     
-    // const AbNftContract: ContractFactory = await hre.ethers.getContractFactory("ERC6956");
-    // const burnAuthorization = ERC6956Authorization.ALL;
-    // const approveAuthorization = ERC6956Authorization.ALL;
-
-    // const abnftContract = (await AbNftContract.connect(owner).deploy("Asset-Bound NFT test", "ABNFT")) as ERC6956;
     abnftContract_owner.updateMaintainer(maintainer.address, true);
 
     await expect(abnftContract_mantainer.updateOracle(oracle.address, true))
@@ -84,11 +43,6 @@ describe("ERC6956: Asset-Bound NFT --- Basics", function () {
     const abnftContract_owner = abnftContract.connect(owner) as ERC6956;
     const abnftContract_mantainer = abnftContract.connect(maintainer) as ERC6956;
     
-    // const AbNftContract: ContractFactory = await hre.ethers.getContractFactory("ERC6956");
-    // const burnAuthorization = ERC6956Authorization.ALL;
-    // const approveAuthorization = ERC6956Authorization.ALL;
-
-    // const abnftContract = (await AbNftContract.connect(owner).deploy("Asset-Bound NFT test", "ABNFT")) as ERC6956;
     abnftContract_owner.updateMaintainer(maintainer.address, true);
 
     await expect(abnftContract_mantainer.updateOracle(oracle.address, true))

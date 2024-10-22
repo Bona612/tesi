@@ -1,25 +1,12 @@
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
-import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 // With TypeChain this step can be done programmatically
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import { createHash } from "crypto";
 import { ethers, keccak256 } from "ethers";
 import hre from "hardhat";
-// import { IERC6956, IERC6956AttestationLimited } from "../../typechain-types";
 
 
-// const commonsModule = buildModule("LockModule", (m) => {
-//     // Identifer already computed
-//     const IERC6956ValidAnchorsInterfaceId = 0x051c9bd8;
-//     const IERC6956FloatableInterfaceId = 0xf82773f7;
-//     const IERC6956InterfaceId = 0xa9cf7635;
-//     const IERC6956AttestationLimitedInterfaceId = 0x75a2e933;
-
-//     return {  };
-// });
-
-// export default commonsModule;
 
 // NULLADDR setting
 export const NULLADDR = ethers.ZeroAddress;
@@ -61,11 +48,6 @@ export const enum ERC6956Role {
     INVALID // =3, Reserved, do not use.
 }
 
-// // const enum ERC6956Authorization = Authorization;
-// // const enum AttestedTransferLimitUpdatePolicy = IERC6956AttestationLimited.AttestationLimitPolicy;
-
-  
-
 
 export async function createAttestation(to: string, anchor: string, oracle: HardhatEthersSigner, validStartTime: number = 0) {
     // #################################### ACCOUNTS
@@ -73,12 +55,9 @@ export async function createAttestation(to: string, anchor: string, oracle: Hard
   // Oracle needs to be a trusted Oracle of the smart-contract that shall accept the generated attestation
 //   const [alice, oracle] = await hre.ethers.getSigners();
 
-//   // #################################### CREATE AN ATTESTATION
-//   const to = alice.address;
-//   const anchor = '0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536'
+  // #################################### CREATE AN ATTESTATION
 
   const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
-//   const validStartTime = 0;
   const validEndTime = attestationTime + validStartTime + 15 * 60; // 15 minutes valid from attestation
 
   const messageHash = hre.ethers.solidityPackedKeccak256(
@@ -100,12 +79,9 @@ export async function createAttestation2(to: string, anchor: string, oracle: Har
   // Oracle needs to be a trusted Oracle of the smart-contract that shall accept the generated attestation
   //   const [alice, oracle] = await hre.ethers.getSigners();
 
-  //   // #################################### CREATE AN ATTESTATION
-  //   const to = alice.address;
-  //   const anchor = '0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536'
+  // #################################### CREATE AN ATTESTATION
 
   const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
-  //   const validStartTime = 0;
   const validEndTime = attestationTime + validStartTime + 15 * 60; // 15 minutes valid from attestation
 
   const messageHash = hre.ethers.solidityPackedKeccak256(
@@ -128,14 +104,8 @@ export async function createAttestationWithData(to: string, anchor: string, orac
   // Oracle needs to be a trusted Oracle of the smart-contract that shall accept the generated attestation
 //   const [alice, oracle] = await hre.ethers.getSigners();
 
-//   // #################################### CREATE AN ATTESTATION
-//   const to = alice.address;
-//   const anchor = '0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536'
+  // #################################### CREATE AN ATTESTATION
 
-  function sha256(input: string): string {
-    // return '0x' + createHash('sha256').update(input).digest('hex');
-    return keccak256(Buffer.from(input.slice(2), 'hex'));
-  } 
 
   const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
   const validEndTime = attestationTime + validStartTime + 15 * 60; // 15 minutes valid from attestation
@@ -146,7 +116,6 @@ export async function createAttestationWithData(to: string, anchor: string, orac
   );
   const sig = await oracle.signMessage(hre.ethers.getBytes(messageHash));
 
-  // const proof = merkleTree.getProof(['0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536']);
   const proof = merkleTree.getProof([anchor]);
 
   return [hre.ethers.AbiCoder.defaultAbiCoder().encode(
@@ -163,7 +132,6 @@ export async function createAttestationWithData(to: string, anchor: string, orac
 
 // #################################### PRELIMINARIES
 export const merkleTestAnchors = [
-    // ['0x4cc52563699fb1e3333b8aab3ecf016f8fd084e6fc48edf8603d83d4c5b97536'],
     ['0x' + createHash('sha256').update('TestAnchor123').digest('hex')],
     ['0x' + createHash('sha256').update('TestAnchor124').digest('hex')],
     ['0x' + createHash('sha256').update('TestAnchor125').digest('hex')],
@@ -192,22 +160,17 @@ function createInvalidAnchor() {
         if (v[0] === alice) {
           // (3)
           proof = tree.getProof(i);
-          console.log('Value:', v);
-          console.log('Proof:', proof);
         }
     }
 
     const verified = StandardMerkleTree.verify(tree.root, ['address', 'uint'], [alice, '100'], proof);
-    // console.log(verified);
 
     // Generate an invalid proof by altering a hash in the valid proof
     let invalidProof = proof;
     invalidProof[0] = '0x' + createHash('sha256').update('TestAnchor001').digest('hex').substring(0, 64);
     
     const verified_invalid = StandardMerkleTree.verify(tree.root, ['address', 'uint'], [alice, '100'], invalidProof);
-    // console.log(verified_invalid);
 
-    console.log(tree.root);
     return invalidProof[0];
 }
 

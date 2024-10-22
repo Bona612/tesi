@@ -1,9 +1,6 @@
 import { Attestation } from "@/types";
 import { NextResponse, NextRequest } from "next/server";
-import { BrowserProvider, Contract, Eip1193Provider, ethers, formatUnits } from 'ethers'
-import { ecsign, toRpcSig, fromRpcSig } from 'ethereumjs-util';
-// import { createMerkleTree, generateMerkleProof, getMerkleTreeRoot } from "../../../utils/merkleTreeUtilities";
-import { ERC6956Full } from '@/typechain/contracts/ERC6956Full';
+import { ethers } from 'ethers'
 
 
 
@@ -21,16 +18,14 @@ interface RequestBody {
 }
 
 
-/// THIS IS GOOD!!! IT WORKS
 async function signAttestation(attestation: Attestation): Promise<string> {
   const oraclePrivateKey: string = process.env.ORACLE_PRIVATE_KEY || "";
-  console.log(oraclePrivateKey);
 
   // Create a wallet instance from the private key
   const wallet = new ethers.Wallet(oraclePrivateKey);
 
   const attestationTime = Math.floor(Date.now() / 1000.0); // Now in seconds UTC
-  // DA CAPIRE CON PRECISIONE QUESTO, SECONDO ME ININFLUENTE COSì CMO'è
+  
   const validStartTime = 0;
   const validEndTime = attestationTime + 15 * 60; // 15 minutes valid from attestation
 
@@ -44,9 +39,6 @@ async function signAttestation(attestation: Attestation): Promise<string> {
   // Sign the message hash with the wallet's private key
   const signature = await wallet.signMessage(ethers.getBytes(messageHash));
   console.log("signature ", signature)
-
-  // const sig = await signer.signMessage(ethers.getBytes(messageHash))
-  // console.log("signed signer: ", sig);
 
   const prova = ethers.AbiCoder.defaultAbiCoder().encode(
     ['address', 'bytes32', 'uint256', 'uint256', 'uint256', 'bytes'], 
@@ -65,12 +57,10 @@ export async function POST(request: NextRequest) {
       const { attestation } = body as RequestBody;
 
       const signedAttestation: string = await signAttestation(attestation)
-      console.log("signedAttestation: ", signedAttestation);
 
       return NextResponse.json({ 'response': signedAttestation , 'status': 200 });
     } 
     catch (error) {
-      console.log(error);
       return NextResponse.json(
         { 'error': "Internal Server Error " },
         { 'status': 500 }

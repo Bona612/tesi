@@ -31,11 +31,9 @@ async function generateCID(uint8array: Uint8Array): Promise<CID> {
 async function predeterminingCIDMetadata(request: NextRequest) {
   const body = await request.json();
   const jsonString = JSON.stringify(body);
-  console.log("predeterming json: ", jsonString);
 
   const uint8array = await convertToUint8Array(jsonString);
   const cid = await generateCID(uint8array);
-  console.log("predeterming json: ", cid);
 
   return NextResponse.json({ cid: cid.toString() });
 }
@@ -43,17 +41,14 @@ async function predeterminingCIDMetadata(request: NextRequest) {
 async function predeterminingCIDImage(request: NextRequest) {
   const formData = await request.formData();
   const file: File = formData.get('image') as File;
-  console.log("predeterming image: ", file);
 
   if (!file) {
     return NextResponse.json({ error: 'No file provided' }, { status: 400 });
   }
 
   const uint8array = await convertToUint8Array(file);
-  console.log("file uint8array: ", uint8array);
 
   const cid = await generateCID(uint8array);
-  console.log("predeterming image: ", cid);
 
   return NextResponse.json({ cid: cid.toString() });
 }
@@ -61,7 +56,6 @@ async function predeterminingCIDImage(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const contentType = request.headers.get('content-type') || '';
-    console.log(contentType);
 
     if (contentType.includes('multipart/form-data')) {
       return predeterminingCIDImage(request);
@@ -74,7 +68,6 @@ export async function POST(request: NextRequest) {
     }
     
   } catch (error) {
-    console.error('Error generating CID:', error);
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
   }
 }

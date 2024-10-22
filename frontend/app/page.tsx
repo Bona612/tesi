@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 import AppInfo from "@/components/AppInfo";
 
 export const dynamic = 'force-dynamic';

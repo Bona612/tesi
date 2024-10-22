@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import NFTBox from "@/components/BaseNFT";
-import ConnectButton from "@/components/ConnectButton";
-import TokenBar from "@/components/TokenBar";
-
-
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +15,8 @@ export default function SubLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <RootLayout>
     <div>
-        {/* <TokenBar /> */}
         {children}
     </div>
-    // </RootLayout>
   );
 }

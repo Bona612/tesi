@@ -11,18 +11,8 @@ interface TransactionReceipt {
     events: Array<{ args: { tokenId: string } }>;
 }
 
-interface Transaction {
-    wait: (confirmations?: number) => Promise<TransactionReceipt>;
-}
-
 
 const FormPage: React.FC = () => {
-    const { address, chainId, isConnected } = useWeb3ModalAccount()
-    const { walletProvider } = useWeb3ModalProvider()
-    console.log(isConnected)
-    console.log(address)
-
-
     return (
         <div>
             <FilterProvider>

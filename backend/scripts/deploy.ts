@@ -7,10 +7,6 @@ import { promisify } from 'util';
 import { exec } from 'child_process';
 
 
-const copyFile = promisify(fs.copyFile);
-const copyDirectory = promisify(fs.copyFile);
-
-
 async function changeDirectoryPermission(directorypath: string) {
   // Check the platform
   if (process.platform === 'linux' || process.platform === 'darwin') {
@@ -48,16 +44,11 @@ async function changeDirectoryPermission(directorypath: string) {
 
 
 async function copyDirectoryRecursive(source: string, destination: string) {
-  // console.log(process.cwd());
   try {
     changeDirectoryPermission(source);
     changeDirectoryPermission("../frontend");
     if (fs.existsSync(destination)) {
-      // changeDirectoryPermission(destination);
-      console.log(`Destination directory '${destination}' exists.`);
-      console.log(`Destination directory '${destination}' already exists. Removing it...`);
       await fs.promises.rm(destination, { recursive: true }); // Remove existing directory
-      console.log("cancelled");
     } else {
       console.log(`Destination directory '${destination}' does not exist.`);
     }    
@@ -157,29 +148,3 @@ main()
       process.exit(1);
     })
 
-
-
-// async function main() {
-//     const [deployer] = await hre.ethers.getSigners();
-  
-//     console.log("Deploying contracts with the account:", deployer.address);
-//     console.log("Account balance:", (await deployer.getBalance()).toString());
-  
-    
-//     // Get the ContractFactories and Signers here.
-//     const NFT = await hre.ethers.getContractFactory("NFT");
-//     const Marketplace = await hre.ethers.getContractFactory("Marketplace");
-//     // deploy contracts
-//     const marketplace = await Marketplace.deploy(1);
-//     const nft = await NFT.deploy();
-
-//   }
-  
-
-  
-//   main()
-//     .then(() => process.exit(0))
-//     .catch(error => {
-//       console.error(error);
-//       process.exit(1);
-// });

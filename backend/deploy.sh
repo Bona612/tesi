@@ -32,6 +32,4 @@ if [ -z "$NETWORK" ]; then
 fi
 
 # Deploy contracts
-# npx hardhat ignition deploy ignition/modules/ERC6956FullModule.ts --network $NETWORK
-# npx hardhat ignition deploy ignition/modules/NFTMarketplaceModule.ts --network $NETWORK
 npx hardhat run scripts/deploy.ts --network $NETWORK

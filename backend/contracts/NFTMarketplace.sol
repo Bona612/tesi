@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol"; //Import necessario 
 import "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
 
 // Contratto che gestisce la compravendita di NFT. Ereditiamo da ReentrancyGuard per alcune funzionalità di sicurezza e dall'interfaccia AutomationCompatible per introdurre dell'automazione nelle funzioni
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./IERC6956.sol";
 
@@ -15,7 +14,6 @@ import "./IERC6956.sol";
 error PriceNotMet(address nftAddress, uint256 tokenId, uint256 price);
 error NotListed(address nftAddress, uint256 tokenId);
 error AlreadyListed(address nftAddress, uint256 tokenId);
-// error NoProceeds();
 error NotOwner();
 error AlreadyOwner();
 error NotApprovedForMarketplace();
@@ -32,11 +30,8 @@ contract NFTMarketplace is ReentrancyGuard, Ownable {
     struct Transaction {
         address seller;
         address buyer;
-        // uint startTimestamp; // Timestamp del momento dell'acquisto
     }
 
-    /// 
-    // mapping(uint256 => Item) private itemById;
     mapping(address => mapping(uint256 => Listing)) private s_listings;
     mapping(address => mapping(uint256 => Transaction)) private s_toBeRedeemed;
     mapping(address => uint256) private s_proceeds;
@@ -208,22 +203,19 @@ contract NFTMarketplace is ReentrancyGuard, Ownable {
 
         s_toBeRedeemed[nftAddress][tokenId] = Transaction(listedItem.seller, msg.sender);
         delete (s_listings[nftAddress][tokenId]);
-        // IERC721(nftAddress).safeTransferFrom(listedItem.seller, msg.sender, tokenId);
+        
         emit ItemBought(nftAddress, tokenId, msg.sender, listedItem.price);
     }
 
 
     function redeemItem(address nftAddress, uint256 tokenId, bytes memory attestation, bytes memory data)
         public
-        // external
         nonReentrant 
-        // isOwner(nftAddress, tokenId, msg.sender)
         isToRedeem(nftAddress, tokenId, msg.sender)
     {
         Transaction storage toBeRedeemed = s_toBeRedeemed[nftAddress][tokenId];
         require(toBeRedeemed.buyer == msg.sender, "You are not the buyer of this token");
 
-        // IERC721(nftAddress).safeTransferFrom(toBeRedeemed.seller, msg.sender, tokenId);
         IERC6956(nftAddress).transferAnchor(attestation, data);
 
         delete s_toBeRedeemed[nftAddress][tokenId];
@@ -233,9 +225,7 @@ contract NFTMarketplace is ReentrancyGuard, Ownable {
 
     function redeemItem(address nftAddress, uint256 tokenId, bytes memory attestation)
         public
-        // external 
         nonReentrant 
-        // isOwner(nftAddress, tokenId, msg.sender)
         isToRedeem(nftAddress, tokenId, msg.sender)
     {
         return redeemItem(nftAddress, tokenId, attestation, "");

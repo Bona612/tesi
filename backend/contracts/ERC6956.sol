@@ -6,12 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-// import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-
-// import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "hardhat/console.sol";
-
 import "./IERC6956.sol";
 
 /** Used for several authorization mechanisms, e.g. who can burn, who can set approval, ... 
@@ -242,7 +237,6 @@ contract ERC6956 is
         string memory uri = tokenURI(tokenId);
         
         emit AnchorTransfer(from, to, anchor, tokenId, uri);
-        // emit AnchorTransfer(from, to, anchor, tokenId);
 
         if (to == address(0)) {
             // we are burning, ensure the mapping is deleted BEFORE the transfer

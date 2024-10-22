@@ -235,7 +235,7 @@ describe("Authorization Map tests", function () {
         .to.revertedWith("ERC6956-E5");
       })
       
-      it("SHOULDN'T allow approveAnchor followed by safeTransfer when anchor not floating", async function() {
+      it("SHOULDN'T allow approveAnchor followed by safeTransfer w anchor not floating", async function() {
         const { abnftContract, anchor, oracle, alice, bob, gasProvider, mallory,carl} = await loadFixture(deployABTandMintTokenToAlice);      
         const tokenId = await abnftContract.tokenByAnchor(anchor);
 

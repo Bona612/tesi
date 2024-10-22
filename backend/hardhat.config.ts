@@ -61,7 +61,7 @@ const config: HardhatUserConfig = {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: "USD",
     outputFile: "gas-report.txt", // Il prospetto sul consumo di gas non verrà fornito su terminale ma su un file a parte
-    // noColors: true,
+    noColors: true,
   },
   etherscan: {
     apiKey: `${process.env.ETHERSCAN_API_KEY}`,
